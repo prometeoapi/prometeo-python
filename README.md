@@ -1,7 +1,7 @@
 Prometeo Python API Client [![PyPI version](https://badge.fury.io/py/prometeo.svg)](https://badge.fury.io/py/prometeo)
 ===============
 
-This is the official library for the [Prometeo API](https://prometeoapi.com/)
+This is the official python library for the [Prometeo API](https://prometeoapi.com/)
 
 
 ## Installation
@@ -66,6 +66,42 @@ for movement in movements:
 providers = client.banking.get_providers()
 for provider in providers:
     print(provider.name, provider.country)
+```
+
+
+## CURP API
+
+### Checking the existence of a curp
+
+```python
+from prometeo.curp import exceptions
+
+curp = 'ABCD12345EFGH'
+try:
+    result = client.curp.query(curp)
+except exceptions.CurpError as e:
+    print("CURP does not exist:", e.message)
+```
+
+### Looking for a CURP by person
+
+```python
+from datetime import datetime
+from prometeo.curp import exceptions, Gender, State
+
+curp = 'ABCD12345EFGH'
+state = State.SINALOA
+birthdate = datetime(1988, 3, 4)
+name = 'JOHN'
+first_surname = 'DOE'
+last_surname = 'PONCE'
+gender = Gender.MALE
+try:
+    result = client.curp.reverse_query(
+        state, birthdate, name, first_surname, last_surname, gender
+    )
+except exceptions.CurpError as e:
+    print("CURP does not exist:", e.message)
 ```
 
 
