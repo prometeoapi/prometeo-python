@@ -1,0 +1,27 @@
+{
+  "numeration": [
+    {
+      "address": null,
+      "country": null,
+      "department": null,
+      "dv": null,
+      "municipality": null,
+      "name": null,
+      "nit": null,
+      "pdf_url": null,
+      "pdf_available": false,
+      "ranges": [
+        {
+          "establishment": "Qualia SRL",
+          "from": 1,
+          "mode": "COMPUTADOR",
+          "prefix": "",
+          "to": 2000,
+          "type": "AUTORIZACIÓN"
+        }
+      ],
+      "reason": null
+    }
+  ],
+  "status": "success"
+}

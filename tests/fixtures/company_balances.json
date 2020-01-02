@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "balances": [
+    {
+      "value": 0,
+      "amount": 26,
+      "type": "al dia"
+    },
+    {
+      "value": 47280000,
+      "amount": 3,
+      "type": "saldo a favor"
+    }
+  ]
+}

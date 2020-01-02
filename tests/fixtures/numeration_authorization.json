@@ -1,0 +1,32 @@
+{
+  "numeration": [
+    {
+      "address": "CR 12 A 65",
+      "country": "Colombia",
+      "department": "Antioquia",
+      "dv": "0",
+      "municipality": "Medellín",
+      "name": {
+        "first_name": "",
+        "first_surname": "",
+        "other_names": "",
+        "second_surname": ""
+      },
+      "nit": "902202672",
+      "pdf_url": "/pdf/25ebc593c917786864b9753cffa68b8f.pdf",
+      "pdf_available": true,
+      "ranges": [
+        {
+          "establishment": "Qualia SRL",
+          "from": 1,
+          "mode": "COMPUTADOR",
+          "prefix": "",
+          "to": 2000,
+          "type": "AUTORIZACIÓN"
+        }
+      ],
+      "reason": "Qualia SRL"
+    }
+  ],
+  "status": "success"
+}

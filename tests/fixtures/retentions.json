@@ -1,0 +1,44 @@
+{
+  "retentions": {
+    "direction_code": "3 2",
+    "fields": {
+      "27": {
+        "name": "Rentas de trabajo",
+        "number": 27,
+        "value": 15972000
+      },
+      "28": {
+        "name": "Rentas de pensiones",
+        "number": 28,
+        "value": 0
+      },
+      "29": {
+        "name": "Honorarios",
+        "number": 29,
+        "value": 4200000
+      },
+      "30": {
+        "name": "Comisiones",
+        "number": 30,
+        "value": 0
+      },
+      "83": {
+        "name": "Más: Sanciones",
+        "number": 83,
+        "value": 0
+      },
+      "84": {
+        "name": "Total retenciones más sanciones",
+        "number": 84,
+        "value": 1668000
+      }
+    },
+    "form_number": "3501661737131",
+    "nit": "80172487",
+    "pdf_url": "/pdf/f9ac62308e8595b1cd2a5756c1c8ce75.pdf",
+    "period": 0,
+    "reason": "Qualia Fintech SRL",
+    "year": 2017
+  },
+  "status": "success"
+}

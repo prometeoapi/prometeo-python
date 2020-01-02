@@ -1,14 +1,14 @@
-import unittest
-
 from prometeo.banking.client import BankingAPIClient, Session
+from tests.base_test_case import BaseTestCase
 
 import requests_mock
 
 
 @requests_mock.Mocker()
-class TestSession(unittest.TestCase):
+class TestSession(BaseTestCase):
 
     def setUp(self):
+        super(TestSession, self).setUp()
         client = BankingAPIClient('test_api_key', 'testing')
         self.session_key = 'test_session_key'
         self.session = Session(client, 'logged_in', self.session_key)

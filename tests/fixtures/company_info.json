@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "info": {
+    "accountant": {
+      "document": "123456",
+      "start_date": "01/05/2017",
+      "name": "ARMANDO BARREDA",
+      "professional_card": "42972Z"
+    },
+    "capital_composition": {
+      "foreign_private": "0%",
+      "foreign_public": "0%",
+      "national": "100%",
+      "national_private": "100%",
+      "foreign": "0%",
+      "national_public": "0%"
+    },
+    "reason": "Qualia Fintech SRL",
+    "pdf_url": "/pdf/9a001f5239673420c3f5335a96cfef4f.pdf",
+    "location": {
+      "country": "Uruguay",
+      "city": "Montevideo",
+      "phone1": "099030345",
+      "phone2": "0303456",
+      "department": "Montevideo",
+      "address": "Calle falsa 12345",
+      "email": "info@qualia.uy"
+    },
+    "name": "Qualia Fintech SRL",
+    "constitution_date": "15/08/2016",
+    "representation": [
+      {
+        "document": "1015399852",
+        "document_type": "13",
+        "name": {
+          "first_name": "Paquita",
+          "first_surname": "Navajas",
+          "other_names": "",
+          "second_surname": ""
+        },
+        "representation_type": "18",
+        "start_date": "10/04/2014"
+      }
+    ],
+    "members": [
+      {
+        "document": "479380",
+        "document_type": "13",
+        "name": {
+          "first_name": "John",
+          "first_surname": "Doe",
+          "other_names": "",
+          "second_surname": ""
+        },
+        "nationality": "COLOMBIA",
+        "start_date": "10/04/2014"
+      },
+      {
+        "document": "16226853",
+        "document_type": "13",
+        "name": {
+          "first_name": "Jane",
+          "first_surname": "Doe",
+          "other_names": "",
+          "second_surname": ""
+        },
+        "nationality": "COLOMBIA",
+        "start_date": "10/04/2014"
+      }
+    ]
+  }
+}

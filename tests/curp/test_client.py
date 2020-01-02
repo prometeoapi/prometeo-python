@@ -1,55 +1,19 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-import unittest
 
 from six.moves.urllib.parse import parse_qs
 import requests_mock
 
-from prometeo import Client
 from prometeo.curp import exceptions, Gender, State
-
-
-CURP_DATA = {
-    "document_data": {
-        "foja": "",
-        "claveEntidadRegistro": "25",
-        "numActa": "00064",
-        "tomo": "",
-        "anioReg": "1988",
-        "municipioRegistro": "GUASAVE",
-        "libro": "0001",
-        "entidadRegistro": "SINALOA",
-        "claveMunicipioRegistro": "011"
-    },
-    "personal_data": {
-        "sexo": "HOMBRE",
-        "entidad": "DISTRITO FEDERAL",
-        "nacionalidad": "MEXICO",
-        "statusCurp": "RCN",
-        "nombres": "JOHN",
-        "segundoApellido": "PONCE",
-        "claveEntidad": "DF",
-        "docProbatorio": 1,
-        "fechaNacimiento": "04/03/1988",
-        "primerApellido": "DOE",
-        "curp": 'ABCD880304HDFXNR45',
-    }
-}
+from tests.base_test_case import BaseTestCase
 
 
 @requests_mock.Mocker()
-class TestClient(unittest.TestCase):
-
-    def setUp(self):
-        self.client = Client('test_key')
+class TestClient(BaseTestCase):
 
     def test_query_success(self, m):
         test_curp = 'ABCD880304HDFXNR45'
-        m.post('/query', json={
-            "errors": None,
-            "data": CURP_DATA,
-        })
-
+        self.mock_post_request(m, '/query', 'successful_curp')
         result = self.client.curp.query(test_curp)
 
         request_body = parse_qs(m.last_request.text)
@@ -60,24 +24,15 @@ class TestClient(unittest.TestCase):
     def test_curp_nonexistent(self, m):
         error_message = u"Estimada/o usuaria/o, la clave que " \
                         u"ingresaste no existe o no está validada."
-        m.post('/query', json={
-            "data": None,
-            "errors": {
-                "code": "180001",
-                "detail": error_message,
-            }
-        })
+        self.mock_post_request(m, '/query', 'inexistent_curp')
 
         with self.assertRaises(exceptions.CurpError) as cm:
             self.client.curp.query('ABCD123445')
 
-        self.assertEqual(error_message, cm.exception.message)
+        self.assertIn(error_message, cm.exception.message)
 
     def test_reverse_query(self, m):
-        m.post('/reverse-query', json={
-            "errors": None,
-            "data": CURP_DATA,
-        })
+        self.mock_post_request(m, '/reverse-query', 'successful_curp')
 
         state = State.SINALOA
         birthdate = datetime(1988, 3, 4)
@@ -103,13 +58,7 @@ class TestClient(unittest.TestCase):
     def test_reverse_query_no_result(self, m):
         error_message = u"Estimada/o usuaria/o, la clave que " \
                         u"ingresaste no existe o no está validada."
-        m.post('/reverse-query', json={
-            "data": None,
-            "errors": {
-                "code": "180001",
-                "detail": error_message,
-            }
-        })
+        self.mock_post_request(m, '/reverse-query', 'inexistent_curp')
 
         state = State.SINALOA
         birthdate = datetime(1988, 3, 4)
@@ -121,4 +70,4 @@ class TestClient(unittest.TestCase):
             self.client.curp.reverse_query(
                 state, birthdate, name, first_surname, last_surname, gender
             )
-        self.assertEqual(error_message, cm.exception.message)
+        self.assertIn(error_message, cm.exception.message)

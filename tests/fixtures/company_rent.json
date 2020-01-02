@@ -1,0 +1,53 @@
+{
+  "status": "success",
+  "declaration": {
+    "previous_form": "",
+    "pdf_url": "/pdf/6368901ff39e2a5ec239823343c575923.pdf",
+    "reason": "Qualia Fintech SRL",
+    "correction_code": "",
+    "year": 2016,
+    "form_number": "1112600018226",
+    "fields": {
+      "31": {
+        "name": "Aportes al sistema de seguridad social",
+        "number": "31",
+        "value": 2278000
+      },
+      "50": {
+        "name": "Otros costos",
+        "value": 0,
+        "number": "50"
+      },
+      "79": {
+        "name": "Total retenciones a?o gravable",
+        "number": "79",
+        "value": 0
+      },
+      "80": {
+        "name": "Anticipo renta por el a?o gravable 2017",
+        "number": "80",
+        "value": 0
+      },
+      "85": {
+        "value": 0,
+        "number": "85",
+        "name": "Saldo a pagar por impuesto"
+      },
+      "88": {
+        "value": 0,
+        "number": "88",
+        "name": "o Total saldo a favor"
+      }
+    },
+    "name": {
+      "first_surname": "",
+      "first_name": "",
+      "second_surname": "",
+      "other_names": ""
+    },
+    "economic_activity": "2499",
+    "nit": "333222251",
+    "dv": "0",
+    "direction_code": "1 3"
+  }
+}

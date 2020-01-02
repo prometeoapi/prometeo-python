@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-import unittest
 from datetime import datetime
 
 from six.moves.urllib.parse import parse_qs, urlparse
 import requests_mock
 
-from prometeo import Client, exceptions
+from prometeo import exceptions
+from tests.base_test_case import BaseTestCase
 
 
 @requests_mock.Mocker()
-class TestClient(unittest.TestCase):
-
-    def setUp(self):
-        self.client = Client('test_key')
+class TestClient(BaseTestCase):
 
     def test_login_success(self, m):
         m.post('/login/', json={
