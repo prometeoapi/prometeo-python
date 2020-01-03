@@ -70,9 +70,10 @@ class TestSession(BaseTestCase):
 
     def test_retentions(self, m):
         self.mock_get_request(m, '/retentions/', 'retentions')
-        retentions = self.session.get_retentions(MonthlyPeriod.NOVEMBER)
+        retentions = self.session.get_retentions(2018, MonthlyPeriod.NOVEMBER)
 
         self.assertEqual(self.session_key, m.last_request.qs['session_key'][0])
+        self.assertEqual('2018', m.last_request.qs['year'][0])
         self.assertEqual('11', m.last_request.qs['period'][0])
 
         self.assertEqual("Qualia Fintech SRL", retentions.reason)

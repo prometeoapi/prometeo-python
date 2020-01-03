@@ -218,9 +218,10 @@ class DianAPIClient(base_client.BaseClient):
             ))
         return numerations
 
-    def get_retentions(self, session_key, period):
+    def get_retentions(self, session_key, year, period):
         data = self.call_api('GET', '/retentions/', params={
             'session_key': session_key,
+            'year': year,
             'period': period.value,
         })
         return Retentions(
@@ -267,5 +268,5 @@ class Session(object):
             self._session_key, type, date_start, date_end
         )
 
-    def get_retentions(self, period):
-        return self._client.get_retentions(self._session_key, period)
+    def get_retentions(self, year, period):
+        return self._client.get_retentions(self._session_key, year, period)
