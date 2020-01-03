@@ -105,6 +105,80 @@ except exceptions.CurpError as e:
 ```
 
 
+## DIAN API
+
+### Log in
+
+Supply the NIT to log in as a company:
+
+```python
+from prometeo.dian import DocumentType
+
+session = client.dian.login(
+    nit='098765',
+    document_type=DocumentType.CEDULA_CIUDADANIA,
+    document='12345',
+    password='test_password',
+)
+```
+
+Or omit it to log in as a person:
+
+```python
+from prometeo.dian import DocumentType
+
+session = client.dian.login(
+    document_type=DocumentType.CEDULA_CIUDADANIA,
+    document='12345',
+    password='test_password',
+)
+```
+
+### Get the data
+
+Company info:
+
+```python
+session.get_company_info()
+```
+
+Balances:
+
+```python
+session.get_balances()
+```
+
+Rent declaration:
+
+```python
+session.get_rent_declaration(2018)
+```
+
+VAT declaration:
+
+```python
+from prometeo.dian import Periodicity, QuartlerlyPeriod
+
+session.get_vat_declaration(2019, Periodicity.QUARTERLY, QuartlerlyPeriod.JANUARY_APRIL)
+```
+
+Numeration:
+
+```python
+from datetime import datetime
+from prometeo.dian import NumerationType
+
+session.get_numeration(NumerationType.Authorization, datetime(2019, 1, 1), datetime(2019, 5, 1))
+```
+
+Retentions:
+
+```python
+from prometeo.dian import MonthlyPeriod
+
+session.get_retentions(2019, MonthlyPeriod.NOVEMBER)
+```
+
 ## License
 
 [The MIT License](https://bitbucket.org/qualiauy/prometeo-python/src/master/LICENSE)
