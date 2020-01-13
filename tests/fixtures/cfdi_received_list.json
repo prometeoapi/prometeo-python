@@ -1,0 +1,44 @@
+{
+  "received": [
+    {
+      "certification_date": "2018-08-29T20:50:04",
+      "certification_pac": "FIN1203015JA",
+      "effect": "Ingreso",
+      "emitted_date": "2018-08-29T20:50:03",
+      "emitter_reason": "John Doe",
+      "emitter_rfc": "ABCD90408BJ2",
+      "id": "DDAA8B0B-4FDC-43D7-A633-F307B898AB3C",
+      "receiver_reason": "Jane Doe",
+      "receiver_rfc": "ZXYW740519633",
+      "status": "valid",
+      "total_value": 174.36
+    },
+    {
+      "certification_date": "2018-08-30T09:43:55",
+      "certification_pac": "FIN1203015JA",
+      "effect": "Ingreso",
+      "emitted_date": "2018-08-30T09:43:55",
+      "emitter_reason": "John Doe",
+      "emitter_rfc": "ABCD90408BJ2",
+      "id": "EB758D6A-07F5-4947-ACD5-98BF0B61654F",
+      "receiver_reason": "Company Name",
+      "receiver_rfc": "ASD030224ES6",
+      "status": "valid",
+      "total_value": 106.22
+    },
+    {
+      "certification_date": "2018-06-12T05:34:19",
+      "certification_pac": "FIN1203015JA",
+      "effect": "Ingreso",
+      "emitted_date": "2018-06-12T05:34:19",
+      "emitter_reason": "John Doe",
+      "emitter_rfc": "ABCD790408BJ2",
+      "id": "FB8C12A1-DA2C-47B0-B2FF-F10A718DB673",
+      "receiver_reason": "Company Name",
+      "receiver_rfc": "ZXC050315240",
+      "status": "cancelled",
+      "total_value": 231.41
+    }
+  ],
+  "status": "success"
+}

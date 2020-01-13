@@ -179,6 +179,72 @@ from prometeo.dian import MonthlyPeriod
 session.get_retentions(2019, MonthlyPeriod.NOVEMBER)
 ```
 
+## SAT API
+
+### Login in
+
+```python
+from prometeo.sat import LoginScope
+
+session = client.sat.login(
+    rfc='ABCD1234EFGH',
+    password='password',
+    scope=LoginScope.CFDI,
+)
+```
+
+### Work with CFDI bills
+
+List emitted and received bills
+
+```python
+from prometeo.sat import BillStatus
+
+emitted_bills = session.get_emitted_bills(
+    date_start=datetime(2020, 1, 1),
+    date_end=datetime(2020, 2, 1),
+    status=BillStatus.ANY,
+)
+
+received_bills = session.get_received_bills(
+    year=2020,
+    month=1,
+    status=BillStatus.ANY,
+```
+
+Bulk download of bills
+
+```python
+from prometeo.sat import BillStatus
+
+download_requests = session.download_emitted_bills(
+    date_start=datetime(2020, 1, 1),
+    date_end=datetime(2020, 2, 1),
+    status=BillStatus.ANY,
+)
+for request in download_requests:
+    download = request.get_download()
+    content = download.get_file().read()
+```
+
+Download acknowledgements
+
+```python
+from prometeo.sat import Motive, DocumentType, Status, SendType
+
+acks = session.get_acknowledgement(
+    year=2020,
+    month_start=1,
+    month_end=2,
+    motive=Motive.ALL,
+    document_type=DocumentType.ALL,
+    status=Status.ALL,
+    send_type=SendType.ALL,
+)
+for ack in acks:
+    download = ack.download().get_file()
+```
+
 ## License
 
 [The MIT License](https://bitbucket.org/qualiauy/prometeo-python/src/master/LICENSE)

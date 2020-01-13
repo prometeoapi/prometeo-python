@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 
-from prometeo import exceptions, base_client
+from prometeo import exceptions, base_client, base_session
 from .models import (
     CompanyInfo, Member, Representative, Name, Accountant, CapitalComposition, Location,
     Balance, RentDeclaration, Field, VATDeclaration, Numeration, NumerationRange,
@@ -88,7 +88,7 @@ class DianAPIClient(base_client.BaseClient):
         elif response['status'] == 'wrong_credentials':
             raise exceptions.WrongCredentialsError(response['message'])
         else:
-            raise exceptions.BankingClientError(response['message'])
+            raise exceptions.ClientError(response['message'])
 
     def get_company_info(self, session_key):
         data = self.call_api('GET', '/company-info/', params={
@@ -236,18 +236,7 @@ class DianAPIClient(base_client.BaseClient):
         )
 
 
-class Session(object):
-
-    def __init__(self, client, status, session_key):
-        self._client = client
-        self._status = status
-        self._session_key = session_key
-
-    def get_status(self):
-        return self._status
-
-    def get_session_key(self):
-        return self._session_key
+class Session(base_session.BaseSession):
 
     def get_company_info(self):
         return self._client.get_company_info(self._session_key)

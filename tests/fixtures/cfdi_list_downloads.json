@@ -1,0 +1,15 @@
+{
+  "downloads": [
+    {
+      "count": 2,
+      "request_id": "CAF80916-71AC-4CEA-BECF-F2AC3F394948",
+      "type": "CFDI"
+    },
+    {
+      "count": 73,
+      "request_id": "4B7659B0-1EEA-4200-BC26-F6826E6189B1",
+      "type": "Metadata"
+    }
+  ],
+  "status": "success"
+}

@@ -1,0 +1,35 @@
+{
+  "results": [
+    {
+      "document_type": "Balanzas de Comprobación",
+      "file_name": "MOP1010266D3201801BN.zip",
+      "id": "0002180100000000325368",
+      "motive": "Envío Mensual",
+      "period": "2018-01",
+      "reception_date": "15/05/2019 12:10:02",
+      "send_type": "Normal",
+      "status": "Aceptado"
+    },
+    {
+      "document_type": "Balanzas de Comprobación",
+      "file_name": "MOP1010266D3201802BN.zip",
+      "id": "0002180200000000313193",
+      "motive": "Envío Mensual",
+      "period": "2018-02",
+      "reception_date": "15/05/2019 12:10:41",
+      "send_type": "Normal",
+      "status": "Aceptado"
+    },
+    {
+      "document_type": "Balanzas de Comprobación",
+      "file_name": "MOP1010266D3201803BN.zip",
+      "id": "0002180300000000303749",
+      "motive": "Envío Mensual",
+      "period": "2018-03",
+      "reception_date": "15/05/2019 12:31:45",
+      "send_type": "Normal",
+      "status": "Aceptado"
+    }
+  ],
+  "status": "success"
+}

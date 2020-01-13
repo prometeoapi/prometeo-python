@@ -8,15 +8,18 @@ class BaseClient(object):
 
     ENVIRONMENTS = {}
 
-    def call_api(self, method, url, *args, **kwargs):
+    def make_request(self, method, url, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = {
             'X-API-Key': self._api_key,
         }
-        response = self._client_session.request(
+        return self._client_session.request(
             method, full_url, headers=headers, *args, **kwargs
         )
+
+    def call_api(self, method, url, *args, **kwargs):
+        response = self.make_request(method, url, *args, **kwargs)
         try:
             data = response.json()
         except ValueError:
