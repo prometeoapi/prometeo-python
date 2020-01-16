@@ -1,4 +1,4 @@
-Prometeo Python API Client [![PyPI version](https://badge.fury.io/py/prometeo.svg)](https://badge.fury.io/py/prometeo)
+Prometeo Python API Client [![PyPI version](https://badge.fury.io/py/prometeo.svg)](https://badge.fury.io/py/prometeo) [![Documentation Status](https://readthedocs.org/projects/prometeo-python/badge/?version=latest)](https://prometeo-python.readthedocs.io/en/latest/?badge=latest)
 ===============
 
 This is the official python library for the [Prometeo API](https://prometeoapi.com/)
