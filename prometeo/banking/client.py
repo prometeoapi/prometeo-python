@@ -12,6 +12,10 @@ PRODUCTION_URL = 'https://prometeo.qualia.uy'
 
 
 class BankingAPIClient(base_client.BaseClient):
+    """
+    API Client for banking api
+    """
+
 
     ENVIRONMENTS = {
         'testing': TESTING_URL,
@@ -19,6 +23,22 @@ class BankingAPIClient(base_client.BaseClient):
     }
 
     def login(self, provider, username, password):
+        """
+        Start log in process with the provider
+
+        :param provider: Name of the provider,
+                         use :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
+                         to get a list of available providers
+        :type provider: str
+
+        :param username: Username used to log in to the banking app or web
+        :type username: str
+
+        :param password: User's password
+        :type password: str
+
+        :rtype: :class:`~prometeo.banking.client.Session`
+        """
         response = self.call_api('POST', '/login/', data={
             'provider': provider,
             'username': username,
@@ -120,17 +140,35 @@ class BankingAPIClient(base_client.BaseClient):
         ]
 
     def get_providers(self):
+        """
+        List all available banks.
+
+        :rtype: :class:`~prometeo.banking.models.Provider`
+        """
         data = self.call_api('GET', '/provider/')
         return [
             Provider(**provider) for provider in data['providers']
         ]
 
     def get_provider_detail(self, provider_code):
+        """
+        Get more detailed information about a bank.
+
+        :param provider_code: Name of the provider, as returned in
+                              :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
+        :type provider_code: str
+
+        :rtype: :class:`~prometeo.banking.models.ProviderDetail`
+        """
         data = self.call_api('GET', '/provider/{}/'.format(provider_code))
         return ProviderDetail(**data['provider'])
 
 
 class Session(object):
+    """
+    Encapsulates the user's session, returned by
+    :meth:`~prometeo.banking.client.BankingAPIClient.login`
+    """
 
     def __init__(self, client, status, session_key, context=None, field=None):
         self._client = client
@@ -140,18 +178,44 @@ class Session(object):
         self._interactive_field = field
 
     def get_status(self):
+        """
+        Returns the status of the session.
+
+        :rtype: str
+        """
         return self._status
 
     def get_session_key(self):
+        """
+        Returns the session key.
+
+        :rtype: str
+        """
         return self._session_key
 
     def get_clients(self):
+        """
+        List the user's clients. Returns an empty list if the bank doesn't uses clients.
+
+        :rtype: List of :class:`~prometeo.banking.models.Client`
+        """
         return self._client.get_clients(self._session_key)
 
     def select_client(self, client):
+        """
+        Selects the client to use for this session.
+
+        :param client_id: The id of the client, obtained from listing the clients
+        :type client_id: str
+        """
         self._client.select_client(self._session_key, client.id)
 
     def get_accounts(self):
+        """
+        List all the user's accounts
+
+        :rtype: List of :class:`~prometeo.banking.models.Account`
+        """
         accounts_data = self._client.get_accounts(self._session_key)
         accounts = []
         for account_data in accounts_data:
@@ -161,6 +225,11 @@ class Session(object):
         return accounts
 
     def get_credit_cards(self):
+        """
+        List all the user's credit cards
+
+        :rtype: List of :class:`~prometeo.banking.models.CreditCard`
+        """
         cards_data = self._client.get_credit_cards(self._session_key)
         cards = []
         for card_data in cards_data:
@@ -170,9 +239,29 @@ class Session(object):
         return cards
 
     def get_interactive_context(self):
+        """
+        Necessary information to answer the login challenge, like a security question.
+
+        :rtype: str
+        """
         return self._interactive_context
 
     def finish_login(self, provider, username, password, answer):
+        """
+        Answer the security challenge, like an OTP or personal question.
+
+        :param provider: The provider used to login
+        :type provider: str
+
+        :param username: The username used to login
+        :type username: str
+
+        :param password: The password used to login
+        :type password: str
+
+        :param answer: The answer to the login challenge
+        :type answer: str
+        """
         self._client.call_api('POST', '/login/', data={
             'provider': provider,
             'username': username,
@@ -182,6 +271,9 @@ class Session(object):
 
 
 class Account(object):
+    """
+    A bank account, returned by :meth:`~prometeo.banking.client.Session.get_accounts`
+    """
 
     def __init__(self, client, session_key, account_data):
         self._client = client
@@ -195,12 +287,27 @@ class Account(object):
         self.balance = account_data.balance
 
     def get_movements(self, date_start, date_end):
+        """
+        List an account's movements for a range of dates.
+
+        :param date_start: Start of the date range for movements.
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End of the date range for movements.
+        :type date_end: :class:`~datetime.datetime`
+
+        :rtype: List of :class:`~prometeo.banking.models.Movement`
+        """
         return self._client.get_movements(
             self._session_key, self.number, self.currency, date_start, date_end,
         )
 
 
 class CreditCard(object):
+    """
+    A credit card, returned by :meth:`~prometeo.banking.client.Session.get_credit_cards`
+    """
+
     def __init__(self, client, session_key, card_data):
         self._client = client
         self._session_key = session_key
@@ -214,6 +321,17 @@ class CreditCard(object):
         self.balance_dollar = card_data.balance_dollar
 
     def get_movements(self, currency_code, date_start, date_end):
+        """
+        List credit card's movements for a range of dates.
+
+        :param date_start: Start of the date range for movements.
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End of the date range for movements.
+        :type date_end: :class:`~datetime.datetime`
+
+        :rtype: List of :class:`~prometeo.banking.models.Movement`
+        """
         return self._client.get_credit_card_movements(
             self._session_key, self.number, currency_code, date_start, date_end,
         )

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from prometeo.dian.client import (
-    DianAPIClient, Session, Periodicity, QuartlerlyPeriod, NumerationType, MonthlyPeriod
+    DianAPIClient, Session, Periodicity, QuarterlyPeriod, NumerationType, MonthlyPeriod
 )
 from tests.base_test_case import BaseTestCase
 
@@ -44,7 +44,7 @@ class TestSession(BaseTestCase):
     def test_get_vat_declaration(self, m):
         self.mock_get_request(m, '/vat/', 'vat_declaration')
         vat = self.session.get_vat_declaration(
-            2019, Periodicity.QUARTERLY, QuartlerlyPeriod.JANUARY_APRIL,
+            2019, Periodicity.QUARTERLY, QuarterlyPeriod.JANUARY_APRIL,
         )
 
         self.assertEqual(self.session_key, m.last_request.qs['session_key'][0])

@@ -10,11 +10,15 @@ PRODUCTION_URL = 'https://api.curp-api.qualia.uy'
 
 
 class Gender(Enum):
+    """A person's gender"""
     MALE = 'H'
     FEMALE = 'M'
 
 
 class State(Enum):
+    """
+    The state a person is registered
+    """
     AGUASCALIENTES = 'AS'
     BAJA_CALIFORNIA = 'BC'
     BAJA_CALIFORNIA_SUR = 'BS'
@@ -51,6 +55,9 @@ class State(Enum):
 
 
 class CurpAPIClient(base_client.BaseClient):
+    """
+    API Client for CURP queries
+    """
 
     ENVIRONMENTS = {
         'testing': TESTING_URL,
@@ -90,6 +97,14 @@ class CurpAPIClient(base_client.BaseClient):
         )
 
     def query(self, curp):
+        """
+        Find the personal data associated with a CURP
+
+        :param curp: The CURP of the person to query
+        :type curp: str
+
+        :rtype: :class:`~prometeo.curp.models.QueryResult`
+        """
         response = self.call_api('POST', '/query', data={
             'curp': curp,
         })
@@ -100,6 +115,29 @@ class CurpAPIClient(base_client.BaseClient):
     def reverse_query(
             self, state, birthdate, name, first_surname, last_surname, gender
     ):
+        """
+        Search for a person by their personal information.
+
+        :param state: The state where the person is registered
+        :type state: :class:`State`
+
+        :param birthdate: The person's birthdate
+        :type birthdate: :class:`~datetime.datetime`
+
+        :param name: The person's name
+        :type name: str
+
+        :param first_surname: The person's first surname
+        :type first_surname: str
+
+        :param last_surname: The person's last surname
+        :type last_surname: str
+
+        :param gender: The person's gender
+        :type gender: :class:`Gender`
+
+        :rtype: :class:`~prometeo.curp.models.QueryResult`
+        """
         response = self.call_api('POST', '/reverse-query', data={
             'state': state.value,
             'birthdate': birthdate.strftime('%d/%m/%Y'),

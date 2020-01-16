@@ -38,7 +38,7 @@ DownloadFile = namedtuple('DownloadFile', [
 ])
 
 
-AcknowledgmentResult = namedtuple('AcknowledgmentResult', [
+AcknowledgementResult = namedtuple('AcknowledgementResult', [
     'id',
     'period',
     'motive',

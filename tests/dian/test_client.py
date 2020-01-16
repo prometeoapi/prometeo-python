@@ -4,7 +4,7 @@ from six.moves.urllib.parse import parse_qs
 import requests_mock
 
 from prometeo.dian import (
-    DocumentType, Periodicity, QuartlerlyPeriod, NumerationType, MonthlyPeriod,
+    DocumentType, Periodicity, QuarterlyPeriod, NumerationType, MonthlyPeriod,
 )
 from tests.base_test_case import BaseTestCase
 
@@ -79,7 +79,7 @@ class TestClient(BaseTestCase):
             self.session_key,
             2019,
             Periodicity.QUARTERLY,
-            QuartlerlyPeriod.JANUARY_APRIL,
+            QuarterlyPeriod.JANUARY_APRIL,
         )
 
         self.assertEqual(self.session_key, m.last_request.qs['session_key'][0])

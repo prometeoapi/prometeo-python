@@ -4,7 +4,7 @@ from enum import Enum
 from prometeo import exceptions, base_client, base_session
 from .models import (
     CFDIBill, CFDIDownloadItem, DownloadRequest as DownloadRequestModel,
-    PdfFile, DownloadFile, AcknowledgmentResult as AcknowledgmentResultModel,
+    PdfFile, DownloadFile, AcknowledgementResult as AcknowledgmentResultModel,
 )
 
 
@@ -62,6 +62,10 @@ class SendType(Enum):
 
 
 class SatAPIClient(base_client.BaseClient):
+    """
+    API Client for SAT API
+    """
+
 
     ENVIRONMENTS = {
         'testing': TESTING_URL,
@@ -69,6 +73,22 @@ class SatAPIClient(base_client.BaseClient):
     }
 
     def login(self, rfc, password, scope):
+        """
+        Log in to SAT
+
+        :param rfc: RFC of the person to log in
+        :type rfc: str
+
+        :param password: Password used to login, also known as CIEC
+        :type password: str
+
+        :param scope: Depending on the type of information to query, use
+                      ``LoginScope.CFDI`` to download bill xmls or
+                      ``LoginScope.SIAT`` to download acknowledgements.
+        :type scope: :class:`LoginScope`
+
+        :rtype: :class:`Session`
+        """
         response = self.call_api('POST', '/login/', data={
             'provider': 'sat',
             'rfc': rfc,
@@ -185,7 +205,7 @@ class SatAPIClient(base_client.BaseClient):
             'send_type': send_type.value,
         })
         return [
-            AcknowledgmentResultModel(**result) for result in data['results']
+            AcknowledgementResultModel(**result) for result in data['results']
         ]
 
     def download_acknowledgement(self, session_key, ack_id):
@@ -198,14 +218,45 @@ class SatAPIClient(base_client.BaseClient):
 class Session(base_session.BaseSession):
 
     def logout(self):
+        """
+        Logs out of SAT. You won't be able to use this session after logout.
+        """
         self._client.logout(self._session_key)
 
     def get_emitted_bills(self, date_start, date_end, status):
+        """
+        List all emitted bills in a range of dates.
+
+        :param date_start: Start date to filter
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End date to filter
+        :type date_end: :class:`~datetime.datetime`
+
+        :param status: Status of the bills
+        :type status: :class:`BillStatus`
+
+        :rtype: List of :class:`~prometeo.sat.models.CFDIBill`
+        """
         return self._client.get_emitted(
             self._session_key, date_start, date_end, status, DownloadAction.LIST
         )
 
     def download_emitted_bills(self, date_start, date_end, status):
+        """
+        Creates a request to download all the emitted bills in a range of dates.
+
+        :param date_start: Start date to filter
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End date to filter
+        :type date_end: :class:`~datetime.datetime`
+
+        :param status: Status of the bills
+        :type status: :class:`BillStatus`
+
+        :rtype: List of :class:`~DownloadRequest`
+        """
         requests = self._client.get_emitted(
             self._session_key, date_start, date_end,
             status, DownloadAction.BULK_DOWNLOAD
@@ -219,11 +270,39 @@ class Session(base_session.BaseSession):
         ]
 
     def get_received_bills(self, year, month, status):
+        """
+        List all received bills in a range of dates.
+
+        :param year: Year of the received bills
+        :type year: int
+
+        :param month: Month of the received bills
+        :type month: int
+
+        :param status: Status of the bills
+        :type status: :class:`BillStatus`
+
+        :rtype: List of :class:`~prometeo.sat.models.CFDIBill`
+        """
         return self._client.get_received(
             self._session_key, year, month, status, DownloadAction.LIST
         )
 
     def download_received_bills(self, year, month, status):
+        """
+        Creates a request to download all the received bills in a range of dates.
+
+        :param date_start: Start date to filter
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End date to filter
+        :type date_end: :class:`~datetime.datetime`
+
+        :param status: Status of the bills
+        :type status: :class:`BillStatus`
+
+        :rtype: List of :class:`~DownloadRequest`
+        """
         requests = self._client.get_received(
             self._session_key, year, month, status, DownloadAction.BULK_DOWNLOAD
         )
@@ -236,6 +315,11 @@ class Session(base_session.BaseSession):
         ]
 
     def get_downloads(self):
+        """
+        Gets a list of available downloads
+
+        :rtype: List of :class:`DownloadRequest`
+        """
         return [
             DownloadRequest(
                 self._client,
@@ -248,16 +332,46 @@ class Session(base_session.BaseSession):
             self, year, month_start, month_end,
             motive, document_type, status, send_type
     ):
+        """
+        Gets a list of acknowledgements for a range of dates
+
+        :param year: The year of the acknowledgements
+        :type year: int
+
+        :param month_start: Start month to filter
+        :type month_start: int
+
+        :param month_end: End month to filter
+        :type month_end: int
+
+        :param motive: Motive
+        :type motive: :class:`Motive`
+
+        :param document_type: Document type
+        :type document_type: :class:`DocumentType`
+
+        :param status: Status
+        :type status: :class:`Status`
+
+        :param send_type: Send type
+        :type send_type: :class:`SendType`
+
+        :rtype: List of :class:`AcknowledgementResult`
+        """
         acks = self._client.get_acknowledgements(
             self._session_key, year, month_start, month_end,
             motive, document_type, status, send_type
         )
         return [
-            AcknowledgmentResult(self._client, self._session_key, ack) for ack in acks
+            AcknowledgementResult(self._client, self._session_key, ack) for ack in acks
         ]
 
 
-class AcknowledgmentResult(object):
+class AcknowledgementResult(object):
+    """
+    Info on an acknowledgement, returned by :meth:`Session.get_acknowledgements`
+    """
+
     def __init__(self, client, session_key, data):
         self._client = client
         self._session_key = session_key
@@ -271,27 +385,46 @@ class AcknowledgmentResult(object):
         self.status = data.status
 
     def get_download(self):
+        """
+        Download the acknowledgement data
+
+        :rtype: :class:`Download`
+        """
         download = self._client.download_acknowledgement(self._session_key, self.id)
         return Download(self._client, download.download_url)
 
 
 class DownloadRequest(object):
+    """
+    A request for bulk downloading of bills.
+    """
     def __init__(self, client, session_key, request_id):
         self._client = client
         self._session_key = session_key
         self.request_id = request_id
 
     def get_download(self):
+        """
+        Download the generated zip file with all the xmls
+        """
         download = self._client.get_download(self._session_key, self.request_id)
         return Download(self._client, download.download_url)
 
 
 class Download(object):
+    """
+    Represents a downloadable file, like an xml bill or acknowledgement.
+    """
 
     def __init__(self, client, url):
         self._client = client
         self.url = url
 
     def get_file(self):
+        """
+        Downloads the file and returns its contents.
+
+        :rtype: bytes
+        """
         resp = self._client.make_request('GET', self.url)
         return resp.content
