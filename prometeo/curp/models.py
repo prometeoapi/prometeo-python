@@ -4,6 +4,8 @@ from collections import namedtuple
 QueryResult = namedtuple('QueryResult', [
     'document_data',
     'personal_data',
+    'pdf_url',
+    'pdf',
 ])
 
 DocumentData = namedtuple('DocumentData', {

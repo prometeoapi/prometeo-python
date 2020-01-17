@@ -213,6 +213,7 @@ class DianAPIClient(base_client.BaseClient):
             capital_composition=CapitalComposition(**data['capital_composition']),
             reason=data['reason'],
             pdf_url=data['pdf_url'],
+            pdf=base_client.Download(self, data['pdf_url']),
             location=Location(**data['location']),
             name=data['name'],
             constitution_date=datetime.strptime(data['constitution_date'], '%d/%m/%Y'),
@@ -253,6 +254,7 @@ class DianAPIClient(base_client.BaseClient):
         })
         return RentDeclaration(
             pdf_url=data['declaration']['pdf_url'],
+            pdf=base_client.Download(self, data['declaration']['pdf_url']),
             fields=[Field(**field) for field in data['declaration']['fields'].values()],
             year=data['declaration']['year'],
             form_number=data['declaration']['form_number'],
@@ -275,6 +277,7 @@ class DianAPIClient(base_client.BaseClient):
         })
         return VATDeclaration(
             pdf_url=data['declaration']['pdf_url'],
+            pdf=base_client.Download(self, data['declaration']['pdf_url']),
             fields=[Field(**field) for field in data['declaration']['fields'].values()],
             year=data['declaration']['year'],
             form_number=data['declaration']['form_number'],
@@ -333,6 +336,7 @@ class DianAPIClient(base_client.BaseClient):
         })
         return Retentions(
             pdf_url=data['retentions']['pdf_url'],
+            pdf=base_client.Download(self, data['retentions']['pdf_url']),
             fields=[Field(**field) for field in data['retentions']['fields'].values()],
             year=data['retentions']['year'],
             form_number=data['retentions']['form_number'],

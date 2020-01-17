@@ -74,3 +74,22 @@ class BaseClient(object):
             )
         self._environment = environment
         self._client_session = requests.Session()
+
+
+class Download(object):
+    """
+    Represents a downloadable file, like an xml bill or pdf document
+    """
+
+    def __init__(self, client, url):
+        self._client = client
+        self.url = url
+
+    def get_file(self):
+        """
+        Downloads the file and returns its contents.
+
+        :rtype: bytes
+        """
+        resp = self._client.make_request('GET', self.url)
+        return resp.content

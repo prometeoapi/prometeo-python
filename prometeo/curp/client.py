@@ -94,6 +94,8 @@ class CurpAPIClient(base_client.BaseClient):
                 primer_apellido=personal_data['primerApellido'],
                 curp=personal_data['curp'],
             ),
+            pdf_url=response_data['pdf_url'],
+            pdf=base_client.Download(self, response_data['pdf_url']),
         )
 
     def query(self, curp):

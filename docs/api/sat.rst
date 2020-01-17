@@ -18,9 +18,6 @@ API Client
 .. autoclass:: prometeo.sat.client.DownloadRequest
    :members:
 
-.. autoclass:: prometeo.sat.client.Download
-   :members:
-
 
 Enums
 -----

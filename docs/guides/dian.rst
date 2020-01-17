@@ -52,6 +52,20 @@ In some cases it may be useful to serialize the session to be used later or to t
    restored_session = client.dian.get_session(session_key)
 
 
+Download the forms
+------------------
+
+To download the original forms in pdf format, use the ``pdf`` property of the object returned by the methods:
+
+.. code-block:: python
+
+   info = session.get_company_info()
+   pdf_content = info.pdf.get_content()
+   # write the contents to a file:
+   with open("company-info.pdf", "wb") as f:
+       f.write(pdf_content)
+
+
 Getting the data
 ----------------
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
+import six
 from six.moves.urllib.parse import parse_qs
 import requests_mock
 
@@ -71,3 +72,19 @@ class TestClient(BaseTestCase):
                 state, birthdate, name, first_surname, last_surname, gender
             )
         self.assertIn(error_message, cm.exception.message)
+
+    def test_pdf_url(self, m):
+        test_curp = 'ABCD880304HDFXNR45'
+        self.mock_post_request(m, '/query', 'successful_curp')
+        result = self.client.curp.query(test_curp)
+        self.assertEqual("/pdf/50ad2ba127ae4cc384fd265e585a1f67.pdf", result.pdf_url)
+
+    def test_download_pdf(self, m):
+        test_curp = 'ABCD880304HDFXNR45'
+        pdf_url = "/pdf/50ad2ba127ae4cc384fd265e585a1f67.pdf"
+        pdf_content = 'pdf content'
+        self.mock_post_request(m, '/query', 'successful_curp')
+        m.get(pdf_url, text=pdf_content)
+
+        result = self.client.curp.query(test_curp)
+        self.assertEqual(six.ensure_binary(pdf_content), result.pdf.get_file())

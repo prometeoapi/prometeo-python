@@ -392,7 +392,7 @@ class AcknowledgementResult(object):
         :rtype: :class:`Download`
         """
         download = self._client.download_acknowledgement(self._session_key, self.id)
-        return Download(self._client, download.download_url)
+        return base_client.Download(self._client, download.download_url)
 
 
 class DownloadRequest(object):
@@ -413,7 +413,7 @@ class DownloadRequest(object):
         """
         if self._download is None:
             download = self._client.get_download(self._session_key, self.request_id)
-            self._download = Download(self._client, download.download_url)
+            self._download = base_client.Download(self._client, download.download_url)
         return self._download
 
     def is_ready(self):
@@ -427,22 +427,3 @@ class DownloadRequest(object):
             return True
         except exceptions.NotFoundError:
             return False
-
-
-class Download(object):
-    """
-    Represents a downloadable file, like an xml bill or acknowledgement.
-    """
-
-    def __init__(self, client, url):
-        self._client = client
-        self.url = url
-
-    def get_file(self):
-        """
-        Downloads the file and returns its contents.
-
-        :rtype: bytes
-        """
-        resp = self._client.make_request('GET', self.url)
-        return resp.content

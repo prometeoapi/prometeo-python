@@ -1,6 +1,7 @@
 import requests_mock
 
-from prometeo.sat.client import SatAPIClient, Download
+from prometeo.sat.client import SatAPIClient
+from prometeo.base_client import Download
 from tests.base_test_case import BaseTestCase
 
 

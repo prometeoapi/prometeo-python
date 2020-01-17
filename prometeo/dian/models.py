@@ -6,6 +6,7 @@ CompanyInfo = namedtuple('CompanyInfo', [
     'capital_composition',
     'reason',
     'pdf_url',
+    'pdf',
     'location',
     'name',
     'constitution_date',
@@ -70,6 +71,7 @@ Balance = namedtuple('Balance', [
 
 RentDeclaration = namedtuple('RentDeclaration', [
     'pdf_url',
+    'pdf',
     'fields',
     'year',
     'form_number',
@@ -91,6 +93,7 @@ Field = namedtuple('Field', [
 
 VATDeclaration = namedtuple('VATDeclaration', [
     'pdf_url',
+    'pdf',
     'fields',
     'year',
     'period',
@@ -129,6 +132,7 @@ NumerationRange = namedtuple('Range', [
 
 Retentions = namedtuple('Retentions', [
     'pdf_url',
+    'pdf',
     'fields',
     'year',
     'period',
