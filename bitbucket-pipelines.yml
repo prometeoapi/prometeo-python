@@ -15,7 +15,6 @@ push: &push
         variables:
           PYPI_USERNAME: '$PYPI_USERNAME'
           PYPI_PASSWORD: '$PYPI_PASSWORD'
-          REPOSITORY: 'https://test.pypi.org/legacy/'
 
 pipelines:
   default:
@@ -24,4 +23,3 @@ pipelines:
     master:
     - <<: *test
     - <<: *push
-
