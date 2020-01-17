@@ -4,7 +4,7 @@ from enum import Enum
 from prometeo import exceptions, base_client, base_session
 from .models import (
     CFDIBill, CFDIDownloadItem, DownloadRequest as DownloadRequestModel,
-    PdfFile, DownloadFile, AcknowledgementResult as AcknowledgmentResultModel,
+    PdfFile, DownloadFile, AcknowledgementResult as AcknowledgementResultModel,
 )
 
 
