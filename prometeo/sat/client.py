@@ -398,6 +398,7 @@ class DownloadRequest(object):
     A request for bulk downloading of bills.
     """
     def __init__(self, client, session_key, request_id):
+        self._download = None
         self._client = client
         self._session_key = session_key
         self.request_id = request_id
@@ -405,9 +406,25 @@ class DownloadRequest(object):
     def get_download(self):
         """
         Download the generated zip file with all the xmls
+
+        :rtype: :class:`Download`
         """
-        download = self._client.get_download(self._session_key, self.request_id)
-        return Download(self._client, download.download_url)
+        if self._download is None:
+            download = self._client.get_download(self._session_key, self.request_id)
+            self._download = Download(self._client, download.download_url)
+        return self._download
+
+    def is_ready(self):
+        """
+        Check if the request is ready to download.
+
+        :rtype: bool
+        """
+        try:
+            self.get_download()
+            return True
+        except exceptions.NotFoundError:
+            return False
 
 
 class Download(object):

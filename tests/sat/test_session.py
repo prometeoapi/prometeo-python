@@ -138,3 +138,30 @@ class TestSession(BaseTestCase):
         )
         download = acks[0].get_download()
         self.assertEqual(download.url, "/download/4f3882b1d413f761ced91b6bd583f6ee.zip")
+
+    def test_download_not_ready(self, m):
+        self.mock_get_request(m, '/cfdi/received/', 'cfdi_received_bulk_download')
+        self.mock_get_request(
+            m,
+            '/cfdi/download/50AD2BA1-27AE-4CC3-84FD-265E585A1F67/',
+            'not_found',
+            status_code=404
+        )
+
+        downloads = self.session.download_received_bills(
+            2018, 5, BillStatus.ANY
+        )
+        self.assertFalse(downloads[0].is_ready())
+
+    def test_download_ready(self, m):
+        self.mock_get_request(m, '/cfdi/received/', 'cfdi_received_bulk_download')
+        self.mock_get_request(
+            m,
+            '/cfdi/download/50AD2BA1-27AE-4CC3-84FD-265E585A1F67/',
+            'cfdi_download',
+        )
+
+        downloads = self.session.download_received_bills(
+            2018, 5, BillStatus.ANY
+        )
+        self.assertTrue(downloads[0].is_ready())
