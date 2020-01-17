@@ -15,6 +15,20 @@ Log in
    )
 
 
+Restoring a session
+-------------------
+
+In some cases it may be useful to serialize the session to be used later or to transfer to another process, like in a task queue job. For this use :meth:`~prometeo.base_client.BaseSession.get_session_key` and :meth:`~prometeo.base_client.BaseClient.get_session`:
+
+.. code-block:: python
+
+   session_key = session.get_session_key()
+
+   # save session_key somewhere...
+
+   restored_session = client.sat.get_session(session_key)
+
+
 Listing bills
 -------------
 

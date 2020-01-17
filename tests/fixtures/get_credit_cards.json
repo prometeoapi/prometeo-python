@@ -1,0 +1,14 @@
+{
+    "credit_cards": [
+        {
+            "balance_dollar": 67.89,
+            "balance_local": 12345.42,
+            "close_date": "04/11/2019",
+            "due_date": "20/11/2019",
+            "id": "EcebS0rIZ5NdJNzS4XHmuOnHvSsI72TSA3j/8drzYYHtW1sQbpz5Hc",
+            "name": "Vi Int Sumaclub Plus",
+            "number": "770012345678"
+        }
+    ],
+    "status": "success"
+}

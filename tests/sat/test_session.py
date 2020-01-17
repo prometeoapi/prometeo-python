@@ -165,3 +165,12 @@ class TestSession(BaseTestCase):
             2018, 5, BillStatus.ANY
         )
         self.assertTrue(downloads[0].is_ready())
+
+    def test_restore_session(self, m):
+        self.mock_get_request(m, '/cfdi/download/', 'cfdi_list_downloads')
+
+        session_key = 'test_restored_key'
+        session = self.client.sat.get_session(session_key)
+
+        session.get_downloads()
+        self.assertEqual(session_key, m.last_request.qs['session_key'][0])

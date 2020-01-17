@@ -69,6 +69,88 @@ class DocumentType(Enum):
     CARNE_DIPLOMATICO = '46'
 
 
+class Session(base_session.BaseSession):
+
+    def get_company_info(self):
+        """
+        Get information about the company or person (form 001).
+
+        :rtype: :class:`~prometeo.dian.models.CompanyInfo`
+        """
+        return self._client.get_company_info(self._session_key)
+
+    def get_balances(self):
+        """
+        Get balances.
+
+        :rtype: list of :class:`~prometeo.dian.models.Balance`
+        """
+        return self._client.get_balances(self._session_key)
+
+    def get_rent_declaration(self, year):
+        """
+        Get rent declaration information (form 110 for companies and 210 for persons)
+
+        :param year: Year of the declaration
+        :type year: int
+
+        :rtype: :class:`~prometeo.dian.models.RentDeclaration`
+        """
+        return self._client.get_rent_declaration(self._session_key, year)
+
+    def get_vat_declaration(self, year, periodicity, period):
+        """
+        Get VAT declaration information (form 300)
+
+        :param year: Year of the declaration
+        :type year: int
+
+        :param periodicity: Periodicity, either quarterly or bimonthly
+        :type periodicity: :class:`Periodicity`
+
+        :param period: Period of the declaration
+        :type period: int
+
+        :rtype: :class:`~prometeo.dian.models.VATDeclaration`
+        """
+        return self._client.get_vat_declaration(
+            self._session_key, year, periodicity, period
+        )
+
+    def get_numeration(self, type, date_start, date_end):
+        """
+        Get bill numeration (form 1876)
+
+        :param type: The type of numeration request to get
+        :type type: :class:`NumerationType`
+
+        :param date_start: Start date to filter
+        :type date_start: :class:`~datetime.datetime`
+
+        :param date_end: End date to filter
+        :type date_end: :class:`~datetime.datetime`
+
+        :rtype: List of :class:`~prometeo.dian.models.Numeration`
+        """
+        return self._client.get_numeration(
+            self._session_key, type, date_start, date_end
+        )
+
+    def get_retentions(self, year, period):
+        """
+        Get retentions information (form 350)
+
+        :param year: Year of the retention
+        :type year: int
+
+        :param period: Period of the retention
+        :type period: int
+
+        :rtype: List of :class:`~prometeo.dian.models.Retentions`
+        """
+        return self._client.get_retentions(self._session_key, year, period)
+
+
 class DianAPIClient(base_client.BaseClient):
     """
     API Client for DIAN API
@@ -78,6 +160,8 @@ class DianAPIClient(base_client.BaseClient):
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
     }
+
+    session_class = Session
 
     def login(self, document_type, document, password, nit=None):
         """
@@ -257,85 +341,3 @@ class DianAPIClient(base_client.BaseClient):
             direction_code=data['retentions']['direction_code'],
             period=data['retentions']['period'],
         )
-
-
-class Session(base_session.BaseSession):
-
-    def get_company_info(self):
-        """
-        Get information about the company or person (form 001).
-
-        :rtype: :class:`~prometeo.dian.models.CompanyInfo`
-        """
-        return self._client.get_company_info(self._session_key)
-
-    def get_balances(self):
-        """
-        Get balances.
-
-        :rtype: list of :class:`~prometeo.dian.models.Balance`
-        """
-        return self._client.get_balances(self._session_key)
-
-    def get_rent_declaration(self, year):
-        """
-        Get rent declaration information (form 110 for companies and 210 for persons)
-
-        :param year: Year of the declaration
-        :type year: int
-
-        :rtype: :class:`~prometeo.dian.models.RentDeclaration`
-        """
-        return self._client.get_rent_declaration(self._session_key, year)
-
-    def get_vat_declaration(self, year, periodicity, period):
-        """
-        Get VAT declaration information (form 300)
-
-        :param year: Year of the declaration
-        :type year: int
-
-        :param periodicity: Periodicity, either quarterly or bimonthly
-        :type periodicity: :class:`Periodicity`
-
-        :param period: Period of the declaration
-        :type period: int
-
-        :rtype: :class:`~prometeo.dian.models.VATDeclaration`
-        """
-        return self._client.get_vat_declaration(
-            self._session_key, year, periodicity, period
-        )
-
-    def get_numeration(self, type, date_start, date_end):
-        """
-        Get bill numeration (form 1876)
-
-        :param type: The type of numeration request to get
-        :type type: :class:`NumerationType`
-
-        :param date_start: Start date to filter
-        :type date_start: :class:`~datetime.datetime`
-
-        :param date_end: End date to filter
-        :type date_end: :class:`~datetime.datetime`
-
-        :rtype: List of :class:`~prometeo.dian.models.Numeration`
-        """
-        return self._client.get_numeration(
-            self._session_key, type, date_start, date_end
-        )
-
-    def get_retentions(self, year, period):
-        """
-        Get retentions information (form 350)
-
-        :param year: Year of the retention
-        :type year: int
-
-        :param period: Period of the retention
-        :type period: int
-
-        :rtype: List of :class:`~prometeo.dian.models.Retentions`
-        """
-        return self._client.get_retentions(self._session_key, year, period)

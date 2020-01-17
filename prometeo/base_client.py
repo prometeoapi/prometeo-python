@@ -5,8 +5,13 @@ from prometeo import exceptions
 
 
 class BaseClient(object):
+    """
+    Base client class to make api calls
+    """
 
     ENVIRONMENTS = {}
+
+    session_class = None
 
     def make_request(self, method, url, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
@@ -19,6 +24,17 @@ class BaseClient(object):
         )
 
     def call_api(self, method, url, *args, **kwargs):
+        """
+        Calls an API endpoint, using the configured api key and environment.
+
+        :param method: The HTTP method to use (``GET``, ``POST``, etc)
+        :type method: str
+
+        :param url: The url to call (without the environment's domain)
+        :type url: str
+
+        :rtype: JSON data as a python object.
+        """
         response = self.make_request(method, url, *args, **kwargs)
         try:
             data = response.json()
@@ -35,6 +51,17 @@ class BaseClient(object):
         elif response.status_code == 500:
             raise exceptions.InternalAPIError(data.get('message', response.text))
         return data
+
+    def get_session(self, session_key):
+        """
+        Restore a session from its session key
+
+        :param session_key: The session key
+        :type session_key: str
+
+        :rtype: :class:`Session`
+        """
+        return self.session_class(self, None, session_key)
 
     def __init__(self, api_key, environment):
         self._api_key = api_key

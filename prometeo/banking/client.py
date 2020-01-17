@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from prometeo import exceptions, base_client
+from prometeo import exceptions, base_client, base_session
 from .models import (
     Client as Client, Account as AccountModel, Movement, CreditCard as CreditCardModel,
     Provider, ProviderDetail,
@@ -9,6 +9,94 @@ from .models import (
 
 TESTING_URL = 'https://test.prometeo.qualia.uy'
 PRODUCTION_URL = 'https://prometeo.qualia.uy'
+
+
+class Session(base_session.BaseSession):
+    """
+    Encapsulates the user's session, returned by
+    :meth:`~prometeo.banking.client.BankingAPIClient.login`
+    """
+
+    def __init__(self, client, status, session_key, context=None, field=None):
+        super(Session, self).__init__(client, status, session_key)
+        self._interactive_context = context
+        self._interactive_field = field
+
+    def get_clients(self):
+        """
+        List the user's clients. Returns an empty list if the bank doesn't uses clients.
+
+        :rtype: List of :class:`~prometeo.banking.models.Client`
+        """
+        return self._client.get_clients(self._session_key)
+
+    def select_client(self, client):
+        """
+        Selects the client to use for this session.
+
+        :param client_id: The id of the client, obtained from listing the clients
+        :type client_id: str
+        """
+        self._client.select_client(self._session_key, client.id)
+
+    def get_accounts(self):
+        """
+        List all the user's accounts
+
+        :rtype: List of :class:`~prometeo.banking.models.Account`
+        """
+        accounts_data = self._client.get_accounts(self._session_key)
+        accounts = []
+        for account_data in accounts_data:
+            accounts.append(Account(
+                self._client, self._session_key, account_data,
+            ))
+        return accounts
+
+    def get_credit_cards(self):
+        """
+        List all the user's credit cards
+
+        :rtype: List of :class:`~prometeo.banking.models.CreditCard`
+        """
+        cards_data = self._client.get_credit_cards(self._session_key)
+        cards = []
+        for card_data in cards_data:
+            cards.append(CreditCard(
+                self._client, self._session_key, card_data,
+            ))
+        return cards
+
+    def get_interactive_context(self):
+        """
+        Necessary information to answer the login challenge, like a security question.
+
+        :rtype: str
+        """
+        return self._interactive_context
+
+    def finish_login(self, provider, username, password, answer):
+        """
+        Answer the security challenge, like an OTP or personal question.
+
+        :param provider: The provider used to login
+        :type provider: str
+
+        :param username: The username used to login
+        :type username: str
+
+        :param password: The password used to login
+        :type password: str
+
+        :param answer: The answer to the login challenge
+        :type answer: str
+        """
+        self._client.call_api('POST', '/login/', data={
+            'provider': provider,
+            'username': username,
+            'password': password,
+            self._interactive_field: answer,
+        })
 
 
 class BankingAPIClient(base_client.BaseClient):
@@ -20,6 +108,8 @@ class BankingAPIClient(base_client.BaseClient):
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
     }
+
+    session_class = Session
 
     def login(self, provider, username, password):
         """
@@ -161,112 +251,6 @@ class BankingAPIClient(base_client.BaseClient):
         """
         data = self.call_api('GET', '/provider/{}/'.format(provider_code))
         return ProviderDetail(**data['provider'])
-
-
-class Session(object):
-    """
-    Encapsulates the user's session, returned by
-    :meth:`~prometeo.banking.client.BankingAPIClient.login`
-    """
-
-    def __init__(self, client, status, session_key, context=None, field=None):
-        self._client = client
-        self._status = status
-        self._session_key = session_key
-        self._interactive_context = context
-        self._interactive_field = field
-
-    def get_status(self):
-        """
-        Returns the status of the session.
-
-        :rtype: str
-        """
-        return self._status
-
-    def get_session_key(self):
-        """
-        Returns the session key.
-
-        :rtype: str
-        """
-        return self._session_key
-
-    def get_clients(self):
-        """
-        List the user's clients. Returns an empty list if the bank doesn't uses clients.
-
-        :rtype: List of :class:`~prometeo.banking.models.Client`
-        """
-        return self._client.get_clients(self._session_key)
-
-    def select_client(self, client):
-        """
-        Selects the client to use for this session.
-
-        :param client_id: The id of the client, obtained from listing the clients
-        :type client_id: str
-        """
-        self._client.select_client(self._session_key, client.id)
-
-    def get_accounts(self):
-        """
-        List all the user's accounts
-
-        :rtype: List of :class:`~prometeo.banking.models.Account`
-        """
-        accounts_data = self._client.get_accounts(self._session_key)
-        accounts = []
-        for account_data in accounts_data:
-            accounts.append(Account(
-                self._client, self._session_key, account_data,
-            ))
-        return accounts
-
-    def get_credit_cards(self):
-        """
-        List all the user's credit cards
-
-        :rtype: List of :class:`~prometeo.banking.models.CreditCard`
-        """
-        cards_data = self._client.get_credit_cards(self._session_key)
-        cards = []
-        for card_data in cards_data:
-            cards.append(CreditCard(
-                self._client, self._session_key, card_data,
-            ))
-        return cards
-
-    def get_interactive_context(self):
-        """
-        Necessary information to answer the login challenge, like a security question.
-
-        :rtype: str
-        """
-        return self._interactive_context
-
-    def finish_login(self, provider, username, password, answer):
-        """
-        Answer the security challenge, like an OTP or personal question.
-
-        :param provider: The provider used to login
-        :type provider: str
-
-        :param username: The username used to login
-        :type username: str
-
-        :param password: The password used to login
-        :type password: str
-
-        :param answer: The answer to the login challenge
-        :type answer: str
-        """
-        self._client.call_api('POST', '/login/', data={
-            'provider': provider,
-            'username': username,
-            'password': password,
-            self._interactive_field: answer,
-        })
 
 
 class Account(object):

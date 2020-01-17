@@ -77,3 +77,12 @@ class TestSession(BaseTestCase):
         self.assertEqual('11', m.last_request.qs['period'][0])
 
         self.assertEqual("Qualia Fintech SRL", retentions.reason)
+
+    def test_restore_session(self, m):
+        self.mock_get_request(m, '/balances/', 'company_balances')
+
+        session_key = 'test_restored_key'
+        session = self.client.dian.get_session(session_key)
+
+        session.get_balances()
+        self.assertEqual(session_key, m.last_request.qs['session_key'][0])

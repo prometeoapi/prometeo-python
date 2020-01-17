@@ -1,0 +1,21 @@
+{
+    "accounts": [
+        {
+            "balance": 1234.95,
+            "branch": "02 - 18 De Julio",
+            "currency": "UYU",
+            "id": "hash1",
+            "name": "Cuenta total",
+            "number": "001234567890"
+        },
+        {
+            "balance": 53.96,
+            "branch": "61 - Ciudad Vieja",
+            "currency": "USD",
+            "id": "hash4",
+            "name": "Caja De Ahorro Atm",
+            "number": "004327567890"
+        }
+    ],
+    "status": "success"
+}
