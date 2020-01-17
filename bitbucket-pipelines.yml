@@ -22,7 +22,6 @@ pipelines:
     - <<: *test
   branches:
     master:
-      master:
-        - <<: *test
-        - <<: *push
+    - <<: *test
+    - <<: *push
 
