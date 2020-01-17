@@ -66,7 +66,6 @@ class SatAPIClient(base_client.BaseClient):
     API Client for SAT API
     """
 
-
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,

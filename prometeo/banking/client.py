@@ -16,7 +16,6 @@ class BankingAPIClient(base_client.BaseClient):
     API Client for banking api
     """
 
-
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
@@ -27,7 +26,7 @@ class BankingAPIClient(base_client.BaseClient):
         Start log in process with the provider
 
         :param provider: Name of the provider,
-                         use :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
+                         use :meth:`~BankingAPIClient.get_providers`
                          to get a list of available providers
         :type provider: str
 

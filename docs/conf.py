@@ -15,7 +15,6 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 
-
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # -- Project information -----------------------------------------------------
@@ -38,8 +37,6 @@ extensions = [
     'sphinx.ext.viewcode',
     "sphinx_rtd_theme",
 ]
-
-
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
