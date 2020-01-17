@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="prometeo",
-    version="0.2.1",
+    version="1.0.0",
     author="Prometeo",
     author_email="dev@prometeoapi.com",
     description="Python client library for Prometeo",
