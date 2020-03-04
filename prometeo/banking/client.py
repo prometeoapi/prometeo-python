@@ -96,6 +96,8 @@ class Session(base_session.BaseSession):
             'username': username,
             'password': password,
             self._interactive_field: answer,
+        }, params={
+            'key': self._session_key,
         })
 
 

@@ -68,12 +68,13 @@ class TestClient(BaseTestCase):
         self.assertEqual('/client/1/', history[-1].path)
 
     def test_login_interactive(self, m):
+        session_key = '123456'
         personal_question = u"¿Cuántos baños tenia la casa de mis padres?"
         m.post('/login/', json={
             'status': 'interaction_required',
             "context": personal_question,
             "field": "personal_question",
-            'key': '123456',
+            'key': session_key,
         })
         session = self.client.banking.login(
             provider='test_provider',
@@ -81,7 +82,7 @@ class TestClient(BaseTestCase):
             password='test_password',
         )
         self.assertEqual('interaction_required', session.get_status())
-        self.assertEqual('123456', session.get_session_key())
+        self.assertEqual(session_key, session.get_session_key())
         self.assertEqual(personal_question, session.get_interactive_context())
 
         m.post('/login/', json={
@@ -93,6 +94,7 @@ class TestClient(BaseTestCase):
         )
         request_body = parse_qs(m.last_request.text)
         self.assertEqual(request_body['personal_question'][0], challenge_answer)
+        self.assertEqual(m.last_request.qs['key'][0], session_key)
 
     def test_get_accounts(self, m):
         m.get('/account/', json={
