@@ -292,3 +292,11 @@ class TestClient(BaseTestCase):
         })
         with self.assertRaises(exceptions.NotFoundError):
             self.client.banking.get_provider_detail('invalid')
+
+    def test_logout(self, m):
+        m.get('/logout/', json={'status': 'logged_out'})
+        session_key = 'test_session_key'
+        self.client.banking.logout(session_key)
+        qs = parse_qs(urlparse(m.last_request.url).query)
+        self.assertEqual('/logout/', m.last_request.path)
+        self.assertEqual(session_key, qs['key'][0])

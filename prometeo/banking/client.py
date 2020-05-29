@@ -101,6 +101,12 @@ class Session(base_session.BaseSession):
             'key': self._session_key,
         })
 
+    def logout(self):
+        """
+        Logs the user out and invalidates its session.
+        """
+        self._client.logout(self._session_key)
+
 
 class BankingAPIClient(base_client.BaseClient):
     """
@@ -254,6 +260,17 @@ class BankingAPIClient(base_client.BaseClient):
         """
         data = self.call_api('GET', '/provider/{}/'.format(provider_code))
         return ProviderDetail(**data['provider'])
+
+    def logout(self, session_key):
+        """
+        Logs the user out and invalidates its session.
+
+        :param session_key: The session key.
+        :type session_key: str
+        """
+        self.call_api('GET', '/logout/', params={
+            'key': session_key,
+        })
 
 
 class Account(object):
