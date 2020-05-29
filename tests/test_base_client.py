@@ -86,3 +86,11 @@ class TestCase(unittest.TestCase):
             self.client.call_api('GET', '/test/')
 
         self.assertEqual(error_message, cm.exception.message)
+
+    def test_provider_unavailable(self, m):
+        m.get('/test/', status_code=503, json={
+            "status": "provider_unavailable",
+            "message": "Provider returned 500 response.",
+        })
+        with self.assertRaises(exceptions.ProviderUnavailableError):
+            self.client.call_api('GET', '/test/')

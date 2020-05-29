@@ -50,6 +50,8 @@ class BaseClient(object):
             raise exceptions.NotFoundError(data.get('message'))
         elif response.status_code == 500:
             raise exceptions.InternalAPIError(data.get('message', response.text))
+        elif response.status_code == 503:
+            raise exceptions.ProviderUnavailableError(data.get('message'))
         return data
 
     def get_session(self, session_key):

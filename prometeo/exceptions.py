@@ -31,3 +31,7 @@ class NotFoundError(PrometeoError):
 
 class InternalAPIError(PrometeoError):
     pass
+
+
+class ProviderUnavailableError(PrometeoError):
+    pass

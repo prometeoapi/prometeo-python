@@ -33,3 +33,8 @@ class TestSession(BaseTestCase):
 
         session.get_accounts()
         self.assertEqual(session_key, m.last_request.qs['key'][0])
+
+    def test_logout(self, m):
+        self.mock_get_request(m, '/logout/', 'successful_logout')
+        self.session.logout()
+        self.assertEqual(self.session_key, m.last_request.qs['key'][0])
