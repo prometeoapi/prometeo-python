@@ -5,6 +5,7 @@ from .models import (
     Client as Client, Account as AccountModel, Movement, CreditCard as CreditCardModel,
     Provider, ProviderDetail,
 )
+from .exceptions import BankingClientError
 
 
 TESTING_URL = 'https://test.prometeo.qualia.uy'
@@ -145,7 +146,7 @@ class BankingAPIClient(base_client.BaseClient):
         elif response['status'] == 'wrong_credentials':
             raise exceptions.WrongCredentialsError(response['message'])
         else:
-            raise exceptions.BankingClientError(response['message'])
+            raise BankingClientError(response['message'])
 
     def get_clients(self, session_key):
         response = self.call_api('GET', '/client/', params={

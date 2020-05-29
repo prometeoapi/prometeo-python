@@ -5,6 +5,7 @@ from six.moves.urllib.parse import parse_qs, urlparse
 import requests_mock
 
 from prometeo import exceptions
+from prometeo.banking import exceptions as banking_exceptions
 from tests.base_test_case import BaseTestCase
 
 
@@ -30,6 +31,18 @@ class TestClient(BaseTestCase):
             'message': 'wrong credentials',
         })
         with self.assertRaises(exceptions.WrongCredentialsError):
+            self.client.banking.login(
+                provider='test_provider',
+                username='test_username',
+                password='test_password',
+            )
+
+    def test_generic_login_error(self, m):
+        m.post('/login/', status_code=200, json={
+            'status': 'error',
+            'message': 'An error has ocurred.',
+        })
+        with self.assertRaises(banking_exceptions.BankingClientError):
             self.client.banking.login(
                 provider='test_provider',
                 username='test_username',
