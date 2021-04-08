@@ -120,7 +120,7 @@ class BankingAPIClient(base_client.BaseClient):
 
     session_class = Session
 
-    def login(self, provider, username, password):
+    def login(self, provider, username, password, **kwargs):
         """
         Start log in process with the provider
 
@@ -141,6 +141,7 @@ class BankingAPIClient(base_client.BaseClient):
             'provider': provider,
             'username': username,
             'password': password,
+            **kwargs
         })
         if response['status'] in ['logged_in', 'select_client']:
             return Session(self, response['status'], response['key'])
