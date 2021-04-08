@@ -135,6 +135,11 @@ class BankingAPIClient(base_client.BaseClient):
         :param password: User's password
         :type password: str
 
+        :param kwargs: Extra login fields for providers that require it,
+                       use :meth:`~BankingAPIClient.get_provider_detail`
+                       to get a list of all the auth login fields
+        :type kwargs: dict
+
         :rtype: :class:`~prometeo.banking.client.Session`
         """
         response = self.call_api('POST', '/login/', data={

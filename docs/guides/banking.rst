@@ -23,12 +23,81 @@ Log in
     session = client.banking.login(
         provider='test',
         username='12345',
-        password='gfdsa'
+        password='gfdsa',
+        kwargs={}
     )
 
 
 To get a list of available provider codes, use :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
 
+Becuase some banks require extra fields to log in, these must be provided inside ``kwargs`` as a dictionary. To see if a provider requires extra auth fields to log in, use :meth:`~prometeo.banking.client.BankingAPIClient.get_provider_detail`
+
+Example with extra auth fields:
+
+.. code-block:: python
+
+    session = client.banking.login(
+        provider='bbva_mx',
+        username='12345',
+        password='gfdsa',
+        kwargs={
+            'otp': 11223
+        }
+    )
+
+The following is a table with all the extra auth fields and their respective providers.
+
+.. list-table:: Extra Login fields
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - Field
+     - Provider
+     - Description
+     - Required
+   * - otp
+     - bbva_mx
+     - One-time password
+     - True
+   * - personal_question
+     - banco_general, intermatico
+     - Personal question
+     - True
+   * - token
+     - banorte
+     - Provider authorization token
+     - True
+   * - company_code
+     - pe_bbva_netcash
+     - Company code
+     - True
+   * - type
+     - davivienda
+     - Type of Login. Options:
+        * ``cedula_ciudadania``: citizenship card
+        * ``cedula_extranjeria``: foreigner Identity card
+        * ``nit`` NIT
+        * ``tarjeta_identidad``: identity card
+        * ``pasaporte``: passport
+        * ``tarjeta_seguro_social_extranjero``: foreign Social Security card
+        * ``sociedad_extranjera_sin_nit``: foreign company without NIT in Colombia
+        * ``fideicomiso``: fideicomiso
+        * ``nit_menores``: Minor NIT
+        * ``rif_venezuela``: RIF Venezuela
+        * ``nit_extranjeria``: Foreigners NIT
+        * ``nit_persona_natural``: Natural Person NIT
+        * ``registro_civil_nacimiento``: birth certificate
+        * ``nit_desasociado``: disassociated NIT
+        * ``cif``: CIF (Unique client number)
+        * ``numero_identidad``: Identity number
+        * ``rtn``: RTN
+        * ``cedula_identidad``: identity card
+        * ``dimex``: DIMEX
+        * ``ced``: CED
+        * ``pas``: PAS
+        * ``documento_unico_identidad``: unique identity document
+        * ``nit_salvadoreno``: Salvadoran NIT
+     - False
 
 Select client
 -------------
