@@ -248,6 +248,30 @@ for ack in acks:
     download = ack.download().get_file()
 ```
 
+## How to run tests
+
+We are using the ```tox``` testing library [tox](https://tox.readthedocs.io/en/latest/)
+
+To run the tests imlpemented inside the ```tests``` folder simply run the following command inside your project: 
+```tox```
+ 
+This will run tests for both python 2 and 3. To restrict the result to only python3 use:
+```tox -e py3```
+
+## How to generate HTML documentation
+
+Inside your terminal, move to the ```/docs``` folder (there should be a file named ```Makefile```), run the following command:
+```make html```
+
+This will generate the HTML files inside the ```docs/_build``` folder.
+
+## Notes
+
+1. Do not install ```pip install prometeo``` package inside the same virtual enviroment where this project is running as it may cause conflicts while running unittest.
+
+2. To use the local files insted of the production source code, install it with 
+```pip install prometeo --no-index --find-links file:///srv/pkg/mypackage```
+
 ## License
 
 [The MIT License](https://bitbucket.org/qualiauy/prometeo-python/src/master/LICENSE)

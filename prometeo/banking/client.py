@@ -3,7 +3,7 @@ from datetime import datetime
 from prometeo import exceptions, base_client, base_session
 from .models import (
     Client as Client, Account as AccountModel, Movement, CreditCard as CreditCardModel,
-    Provider, ProviderDetail,
+    Provider, ProviderDetail, PreprocessTransfer, ConfirmTransfer, TransferInstitution
 )
 from .exceptions import BankingClientError
 
@@ -106,6 +106,73 @@ class Session(base_session.BaseSession):
         Logs the user out and invalidates its session.
         """
         self._client.logout(self._session_key)
+
+    def preprocess_transfer(self, origin_account, destination_institution, destination_account, 
+        currency, amount, concept, destination_owner_name, branch):
+        """
+        Preprocess transfer.
+
+        :param origin_account: Account number from where it is transferred
+        :type origin_account: str
+
+        :param destination_institution: Id of the institution where it is transferred.
+                                        As provided by :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
+        :type destination_institution: str
+
+        :param destination_account: Account number where it is transferred
+        :type destination_account: str   
+
+        :param currency: Account currency in format `ISO 4217
+        :type currency: str 
+
+        :param amount: Amount to transfer
+        :type amount: str 
+
+        :param concept: Concept or description of the transfer
+        :type concept: str 
+
+        :param destination_owner_name: Name of the holder of the destination account (empty if not applicable)
+        :type destination_owner_name: str 
+
+        :param branch: Branch number of the destination account (empty if not applicable)
+        :type branch: str 
+
+        :rtype: :class:`~prometeo.banking.models.PreprocessTransfer`
+        """
+        return self._client.preprocess_transfer(self._session_key, origin_account, 
+            destination_institution, destination_account, currency, amount, concept, 
+            destination_owner_name, branch)
+
+    def confirm_transfer(self, request_id, authorization_type, authorization_data):
+        """
+        Confirm transfer.
+
+        :param request_id: Id of the request returned by the endpoint 
+                           of :meth:`~prometeo.banking.client.BankingAPIClient.preprocess_transfer`
+        :type request_id: str
+
+        :param authorization_type: 
+            - ``cardCode`` Coordinates card
+            - ``pin`` Account personal pin
+            - ``otp`` One-time generated pin, sent by sms, email, hard token or soft token.
+            - ``otp-api`` Hard token or soft token device, digitized by Prometeo
+        :type authorization_type: str
+
+        :param authorization_data: Verification value (pin number, coordinates card response , etc) if there 
+                                   are several values, they must be separated by commas.
+        :type authorization_data: str
+
+        :rtype: :class:`~prometeo.banking.models.ConfirmTransfer`
+        """
+        return self._client.confirm_transfer(self._session_key, request_id, authorization_type, authorization_data)
+
+    def list_transfer_institutions(self):
+        """
+        List transfer institutions.
+
+        :rtype: :class:`~prometeo.banking.models.TransferInstitution`
+        """
+        return self._client.list_transfer_institutions(self._session_key)
 
 
 class BankingAPIClient(base_client.BaseClient):
@@ -277,6 +344,105 @@ class BankingAPIClient(base_client.BaseClient):
         self.call_api('GET', '/logout/', params={
             'key': session_key,
         })
+
+    def preprocess_transfer(self, session_key, origin_account,
+            destination_institution, destination_account, currency,
+            amount, concept, destination_owner_name, branch):
+        """
+        Preprocess transfer.
+
+        :param session_key: The session key.
+        :type session_key: str
+
+        :param origin_account: Account number from where it is transferred
+        :type origin_account: str
+
+        :param destination_institution: Id of the institution where it is transferred.
+                                        As provided by :meth:`~prometeo.banking.client.BankingAPIClient.get_providers`
+        :type destination_institution: str
+
+        :param destination_account: Account number where it is transferred
+        :type destination_account: str   
+
+        :param currency: Account currency in format `ISO 4217
+        :type currency: str 
+
+        :param amount: Amount to transfer
+        :type amount: str 
+
+        :param concept: Concept or description of the transfer
+        :type concept: str 
+
+        :param destination_owner_name: Name of the holder of the destination account (empty if not applicable)
+        :type destination_owner_name: str 
+
+        :param branch: Branch number of the destination account (empty if not applicable)
+        :type branch: str 
+
+        :rtype: :class:`~prometeo.banking.models.PreprocessTransfer`
+        """
+        data = self.call_api('POST', '/transfer/preprocess/', params={
+            'key': session_key,
+        }, data={
+            'origin_account': origin_account,
+            'destination_institution': destination_institution,
+            'destination_account': destination_account,
+            'currency': currency,
+            'amount': amount,
+            'concept': concept,
+            'destination_owner_name': destination_owner_name,
+            'branch': branch,
+        })
+        return PreprocessTransfer(**data['result'])
+
+    def confirm_transfer(self, session_key, request_id, authorization_type, authorization_data):
+        """
+        Confirm transfer.
+
+        :param session_key: The session key.
+        :type session_key: str
+
+        :param request_id: Id of the request returned by the endpoint 
+                           of :meth:`~prometeo.banking.client.BankingAPIClient.preprocess_transfer`
+        :type request_id: str
+
+        :param authorization_type: 
+            - ``cardCode`` Coordinates card
+            - ``pin`` Account personal pin
+            - ``otp`` One-time generated pin, sent by sms, email, hard token or soft token.
+            - ``otp-api`` Hard token or soft token device, digitized by Prometeo
+        :type authorization_type: str
+
+        :param authorization_data: Verification value (pin number, coordinates card response , etc) if there 
+                                   are several values, they must be separated by commas.
+        :type authorization_data: str
+
+        :rtype: :class:`~prometeo.banking.models.ConfirmTransfer`
+        """
+        data = self.call_api('POST', '/transfer/confirm/', params={
+            'key': session_key,
+        }, data={
+            'request_id': request_id,
+            'authorization_type': authorization_type,
+            'authorization_data': authorization_data,
+        })
+        return ConfirmTransfer(**data['transfer'])
+
+    def list_transfer_institutions(self, session_key):
+        """
+        List transfer institutions.
+
+        :param session_key: The session key.
+        :type session_key: str
+
+        :rtype: :class:`~prometeo.banking.models.TransferInstitution`
+        """
+        data = self.call_api('GET', '/transfer/destinations/', params={
+            'key': session_key,
+        })
+        return [
+            TransferInstitution(**institution) for institution in data['destinations']
+        ]
 
 
 class Account(object):

@@ -45,3 +45,20 @@ ProviderDetail = namedtuple('ProviderDetail', [
     'name',
     'auth_fields',
 ])
+
+PreprocessTransfer = namedtuple('PreprocessTransfer', [
+    'approved',
+    'authorization_devices',
+    'message',
+    'request_id',
+])
+
+ConfirmTransfer = namedtuple('ConfirmTransfer', [
+    'message',
+    'success',
+])
+
+TransferInstitution = namedtuple('TransferInstitution', [
+    'id',
+    'name',
+])
