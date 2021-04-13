@@ -55,25 +55,25 @@ The following is a table with all the extra auth fields and their respective pro
      - Provider
      - Description
      - Required
-   * - otp
+   * - ``otp``
      - bbva_mx
      - One-time password
      - True
-   * - personal_question
+   * - ``personal_question``
      - banco_general, intermatico
      - Personal question
      - True
-   * - token
+   * - ``token``
      - banorte
      - Provider authorization token
      - True
-   * - company_code
+   * - ``company_code``
      - pe_bbva_netcash
      - Company code
      - True
-   * - type
+   * - ``type``
      - davivienda
-     - Type of Login. Options:
+     - Options
         * ``cedula_ciudadania``: citizenship card
         * ``cedula_extranjeria``: foreigner Identity card
         * ``nit`` NIT
@@ -189,3 +189,46 @@ We recommend that the list of available banks be stored on a database and update
 .. code-block:: python
 
    providers = client.banking.get_providers()
+
+
+Preprocess transfer
+---------------------
+
+.. code-block:: python
+
+  preprocess = session.preprocess_transfer(
+    origin_account='002206345988',
+    destination_institution='0',
+    destination_account='001002363321',
+    currency='UYU',
+    amount='1.3',
+    concept='transfer description',
+    destination_owner_name='John Doe',
+    branch='62', 
+  )
+
+  print(preprocess)
+
+
+Confirm transfer
+---------------------
+
+.. code-block:: python
+
+  confirmation = session.confirm_transfer(
+    request_id='0b7d6b32d1be4c11bde21e7ddc08cc36',
+    authorization_type='cardCode',
+    authorization_data='1, 2, 3',
+  )
+
+  print(confirmation)
+
+
+List transfer institutions
+--------------------------
+
+.. code-block:: python
+
+  institutions_list = session.list_transfer_institutions()
+  for intitution in institutions_list:
+    print(intitution)
