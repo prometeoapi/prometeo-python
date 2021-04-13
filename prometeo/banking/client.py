@@ -209,12 +209,13 @@ class BankingAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.banking.client.Session`
         """
-        response = self.call_api('POST', '/login/', data={
+        data = {
             'provider': provider,
             'username': username,
             'password': password,
-            **kwargs
-        })
+        }
+        data.update(kwargs)
+        response = self.call_api('POST', '/login/', data=data)
         if response['status'] in ['logged_in', 'select_client']:
             return Session(self, response['status'], response['key'])
         elif response['status'] == 'interaction_required':

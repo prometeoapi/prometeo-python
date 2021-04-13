@@ -24,7 +24,6 @@ Log in
         provider='test',
         username='12345',
         password='gfdsa',
-        kwargs={}
     )
 
 
@@ -40,9 +39,7 @@ Example with extra auth fields:
         provider='bbva_mx',
         username='12345',
         password='gfdsa',
-        kwargs={
-            'otp': 11223
-        }
+        otp=11223
     )
 
 The following is a table with all the extra auth fields and their respective providers.
