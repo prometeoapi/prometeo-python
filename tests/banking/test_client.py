@@ -300,3 +300,86 @@ class TestClient(BaseTestCase):
         qs = parse_qs(urlparse(m.last_request.url).query)
         self.assertEqual('/logout/', m.last_request.path)
         self.assertEqual(session_key, qs['key'][0])
+
+    def test_preprocess_transfer(self, m):
+        m.post('/transfer/preprocess/', json={
+            "result": {
+                "approved": True,
+                "authorization_devices": [
+                    {
+                        "data": ["F-4", "B-2", "G-7"],
+                        "type": "cardCode"
+                    },
+                    {
+                        "data": None,
+                        "type": "pin"
+                    }
+                ],
+                "message": None,
+                "request_id": "0b7d6b32d1be4c11bde21e7ddc08cc36"
+            },
+            "status": "success"
+        })
+        session_key = 'test_session_key'
+        origin_account = '002206345988'
+        destination_institution = '0'
+        destination_account = '001002363321'
+        currency = 'UYU'
+        amount = '1.3'
+        concept = 'descripcion de transferencia'
+        destination_owner_name = 'John Doe'
+        branch = '62'
+        preprocess = self.client.banking.preprocess_transfer(
+            session_key, origin_account, destination_institution,
+            destination_account, currency, amount, concept,
+            destination_owner_name, branch
+        )
+        self.assertEqual(True, preprocess.approved)
+        self.assertEqual(3, len(preprocess.authorization_devices[0]['data']))
+        self.assertEqual('cardCode', preprocess.authorization_devices[0]['type'])
+        self.assertEqual('0b7d6b32d1be4c11bde21e7ddc08cc36', preprocess.request_id)
+        self.assertEqual(None, preprocess.message)
+
+    def test_confirm_transfer(self, m):
+        m.post('/transfer/confirm/', json={
+            "status": "success",
+            "transfer": {
+                "message": "Transferencia confirmada con exito",
+                "success": True
+            }
+        })
+        session_key = 'test_session_key'
+        request_id = '0b7d6b32d1be4c11bde21e7ddc08cc36'
+        authorization_type = 'cardCode'
+        authorization_data = '1, 2, 3'
+        confirmation = self.client.banking.confirm_transfer(
+            session_key, request_id, authorization_type, authorization_data
+        )
+        self.assertEqual(True, confirmation.success)
+        self.assertNotEqual(None, confirmation.message)
+
+    def test_list_transfer_institutions(self, m):
+        m.get('/transfer/destinations/', json={
+            "destinations": [
+                {
+                    "id": 0,
+                    "name": "SANTANDER"
+                },
+                {
+                    "id": 1,
+                    "name": "B.R.O.U."
+                },
+                {
+                    "id": 91,
+                    "name": "B.H.U."
+                },
+                {
+                    "id": 110,
+                    "name": "BANDES"
+                }
+            ],
+            "status": "success"
+        })
+        session_key = 'test_session_key'
+        institutions = self.client.banking.list_transfer_institutions(session_key)
+        self.assertNotEqual(0, len(institutions))
