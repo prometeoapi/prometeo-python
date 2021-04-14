@@ -50,27 +50,29 @@ The following is a table with all the extra auth fields and their respective pro
 
    * - Field
      - Provider
-     - Description
      - Required
+     - Description
    * - ``otp``
      - bbva_mx
-     - One-time password
      - True
+     - One-time password
    * - ``personal_question``
      - banco_general, intermatico
-     - Personal question
      - True
+     - Personal question
    * - ``token``
      - banorte
-     - Provider authorization token
      - True
+     - Provider authorization token
    * - ``company_code``
      - pe_bbva_netcash
-     - Company code
      - True
+     - Company code
    * - ``type``
      - davivienda
-     - Options
+     - False
+     - 
+      Options
         * ``cedula_ciudadania``: citizenship card
         * ``cedula_extranjeria``: foreigner Identity card
         * ``nit`` NIT
@@ -94,7 +96,6 @@ The following is a table with all the extra auth fields and their respective pro
         * ``pas``: PAS
         * ``documento_unico_identidad``: unique identity document
         * ``nit_salvadoreno``: Salvadoran NIT
-     - False
 
 Select client
 -------------

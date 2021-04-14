@@ -49,8 +49,9 @@ class TestSession(BaseTestCase):
         concept = 'descripcion de transferencia'
         destination_owner_name = 'John Doe'
         branch = '62'
-        preprocess = self.session.preprocess_transfer(origin_account, destination_institution,
-            destination_account, currency, amount, concept, destination_owner_name, branch)
+        self.session.preprocess_transfer(origin_account, destination_institution,
+                                         destination_account, currency, amount,
+                                         concept, destination_owner_name, branch)
         self.assertEqual(self.session_key, m.last_request.qs['key'][0])
 
     def test_confirm_transfer(self, m):
@@ -58,10 +59,12 @@ class TestSession(BaseTestCase):
         request_id = '0b7d6b32d1be4c11bde21e7ddc08cc36'
         authorization_type = 'cardCode'
         authorization_data = '1, 2, 3'
-        confirm = self.session.confirm_transfer(request_id, authorization_type, authorization_data)
+        self.session.confirm_transfer(request_id, authorization_type,
+                                      authorization_data)
         self.assertEqual(self.session_key, m.last_request.qs['key'][0])
 
     def test_list_transfer_institutions(self, m):
-        self.mock_get_request(m, '/transfer/destinations/', 'list_transfer_institutions')
-        institutions = self.session.list_transfer_institutions()
+        self.mock_get_request(m, '/transfer/destinations/',
+                              'list_transfer_institutions')
+        self.session.list_transfer_institutions()
         self.assertEqual(self.session_key, m.last_request.qs['key'][0])

@@ -330,8 +330,9 @@ class TestClient(BaseTestCase):
         destination_owner_name = 'John Doe'
         branch = '62'
         preprocess = self.client.banking.preprocess_transfer(
-            session_key, origin_account, destination_institution, destination_account, currency,
-            amount, concept, destination_owner_name, branch
+            session_key, origin_account, destination_institution,
+            destination_account, currency, amount, concept,
+            destination_owner_name, branch
         )
         self.assertEqual(True, preprocess.approved)
         self.assertEqual(3, len(preprocess.authorization_devices[0]['data']))
