@@ -33,7 +33,8 @@ class TestAccount(unittest.TestCase):
                     "debit": 3500,
                     "detail": "RETIRO EFECTIVO CAJERO AUTOMATICO J.C. ",
                     "id": -890185180,
-                    "reference": "000000005084"
+                    "reference": "000000005084",
+                    "extra_data": None
                 },
                 {
                     "credit": "",
@@ -41,7 +42,8 @@ class TestAccount(unittest.TestCase):
                     "debit": 16000,
                     "detail": "RETIRO EFECTIVO CAJERO AUTOMATICO J.H Y ",
                     "id": 1024917397,
-                    "reference": "000000002931"
+                    "reference": "000000002931",
+                    "extra_data": None
                 },
             ],
             "status": "success",

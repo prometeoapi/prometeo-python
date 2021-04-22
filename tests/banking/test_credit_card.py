@@ -34,7 +34,8 @@ class TestCreditCard(unittest.TestCase):
                     "debit": 3500,
                     "detail": "RETIRO EFECTIVO CAJERO AUTOMATICO",
                     "id": -890185180,
-                    "reference": "000000005084"
+                    "reference": "000000005084",
+                    "extra_data": None
                 },
                 {
                     "credit": "",
@@ -42,7 +43,8 @@ class TestCreditCard(unittest.TestCase):
                     "debit": 16000,
                     "detail": "RETIRO EFECTIVO CAJERO AUTOMATICO",
                     "id": 1024917397,
-                    "reference": "000000002931"
+                    "reference": "000000002931",
+                    "extra_data": None
                 },
             ],
             "status": "success"
