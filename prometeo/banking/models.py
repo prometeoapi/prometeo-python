@@ -31,8 +31,10 @@ Movement = namedtuple('Movement', [
     'date',
     'detail',
     'debit',
-    'credit'
+    'credit',
+    'extra_data',
 ])
+Movement.__new__.__defaults__ = (None,)
 
 Provider = namedtuple('Provider', [
     'code',
