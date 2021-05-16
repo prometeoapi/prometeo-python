@@ -197,6 +197,13 @@ class BankingAPIClient(base_client.BaseClient):
 
     session_class = Session
 
+    def on_response(self, data):
+        if data['status'] == 'error':
+            if data['message'] == 'Invalid key':
+                raise exceptions.InvalidSessionKeyError(data['message'])
+            else:
+                raise BankingClientError(data['message'])
+
     def login(self, provider, username, password, **kwargs):
         """
         Start log in process with the provider

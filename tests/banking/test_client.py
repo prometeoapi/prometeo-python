@@ -385,3 +385,19 @@ class TestClient(BaseTestCase):
         session_key = 'test_session_key'
         institutions = self.client.banking.list_transfer_institutions(session_key)
         self.assertNotEqual(0, len(institutions))
+
+    def test_invalid_session_key(self, m):
+        m.get('/account/', json={
+            "message": "Invalid key",
+            "status": "error"
+        })
+        with self.assertRaises(exceptions.InvalidSessionKeyError):
+            self.client.banking.get_accounts('invalid_session_key')
+
+    def test_generic_client_error(self, m):
+        m.get('/account/', json={
+            "message": "Some generic error",
+            "status": "error"
+        })
+        with self.assertRaises(banking_exceptions.BankingClientError):
+            self.client.banking.get_accounts('invalid_session_key')

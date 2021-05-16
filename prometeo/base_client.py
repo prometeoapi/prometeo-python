@@ -23,6 +23,12 @@ class BaseClient(object):
             method, full_url, headers=headers, *args, **kwargs
         )
 
+    def on_response(self, response_data):
+        """
+        Called after every 200 response
+        """
+        pass
+
     def call_api(self, method, url, *args, **kwargs):
         """
         Calls an API endpoint, using the configured api key and environment.
@@ -52,6 +58,7 @@ class BaseClient(object):
             raise exceptions.InternalAPIError(data.get('message', response.text))
         elif response.status_code == 503:
             raise exceptions.ProviderUnavailableError(data.get('message'))
+        self.on_response(data)
         return data
 
     def get_session(self, session_key):

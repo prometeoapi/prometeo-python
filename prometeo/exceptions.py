@@ -35,3 +35,7 @@ class InternalAPIError(PrometeoError):
 
 class ProviderUnavailableError(PrometeoError):
     pass
+
+
+class InvalidSessionKeyError(PrometeoError):
+    pass
