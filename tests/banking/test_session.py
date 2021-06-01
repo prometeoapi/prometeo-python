@@ -64,7 +64,7 @@ class TestSession(BaseTestCase):
         self.assertEqual(self.session_key, m.last_request.qs['key'][0])
 
     def test_list_transfer_institutions(self, m):
-        self.mock_get_request(m, '/transfer/destinations/',
+        self.mock_get_request(m, '/transfer/destinations',
                               'list_transfer_institutions')
         self.session.list_transfer_institutions()
         self.assertEqual(self.session_key, m.last_request.qs['key'][0])

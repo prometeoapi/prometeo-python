@@ -361,7 +361,7 @@ class TestClient(BaseTestCase):
         self.assertNotEqual(None, confirmation.message)
 
     def test_list_transfer_institutions(self, m):
-        m.get('/transfer/destinations/', json={
+        m.get('/transfer/destinations', json={
             "destinations": [
                 {
                     "id": 0,
