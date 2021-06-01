@@ -20,11 +20,11 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 # -- Project information -----------------------------------------------------
 
 project = 'Prometeo Python'
-copyright = '2020, Prometeo'
+copyright = '2021, Prometeo'
 author = 'Prometeo'
 
 # The full version, including alpha/beta/rc tags
-release = '1.2.1'
+release = '1.2.2'
 
 
 # -- General configuration ---------------------------------------------------
