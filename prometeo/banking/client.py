@@ -463,7 +463,7 @@ class BankingAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.banking.models.TransferInstitution`
         """
-        data = self.call_api('GET', '/transfer/destinations/', params={
+        data = self.call_api('GET', '/transfer/destinations', params={
             'key': session_key,
         })
         return [
