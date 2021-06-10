@@ -304,7 +304,7 @@ class TestClient(BaseTestCase):
         self.assertEqual(session_key, qs['key'][0])
 
     def test_preprocess_transfer(self, m):
-        m.post('/transfer/preprocess/', json={
+        m.post('/transfer/preprocess', json={
             "result": {
                 "approved": True,
                 "authorization_devices": [
@@ -343,7 +343,7 @@ class TestClient(BaseTestCase):
         self.assertEqual(None, preprocess.message)
 
     def test_confirm_transfer(self, m):
-        m.post('/transfer/confirm/', json={
+        m.post('/transfer/confirm', json={
             "status": "success",
             "transfer": {
                 "message": "Transferencia confirmada con exito",
