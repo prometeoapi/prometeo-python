@@ -402,7 +402,7 @@ class BankingAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.banking.models.PreprocessTransfer`
         """
-        data = self.call_api('POST', '/transfer/preprocess/', params={
+        data = self.call_api('POST', '/transfer/preprocess', params={
             'key': session_key,
         }, data={
             'origin_account': origin_account,
@@ -445,7 +445,7 @@ class BankingAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.banking.models.ConfirmTransfer`
         """
-        data = self.call_api('POST', '/transfer/confirm/', params={
+        data = self.call_api('POST', '/transfer/confirm', params={
             'key': session_key,
         }, data={
             'request_id': request_id,
