@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         TWINE_USERNAME = getCredential("pypi-username")
-        TWINE_PASSWORD = getCredential(""pypi-password"")
-        TWINE_REPOSITORY_URL = getCredential(""pypi-repository"")
+        TWINE_PASSWORD = getCredential("pypi-password")
+        TWINE_REPOSITORY_URL = getCredential("pypi-repository")
     }
 
     stages {
