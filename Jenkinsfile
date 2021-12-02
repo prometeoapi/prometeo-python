@@ -3,15 +3,9 @@ pipeline {
     agent any
 
     environment {
-        if (env.BRANCH_NAME == "master") {
-            TWINE_USERNAME = credentials("prod-pypi-username")
-            TWINE_PASSWORD = credentials("prod-pypi-password")
-            TWINE_REPOSITORY_URL = "https://upload.pypi.org/legacy/"
-        } else if (env.BRANCH_NAME == "develop") {
-            TWINE_USERNAME = credentials("test-pypi-username")
-            TWINE_PASSWORD = credentials("test-pypi-password")
-            TWINE_REPOSITORY_URL = "https://test.pypi.org/legacy/"
-        }
+        TWINE_USERNAME = getCredential("pypi-username")
+        TWINE_PASSWORD = getCredential(""pypi-password"")
+        TWINE_REPOSITORY_URL = getCredential(""pypi-repository"")
     }
 
     stages {
@@ -39,4 +33,14 @@ pipeline {
 
     }
 
+}
+
+def getCredential(varName) {
+    if (env.BRANCH_NAME == "master") {
+        return credentials("prod-${varName}")
+    } else (env.BRANCH_NAME == "develop") {
+        return credentials("test-${varName}")
+    } else {
+        return "";
+    }
 }
