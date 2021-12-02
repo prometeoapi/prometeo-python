@@ -5,6 +5,10 @@ pipeline {
             steps {
                 sh("python3 -m venv env")
                 sh("source ./env/bin/activate")
+                sh("which python3")
+                sh("which python")
+                sh("which pip")
+                sh("which pip3")
                 sh("pip3 install -r dev-requirements.txt")
                 sh("tox")
             }
