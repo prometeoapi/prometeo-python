@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Run tests") {
             steps {
-                sh("pip install -r dev-requirements.txt")
+                sh("pip3 install -r dev-requirements.txt")
                 sh("tox")
             }
         }
@@ -15,8 +15,8 @@ pipeline {
                 }
             }
             steps {
-                sh("pip install twine")
-                sh("python setup.py sdist bdist_wheel")
+                sh("pip3 install twine")
+                sh("python3 setup.py sdist bdist_wheel")
                 sh("twine check dist/*")
                 sh("twine upload dist/*")
             }
