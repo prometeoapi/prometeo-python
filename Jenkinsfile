@@ -4,15 +4,11 @@ pipeline {
         stage("Run tests") {
             steps {
                 sh("python3 -m venv env")
-                sh("source ./env/bin/activate")
-                sh("pwd")
-                sh("ls")
-                sh("which python3")
-                sh("which python")
-                sh("which pip3")
-                sh("which pip")
-                sh("pip3 install -r dev-requirements.txt")
-                sh("tox")
+                sh("""
+                   source ./env/bin/activate
+                   pip install -r dev-requirements.txt
+                   tox
+                   """)
             }
         }
 
@@ -24,10 +20,12 @@ pipeline {
            //  }
             steps {
                 sh("python3 -m venv env")
-                sh("source ./env/bin/activate")
-                sh("pip3 install twine")
-                sh("python3 setup.py sdist bdist_wheel")
-                sh("twine check dist/*")
+                sh("""
+                   source ./env/bin/activate
+                   pip install twine
+                   python setup.py sdist bdist_wheel
+                   twine check dist/*
+                   """
                 // sh("twine upload dist/*")
             }
         }
