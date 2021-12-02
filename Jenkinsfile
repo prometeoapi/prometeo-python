@@ -25,7 +25,7 @@ pipeline {
                    pip install twine
                    python setup.py sdist bdist_wheel
                    twine check dist/*
-                   """
+                   """)
                 // sh("twine upload dist/*")
             }
         }
