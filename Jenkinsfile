@@ -40,11 +40,9 @@ pipeline {
 }
 
 def getCredential(varName) {
-    if (env.BRANCH_NAME == "master") {
-        return credentials("prod-${varName}")
-    } else (env.BRANCH_NAME == "develop") {
-        return credentials("test-${varName}")
-    } else {
-        return "";
+    switch(env.BRANCH_NAME) {
+        case "master": return credentials("prod-${varName}"); break
+        case "develop": return credentials("test-${varName}"); break
+        default: return ""; break
     }
 }
