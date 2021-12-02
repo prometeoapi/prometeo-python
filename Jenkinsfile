@@ -1,7 +1,5 @@
 pipeline {
-
     agent any
-
     environment {
         if (env.BRANCH_NAME == "master") {
             TWINE_USERNAME = credentials("prod-pypi-username")
@@ -13,9 +11,7 @@ pipeline {
             TWINE_REPOSITORY_URL = "https://test.pypi.org/legacy/"
         }
     }
-
     stages {
-
         stage("Run tests") {
             steps {
                 sh("pip install -r dev-requirements.txt")
@@ -36,7 +32,5 @@ pipeline {
                 sh("twine upload dist/*")
             }
         }
-
     }
-
 }
