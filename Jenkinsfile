@@ -31,6 +31,13 @@ pipeline {
             //     }
             // }
             steps {
+
+                if (env.BRANCH_NAME == "master") {
+                    TWINE_USERNAME = credentials("prod-pypi-username")
+                    TWINE_PASSWORD = credentials("prod-pypi-password")
+                    TWINE_REPOSITORY_URL = credentials("prod-pypi-repository")
+                }
+
                 sh("python3 -m venv .venv")
                 sh("""
                    source ./.venv/bin/activate
@@ -38,7 +45,7 @@ pipeline {
                    pip install twine wheel
                    python setup.py sdist bdist_wheel
                    twine check dist/*
-                   twine upload dist/* --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD
+                   twine upload dist/* --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD --verbose
                    """)
             }
         }
