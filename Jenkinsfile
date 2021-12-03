@@ -13,6 +13,7 @@ pipeline {
                 sh("python3 -m venv .venv")
                 sh("""
                    source ./.venv/bin/activate
+                   pip install --upgrade pip
                    pip install -r dev-requirements.txt
                    tox
                    """)
@@ -29,6 +30,7 @@ pipeline {
                 sh("python3 -m venv .venv")
                 sh("""
                    source ./.venv/bin/activate
+                   pip install --upgrade pip
                    pip install twine
                    python setup.py sdist bdist_wheel
                    twine check dist/*
