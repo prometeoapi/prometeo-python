@@ -2,9 +2,13 @@ pipeline {
     agent any
 
     environment {
-        TWINE_USERNAME = getCredential("pypi-username")
-        TWINE_PASSWORD = getCredential("pypi-password")
-        TWINE_REPOSITORY_URL = getCredential("pypi-repository")
+        // TWINE_USERNAME = getCredential("pypi-username")
+        // TWINE_PASSWORD = getCredential("pypi-password")
+        // TWINE_REPOSITORY_URL = getCredential("pypi-repository")
+
+        TWINE_USERNAME = credentials("test-pypi-username")
+        TWINE_PASSWORD = credentials("test-pypi-password")
+        TWINE_REPOSITORY_URL = credentials("test-pypi-repository")
     }
 
     stages {
@@ -34,8 +38,8 @@ pipeline {
                    pip install twine wheel
                    python setup.py sdist bdist_wheel
                    twine check dist/*
+                   twine upload dist/* --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD
                    """)
-                   // twine upload dist/* --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD
             }
         }
     }
