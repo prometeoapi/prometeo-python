@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        TWINE_USERNAME = credentials("test-pypi-username")
-        TWINE_PASSWORD = credentials("test-pypi-password")
-        TWINE_REPOSITORY_URL = credentials("test-pypi-repository")
-    }
-
     stages {
         stage("Run tests") {
             steps {
@@ -26,17 +20,22 @@ pipeline {
                     return env.BRANCH_NAME ==~ /(develop)/
                 }
             }
+            environment {
+                TWINE_USERNAME = credentials("test-pypi-username")
+                TWINE_PASSWORD = credentials("test-pypi-password")
+                TWINE_REPOSITORY_URL = credentials("test-pypi-repository")
+            }
             steps {
                 publishToPypi()
             }
         }
 
         stage("Publish PROD to Pypi") {
-            // when {
-            //     expression {
-            //         return env.BRANCH_NAME ==~ /(master)/
-            //     }
-            // }
+            when {
+                expression {
+                    return env.BRANCH_NAME ==~ /(master)/
+                }
+            }
             environment {
                 TWINE_USERNAME = credentials("prod-pypi-username")
                 TWINE_PASSWORD = credentials("prod-pypi-password")
