@@ -21,11 +21,11 @@ pipeline {
         }
 
         stage("Publish to PyPI") {
-           // when {
-           //      expression {
-           //          return env.BRANCH_NAME ==~ /(master|develop)/
-           //      }
-           //  }
+            // when {
+            //     expression {
+            //         return env.BRANCH_NAME ==~ /(master|develop)/
+            //     }
+            // }
             steps {
                 sh("python3 -m venv .venv")
                 sh("""
@@ -34,8 +34,8 @@ pipeline {
                    pip install twine wheel
                    python setup.py sdist bdist_wheel
                    twine check dist/*
+                   twine upload dist/*
                    """)
-                // sh("twine upload dist/*")
             }
         }
     }
@@ -44,7 +44,6 @@ pipeline {
 def getCredential(varName) {
     switch(env.BRANCH_NAME) {
         case "master": return credentials("prod-${varName}"); break
-        case "develop": return credentials("test-${varName}"); break
-        default: return ""; break
+        default: return credentials("test-${varName}"); break; break
     }
 }
