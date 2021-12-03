@@ -42,8 +42,6 @@ pipeline {
                 TWINE_REPOSITORY_URL = credentials("prod-pypi-repository")
             }
             steps {
-                sh("echo $env.CHANGE_BRANCH")
-                sh("echo ${env.CHANGE_BRANCH}")
                 publishToPypi()
             }
         }
