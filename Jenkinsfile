@@ -37,6 +37,7 @@ pipeline {
                     TWINE_PASSWORD = credentials("prod-pypi-password")
                     TWINE_REPOSITORY_URL = credentials("prod-pypi-repository")
                 }
+                sh("echo ${env.BRANCH_NAME}")
 
                 sh("python3 -m venv .venv")
                 sh("""
