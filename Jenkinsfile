@@ -34,7 +34,7 @@ pipeline {
                    pip install twine wheel
                    python setup.py sdist bdist_wheel
                    twine check dist/*
-                   twine upload dist/* --repository-url $TWINE_REPOSITORY_URL -u $TWINE_USERNAME -p $TWINE_PASSWORD
+                   twine upload dist/* --repository-url ${TWINE_REPOSITORY_URL} -u ${TWINE_USERNAME} -p ${TWINE_PASSWORD}
                    """)
             }
         }
