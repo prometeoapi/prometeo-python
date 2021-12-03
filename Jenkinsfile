@@ -31,7 +31,7 @@ pipeline {
                 sh("""
                    source ./.venv/bin/activate
                    pip install --upgrade pip
-                   pip install twine
+                   pip install twine wheel
                    python setup.py sdist bdist_wheel
                    twine check dist/*
                    """)
