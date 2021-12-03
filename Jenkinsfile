@@ -21,15 +21,12 @@ pipeline {
         }
 
         stage("Publish DEV to Pypi") {
-            // when {
-            //     expression {
-            //         return env.BRANCH_NAME ==~ /(develop)/
-            //     }
-            // }
-            //
+            when {
+                expression {
+                    return env.BRANCH_NAME ==~ /(develop)/
+                }
+            }
             steps {
-                sh("echo $env.BRANCH_NAME")
-                sh("echo ${env.BRANCH_NAME}")
                 publishToPypi()
             }
         }
@@ -40,13 +37,14 @@ pipeline {
             //         return env.BRANCH_NAME ==~ /(master)/
             //     }
             // }
-            //
             environment {
                 TWINE_USERNAME = credentials("prod-pypi-username")
                 TWINE_PASSWORD = credentials("prod-pypi-password")
                 TWINE_REPOSITORY_URL = credentials("prod-pypi-repository")
             }
             steps {
+                sh("echo $env.CHANGE_BRANCH")
+                sh("echo ${env.CHANGE_BRANCH}")
                 publishToPypi()
             }
         }
