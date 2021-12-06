@@ -23,7 +23,7 @@ pipeline {
             environment {
                 TWINE_USERNAME = credentials("test-pypi-username")
                 TWINE_PASSWORD = credentials("test-pypi-password")
-                TWINE_REPOSITORY = credentials("test-pypi-repository")
+                TWINE_REPOSITORY = "testpypi"
             }
             steps {
                 publishToPypi()
@@ -39,7 +39,7 @@ pipeline {
             environment {
                 TWINE_USERNAME = credentials("prod-pypi-username")
                 TWINE_PASSWORD = credentials("prod-pypi-password")
-                TWINE_REPOSITORY = credentials("prod-pypi-repository")
+                TWINE_REPOSITORY = "pypi"
             }
             steps {
                 publishToPypi()
@@ -57,6 +57,6 @@ def publishToPypi() {
         pip install twine wheel
         python setup.py sdist bdist_wheel
         twine check dist/*
-        twine upload dist/* --repository-url $TWINE_REPOSITORY -u $TWINE_USERNAME -p $TWINE_PASSWORD --verbose
+        twine upload dist/* --verbose
         """)
 }
