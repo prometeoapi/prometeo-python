@@ -15,11 +15,11 @@ pipeline {
         }
 
         stage("Publish DEV to Pypi") {
-            // when {
-            //     expression {
-            //         return env.BRANCH_NAME ==~ /(develop)/
-            //     }
-            // }
+            when {
+                expression {
+                    return env.BRANCH_NAME ==~ /(develop)/
+                }
+            }
             environment {
                 TWINE_USERNAME = credentials("test-pypi-username")
                 TWINE_PASSWORD = credentials("test-pypi-password")
