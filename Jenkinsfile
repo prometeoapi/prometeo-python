@@ -57,6 +57,6 @@ def publishToPypi() {
         pip install twine wheel
         python setup.py sdist bdist_wheel
         twine check dist/*
-        twine upload dist/* --verbose
+        twine upload dist/* --repository-url $TWINE_REPOSITORY -u $TWINE_USERNAME -p $TWINE_PASSWORD --verbose
         """)
 }
