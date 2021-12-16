@@ -8,12 +8,6 @@ pipeline {
     }
 
     stages {
-        stage("Check env") {
-            steps {
-                sh("printenv")
-            }
-        }
-
         stage("Run tests") {
             steps {
                 sh("python3 -m venv .venv")
@@ -27,11 +21,11 @@ pipeline {
         }
 
         stage("Publish to PyPI") {
-           // when {
-           //      expression {
-           //          return env.BRANCH_NAME ==~ /(master|develop)/
-           //      }
-           //  }
+           when {
+                expression {
+                    return env.BRANCH_NAME ==~ /(master|develop)/
+                }
+            }
             steps {
                 sh("python3 -m venv .venv")
                 sh("""
@@ -51,6 +45,6 @@ def getCredential(varName) {
     switch(env.BRANCH_NAME) {
         case "master": return credentials("master-${varName}"); break
         case "develop": return credentials("develop-${varName}"); break
-        default: return "some-default"; break
+        default: return ""; break
     }
 }
