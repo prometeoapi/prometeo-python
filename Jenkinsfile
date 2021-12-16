@@ -23,7 +23,7 @@ pipeline {
             environment {
                 TWINE_USERNAME = credentials("${env.CHANGE_TARGET}-pypi-username")
                 TWINE_PASSWORD = credentials("${env.CHANGE_TARGET}-pypi-password")
-                TWINE_REPOSITORY_URL = credentials("${env.CHANGE_TARGET}-pypi-repository")
+                TWINE_REPOSITORY = credentials("${env.CHANGE_TARGET}-pypi-repository")
             }
             steps {
                 sh("python3 -m venv .venv")
