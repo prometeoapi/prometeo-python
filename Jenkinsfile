@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh("python3 -m venv .venv")
                 sh("""
-                   source ./venv/bin/activate
+                   source ./.venv/bin/activate
                    pip install twine
                    python setup.py sdist bdist_wheel
                    twine check dist/*
