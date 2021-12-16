@@ -9,8 +9,11 @@ pipeline {
 
     stages {
         stage("Check env") {
-            sh("printenv")
+            steps {
+                sh("printenv")
+            }
         }
+
         stage("Run tests") {
             steps {
                 sh("python3 -m venv .venv")
