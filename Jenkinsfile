@@ -8,6 +8,9 @@ pipeline {
     }
 
     stages {
+        stage("Check env") {
+            sh("printenv")
+        }
         stage("Run tests") {
             steps {
                 sh("python3 -m venv .venv")
@@ -45,6 +48,6 @@ def getCredential(varName) {
     switch(env.BRANCH_NAME) {
         case "master": return credentials("master-${varName}"); break
         case "develop": return credentials("develop-${varName}"); break
-        default: return ""; break
+        default: return "some-default"; break
     }
 }
