@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        TWINE_USERNAME = getCredential("pypi-username")
-        TWINE_PASSWORD = getCredential("pypi-password")
-        TWINE_REPOSITORY_URL = getCredential("pypi-repository")
-    }
-
     stages {
         stage("Run tests") {
             steps {
@@ -21,10 +15,15 @@ pipeline {
         }
 
         stage("Publish to PyPI") {
-           when {
-                expression {
-                    return env.BRANCH_NAME ==~ /(master|develop)/
-                }
+           // when {
+           //      expression {
+           //          return env.BRANCH_NAME ==~ /(master|develop)/
+           //      }
+           //  }
+            environment {
+                TWINE_USERNAME = credentials("${env.CHANGE_TARGET}-pypi-username")
+                TWINE_PASSWORD = credentials("${env.CHANGE_TARGET}-pypi-password")
+                TWINE_REPOSITORY_URL = credentials("${env.CHANGE_TARGET}-pypi-repository")
             }
             steps {
                 sh("python3 -m venv .venv")
@@ -38,13 +37,5 @@ pipeline {
                     """)
             }
         }
-    }
-}
-
-def getCredential(varName) {
-    switch(env.BRANCH_NAME) {
-        case "master": return credentials("master-${varName}"); break
-        case "develop": return credentials("develop-${varName}"); break
-        default: return ""; break
     }
 }
