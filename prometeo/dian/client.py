@@ -10,6 +10,7 @@ from .models import (
 
 TESTING_URL = 'https://test.dian-api.qualia.uy'
 PRODUCTION_URL = 'https://api.dian-api.qualia.uy'
+SANDBOX_URL = 'https://fiscal.sandbox.prometeoapi.com'
 
 
 class NumerationType(Enum):
@@ -159,6 +160,7 @@ class DianAPIClient(base_client.BaseClient):
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
+        'sandbox': SANDBOX_URL,
     }
 
     session_class = Session

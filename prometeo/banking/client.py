@@ -10,6 +10,7 @@ from .exceptions import BankingClientError
 
 TESTING_URL = 'https://test.prometeo.qualia.uy'
 PRODUCTION_URL = 'https://prometeo.qualia.uy'
+SANDBOX_URL = 'https://banking.sandbox.prometeoapi.com'
 
 
 class Session(base_session.BaseSession):
@@ -193,6 +194,7 @@ class BankingAPIClient(base_client.BaseClient):
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
+        'sandbox': SANDBOX_URL,
     }
 
     session_class = Session
