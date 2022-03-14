@@ -7,6 +7,7 @@ from .exceptions import CurpError
 
 TESTING_URL = 'https://test.curp-api.qualia.uy'
 PRODUCTION_URL = 'https://api.curp-api.qualia.uy'
+SANDBOX_URL = 'https://identity.sandbox.prometeoapi.com'
 
 
 class Gender(Enum):
@@ -62,6 +63,7 @@ class CurpAPIClient(base_client.BaseClient):
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
+        'sandbox': SANDBOX_URL,
     }
 
     def _make_result(self, response_data):

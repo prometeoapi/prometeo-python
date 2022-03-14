@@ -26,7 +26,7 @@ Go to `your dashboard <https://test.prometeo.qualia.uy/dashboard/>`_, there you'
     client = Client('<YOUR_API_KEY>', environment='testing')
 
 
-The ``environment`` argument is either ``testing`` for the sandbox or ``production`` for the production environment.
+The ``environment`` argument is either ``sandbox`` for the sandbox or ``production`` for the production environment.
 
 .. note::
 
