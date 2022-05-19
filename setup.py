@@ -8,13 +8,13 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="prometeo",
-    version="1.2.3",
+    version="1.2.4",
     author="Prometeo",
     author_email="dev@prometeoapi.com",
     description="Python client library for Prometeo",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://bitbucket.org/qualiauy/prometeo-python",
+    url="https://github.com/prometeoapi/prometeo-python",
     packages=setuptools.find_packages(exclude='tests'),
     package_data={'README': ['README.md']},
     include_package_data=True,
