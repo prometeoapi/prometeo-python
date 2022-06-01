@@ -10,6 +10,7 @@ from .models import (
 
 TESTING_URL = 'https://test.sat-api.qualia.uy'
 PRODUCTION_URL = 'https://api.sat-api.qualia.uy'
+SANDBOX_URL = 'https://fiscal.sandbox.prometeoapi.com'
 
 
 class LoginScope(Enum):
@@ -221,6 +222,7 @@ class SatAPIClient(base_client.BaseClient):
     ENVIRONMENTS = {
         'testing': TESTING_URL,
         'production': PRODUCTION_URL,
+        'sandbox': SANDBOX_URL,
     }
 
     session_class = Session
