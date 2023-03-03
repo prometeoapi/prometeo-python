@@ -8,8 +8,8 @@ from .models import (
 from .exceptions import BankingClientError
 
 
-TESTING_URL = 'https://test.prometeo.qualia.uy'
-PRODUCTION_URL = 'https://prometeo.qualia.uy'
+TESTING_URL = 'https://banking.sandbox.prometeoapi.com'
+PRODUCTION_URL = 'https://banking.prometeoapi.net'
 
 
 class Session(base_session.BaseSession):

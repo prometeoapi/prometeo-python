@@ -8,8 +8,8 @@ from .models import (
 )
 
 
-TESTING_URL = 'https://test.sat-api.qualia.uy'
-PRODUCTION_URL = 'https://api.sat-api.qualia.uy'
+TESTING_URL = 'https://fiscal.sandbox.prometeoapi.com'
+PRODUCTION_URL = 'https://fiscal.prometeoapi.net'
 
 
 class LoginScope(Enum):

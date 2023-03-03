@@ -8,8 +8,8 @@ from .models import (
     Retentions,
 )
 
-TESTING_URL = 'https://test.dian-api.qualia.uy'
-PRODUCTION_URL = 'https://api.dian-api.qualia.uy'
+TESTING_URL = 'https://fiscal.sandbox.prometeoapi.com'
+PRODUCTION_URL = 'https://fiscal.prometeoapi.net'
 
 
 class NumerationType(Enum):

@@ -5,8 +5,8 @@ from prometeo import base_client
 from .models import QueryResult, DocumentData, PersonalData
 from .exceptions import CurpError
 
-TESTING_URL = 'https://test.curp-api.qualia.uy'
-PRODUCTION_URL = 'https://api.curp-api.qualia.uy'
+TESTING_URL = 'https://identity.sandbox.prometeoapi.com'
+PRODUCTION_URL = 'https://identity.prometeoapi.net'
 
 
 class Gender(Enum):
