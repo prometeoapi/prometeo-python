@@ -2,6 +2,7 @@ from .banking import BankingAPIClient
 from .curp import CurpAPIClient
 from .dian import DianAPIClient
 from .sat import SatAPIClient
+from .payment import PaymentAPIClient
 
 
 class Client(object):
@@ -12,6 +13,7 @@ class Client(object):
         self._dian = None
         self._sat = None
         self._curp = None
+        self._payment = None
 
     @property
     def banking(self):
@@ -36,3 +38,9 @@ class Client(object):
         if self._curp is None:
             self._curp = CurpAPIClient(self._api_key, self._environment)
         return self._curp
+
+    @property
+    def payment(self):
+        if self._payment is None:
+            self._payment = PaymentAPIClient(self._api_key, self._environment)
+        return self._payment

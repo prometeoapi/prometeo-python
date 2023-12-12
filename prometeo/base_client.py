@@ -28,6 +28,23 @@ class BaseClient(object):
         """
         pass
 
+    def on_error(self, response, data):
+        """
+        Check errors on response
+        """
+        if response.status_code == 400:
+            raise exceptions.BadRequestError(data.get("message"))
+        elif response.status_code == 401:
+            raise exceptions.UnauthorizedError(data.get("message"))
+        elif response.status_code == 403 and data.get("status") != "wrong_credentials":
+            raise exceptions.ForbiddenError(data.get("message"))
+        elif response.status_code == 404:
+            raise exceptions.NotFoundError(data.get("message"))
+        elif response.status_code == 500:
+            raise exceptions.InternalAPIError(data.get("message", response.text))
+        elif response.status_code == 503:
+            raise exceptions.ProviderUnavailableError(data.get("message"))
+
     def call_api(self, method, url, headers=None, *args, **kwargs):
         """
         Calls an API endpoint, using the configured api key and environment.
@@ -45,18 +62,7 @@ class BaseClient(object):
             data = response.json()
         except ValueError:
             data = {}
-        if response.status_code == 400:
-            raise exceptions.BadRequestError(data.get("message"))
-        elif response.status_code == 401:
-            raise exceptions.UnauthorizedError(data.get("message"))
-        elif response.status_code == 403 and data.get("status") != "wrong_credentials":
-            raise exceptions.ForbiddenError(data.get("message"))
-        elif response.status_code == 404:
-            raise exceptions.NotFoundError(data.get("message"))
-        elif response.status_code == 500:
-            raise exceptions.InternalAPIError(data.get("message", response.text))
-        elif response.status_code == 503:
-            raise exceptions.ProviderUnavailableError(data.get("message"))
+        self.on_error(response, data)
         self.on_response(data)
         return data
 
