@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime
 
 from six.moves.urllib.parse import parse_qs, urlparse

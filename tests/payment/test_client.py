@@ -73,7 +73,7 @@ class TestClient(BaseTestCase):
             amount="1.00",
             external_id=None,
             concept="PROM123452 REF454243",
-            bank_codes=["test"]
+            bank_codes=["test"],
         )
         self.assertEqual(data.intent_id, "52abd9b2-7a8d-4e8b-b724-0b68701d2e0e")
 
