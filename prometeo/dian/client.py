@@ -3,25 +3,35 @@ from datetime import datetime
 
 from prometeo import exceptions, base_client, base_session
 from .models import (
-    CompanyInfo, Member, Representative, Name, Accountant, CapitalComposition, Location,
-    Balance, RentDeclaration, Field, VATDeclaration, Numeration, NumerationRange,
+    CompanyInfo,
+    Member,
+    Representative,
+    Name,
+    Accountant,
+    CapitalComposition,
+    Location,
+    Balance,
+    RentDeclaration,
+    Field,
+    VATDeclaration,
+    Numeration,
+    NumerationRange,
     Retentions,
 )
 
-TESTING_URL = 'https://test.dian-api.qualia.uy'
-PRODUCTION_URL = 'https://api.dian-api.qualia.uy'
-SANDBOX_URL = 'https://fiscal.sandbox.prometeoapi.com'
+PRODUCTION_URL = "https://fiscal.prometeoapi.net"
+SANDBOX_URL = "https://fiscal.sandbox.prometeoapi.com"
 
 
 class NumerationType(Enum):
-    Authorization = 'authorization'
-    Habilitation = 'habilitation'
-    Inhabilitation = 'inhabilitation'
+    Authorization = "authorization"
+    Habilitation = "habilitation"
+    Inhabilitation = "inhabilitation"
 
 
 class Periodicity(Enum):
-    QUARTERLY = 'q'
-    BIMONTHLY = 'b'
+    QUARTERLY = "q"
+    BIMONTHLY = "b"
 
 
 class QuarterlyPeriod(Enum):
@@ -58,20 +68,20 @@ class DocumentType(Enum):
     """
     Document types used for :meth:`DianAPIClient.login`
     """
-    TARJETA_IDENTIDAD = '12'
-    CEDULA_CIUDADANIA = '13'
-    CERTIFICADO_REGISTRADURIA = '14'
-    TARJETA_EXTRANJERIA = '21'
-    CEDULA_EXTRANJERIA = '22'
-    PASAPORTE = '41'
-    DOCUMENTO_IDENTIFICACION_EXTRANJERO = '42'
-    SIN_IDENTIFICACION_EXTRANJERO = '43'
-    DOCUMENTO_IDENTIFICACION_EXTRANJERO_PERSONA_JURIDICA = '44'
-    CARNE_DIPLOMATICO = '46'
+
+    TARJETA_IDENTIDAD = "12"
+    CEDULA_CIUDADANIA = "13"
+    CERTIFICADO_REGISTRADURIA = "14"
+    TARJETA_EXTRANJERIA = "21"
+    CEDULA_EXTRANJERIA = "22"
+    PASAPORTE = "41"
+    DOCUMENTO_IDENTIFICACION_EXTRANJERO = "42"
+    SIN_IDENTIFICACION_EXTRANJERO = "43"
+    DOCUMENTO_IDENTIFICACION_EXTRANJERO_PERSONA_JURIDICA = "44"
+    CARNE_DIPLOMATICO = "46"
 
 
 class Session(base_session.BaseSession):
-
     def get_company_info(self):
         """
         Get information about the company or person (form 001).
@@ -158,9 +168,8 @@ class DianAPIClient(base_client.BaseClient):
     """
 
     ENVIRONMENTS = {
-        'testing': TESTING_URL,
-        'production': PRODUCTION_URL,
-        'sandbox': SANDBOX_URL,
+        "production": PRODUCTION_URL,
+        "sandbox": SANDBOX_URL,
     }
 
     session_class = Session
@@ -184,166 +193,193 @@ class DianAPIClient(base_client.BaseClient):
         :rtype: :class:`Session`
         """
         data = {
-            'provider': 'dian',
-            'document_type': document_type.value,
-            'document': document,
-            'password': password,
+            "provider": "dian",
+            "document_type": document_type.value,
+            "document": document,
+            "password": password,
         }
         if nit is not None:
-            data['nit'] = nit
-        response = self.call_api('POST', '/login/', data=data)
-        if response['status'] == 'logged_in':
-            return Session(self, response['status'], response['session_key'])
-        elif response['status'] == 'wrong_credentials':
-            raise exceptions.WrongCredentialsError(response['message'])
+            data["nit"] = nit
+        response = self.call_api("POST", "/login/", data=data)
+        if response["status"] == "logged_in":
+            return Session(self, response["status"], response["session_key"])
+        elif response["status"] == "wrong_credentials":
+            raise exceptions.WrongCredentialsError(response["message"])
         else:
-            raise exceptions.ClientError(response['message'])
+            raise exceptions.ClientError(response["message"])
 
     def get_company_info(self, session_key):
-        data = self.call_api('GET', '/company-info/', params={
-            'session_key': session_key,
-        })['info']
+        data = self.call_api(
+            "GET",
+            "/company-info/",
+            params={
+                "session_key": session_key,
+            },
+        )["info"]
         return CompanyInfo(
             accountant=Accountant(
-                document=data['accountant']['document'],
+                document=data["accountant"]["document"],
                 start_date=datetime.strptime(
-                    data['accountant']['start_date'], '%d/%m/%Y'
+                    data["accountant"]["start_date"], "%d/%m/%Y"
                 ),
-                name=data['accountant']['name'],
-                professional_card=data['accountant']['professional_card'],
+                name=data["accountant"]["name"],
+                professional_card=data["accountant"]["professional_card"],
             ),
-            capital_composition=CapitalComposition(**data['capital_composition']),
-            reason=data['reason'],
-            pdf_url=data['pdf_url'],
-            pdf=base_client.Download(self, data['pdf_url']),
-            location=Location(**data['location']),
-            name=data['name'],
-            constitution_date=datetime.strptime(data['constitution_date'], '%d/%m/%Y'),
+            capital_composition=CapitalComposition(**data["capital_composition"]),
+            reason=data["reason"],
+            pdf_url=data["pdf_url"],
+            pdf=base_client.Download(self, data["pdf_url"]),
+            location=Location(**data["location"]),
+            name=data["name"],
+            constitution_date=datetime.strptime(data["constitution_date"], "%d/%m/%Y"),
             representation=[
                 Representative(
-                    representation_type=representative['representation_type'],
+                    representation_type=representative["representation_type"],
                     start_date=datetime.strptime(
-                        representative['start_date'], '%d/%m/%Y'
+                        representative["start_date"], "%d/%m/%Y"
                     ),
-                    document_type=representative['document_type'],
-                    document=representative['document'],
-                    name=Name(**representative['name']),
-                ) for representative in data['representation']
+                    document_type=representative["document_type"],
+                    document=representative["document"],
+                    name=Name(**representative["name"]),
+                )
+                for representative in data["representation"]
             ],
             members=[
                 Member(
-                    document_type=member['document_type'],
-                    document=member['document'],
-                    nationality=member['nationality'],
-                    name=Name(**member['name']),
-                    start_date=datetime.strptime(member['start_date'], '%d/%m/%Y'),
-                ) for member in data['members']
+                    document_type=member["document_type"],
+                    document=member["document"],
+                    nationality=member["nationality"],
+                    name=Name(**member["name"]),
+                    start_date=datetime.strptime(member["start_date"], "%d/%m/%Y"),
+                )
+                for member in data["members"]
             ],
         )
 
     def get_balances(self, session_key):
-        data = self.call_api('GET', '/balances/', params={
-            'session_key': session_key,
-        })
-        return [
-            Balance(**balance) for balance in data['balances']
-        ]
+        data = self.call_api(
+            "GET",
+            "/balances/",
+            params={
+                "session_key": session_key,
+            },
+        )
+        return [Balance(**balance) for balance in data["balances"]]
 
     def get_rent_declaration(self, session_key, year):
-        data = self.call_api('GET', '/rent/', params={
-            'session_key': session_key,
-            'year': year,
-        })
+        data = self.call_api(
+            "GET",
+            "/rent/",
+            params={
+                "session_key": session_key,
+                "year": year,
+            },
+        )
         return RentDeclaration(
-            pdf_url=data['declaration']['pdf_url'],
-            pdf=base_client.Download(self, data['declaration']['pdf_url']),
-            fields=[Field(**field) for field in data['declaration']['fields'].values()],
-            year=data['declaration']['year'],
-            form_number=data['declaration']['form_number'],
-            nit=data['declaration']['nit'],
-            dv=data['declaration']['dv'],
-            name=Name(**data['declaration']['name']),
-            reason=data['declaration']['reason'],
-            direction_code=data['declaration']['direction_code'],
-            economic_activity=data['declaration']['economic_activity'],
-            correction_code=data['declaration']['correction_code'],
-            previous_form=data['declaration']['previous_form']
+            pdf_url=data["declaration"]["pdf_url"],
+            pdf=base_client.Download(self, data["declaration"]["pdf_url"]),
+            fields=[Field(**field) for field in data["declaration"]["fields"].values()],
+            year=data["declaration"]["year"],
+            form_number=data["declaration"]["form_number"],
+            nit=data["declaration"]["nit"],
+            dv=data["declaration"]["dv"],
+            name=Name(**data["declaration"]["name"]),
+            reason=data["declaration"]["reason"],
+            direction_code=data["declaration"]["direction_code"],
+            economic_activity=data["declaration"]["economic_activity"],
+            correction_code=data["declaration"]["correction_code"],
+            previous_form=data["declaration"]["previous_form"],
         )
 
     def get_vat_declaration(self, session_key, year, periodicity, period):
-        data = self.call_api('GET', '/vat/', params={
-            'session_key': session_key,
-            'year': year,
-            'periodicity': periodicity.value,
-            'period': period.value,
-        })
+        data = self.call_api(
+            "GET",
+            "/vat/",
+            params={
+                "session_key": session_key,
+                "year": year,
+                "periodicity": periodicity.value,
+                "period": period.value,
+            },
+        )
         return VATDeclaration(
-            pdf_url=data['declaration']['pdf_url'],
-            pdf=base_client.Download(self, data['declaration']['pdf_url']),
-            fields=[Field(**field) for field in data['declaration']['fields'].values()],
-            year=data['declaration']['year'],
-            form_number=data['declaration']['form_number'],
-            nit=data['declaration']['nit'],
-            dv=data['declaration']['dv'],
-            name=Name(**data['declaration']['name']),
-            reason=data['declaration']['reason'],
-            direction_code=data['declaration']['direction_code'],
-            correction_code=data['declaration']['correction_code'],
-            previous_form=data['declaration']['previous_form'],
-            period=data['declaration']['period'],
+            pdf_url=data["declaration"]["pdf_url"],
+            pdf=base_client.Download(self, data["declaration"]["pdf_url"]),
+            fields=[Field(**field) for field in data["declaration"]["fields"].values()],
+            year=data["declaration"]["year"],
+            form_number=data["declaration"]["form_number"],
+            nit=data["declaration"]["nit"],
+            dv=data["declaration"]["dv"],
+            name=Name(**data["declaration"]["name"]),
+            reason=data["declaration"]["reason"],
+            direction_code=data["declaration"]["direction_code"],
+            correction_code=data["declaration"]["correction_code"],
+            previous_form=data["declaration"]["previous_form"],
+            period=data["declaration"]["period"],
         )
 
     def get_numeration(self, session_key, type, date_start, date_end):
-        data = self.call_api('GET', '/numeration/', params={
-            'session_key': session_key,
-            'type': type.value,
-            'date_start': date_start.strftime('%d/%m/%Y'),
-            'date_end': date_end.strftime('%d/%m/%Y'),
-        })
+        data = self.call_api(
+            "GET",
+            "/numeration/",
+            params={
+                "session_key": session_key,
+                "type": type.value,
+                "date_start": date_start.strftime("%d/%m/%Y"),
+                "date_end": date_end.strftime("%d/%m/%Y"),
+            },
+        )
         numerations = []
-        for numeration in data['numeration']:
-            if numeration['name']:
-                name = Name(**numeration['name'])
+        for numeration in data["numeration"]:
+            if numeration["name"]:
+                name = Name(**numeration["name"])
             else:
                 name = None
-            numerations.append(Numeration(
-                address=numeration['address'],
-                country=numeration['country'],
-                department=numeration['department'],
-                dv=numeration['dv'],
-                municipality=numeration['municipality'],
-                nit=numeration['nit'],
-                pdf_url=numeration['pdf_url'],
-                pdf_available=numeration['pdf_available'],
-                reason=numeration['reason'],
-                name=name,
-                ranges=[
-                    NumerationRange(
-                        establishment=range['establishment'],
-                        from_number=range['from'],
-                        to_number=range['to'],
-                        mode=range['mode'],
-                        prefix=range['prefix'],
-                        type=range['type'],
-                    ) for range in numeration['ranges']
-                ]
-            ))
+            numerations.append(
+                Numeration(
+                    address=numeration["address"],
+                    country=numeration["country"],
+                    department=numeration["department"],
+                    dv=numeration["dv"],
+                    municipality=numeration["municipality"],
+                    nit=numeration["nit"],
+                    pdf_url=numeration["pdf_url"],
+                    pdf_available=numeration["pdf_available"],
+                    reason=numeration["reason"],
+                    name=name,
+                    ranges=[
+                        NumerationRange(
+                            establishment=range["establishment"],
+                            from_number=range["from"],
+                            to_number=range["to"],
+                            mode=range["mode"],
+                            prefix=range["prefix"],
+                            type=range["type"],
+                        )
+                        for range in numeration["ranges"]
+                    ],
+                )
+            )
         return numerations
 
     def get_retentions(self, session_key, year, period):
-        data = self.call_api('GET', '/retentions/', params={
-            'session_key': session_key,
-            'year': year,
-            'period': period.value,
-        })
+        data = self.call_api(
+            "GET",
+            "/retentions/",
+            params={
+                "session_key": session_key,
+                "year": year,
+                "period": period.value,
+            },
+        )
         return Retentions(
-            pdf_url=data['retentions']['pdf_url'],
-            pdf=base_client.Download(self, data['retentions']['pdf_url']),
-            fields=[Field(**field) for field in data['retentions']['fields'].values()],
-            year=data['retentions']['year'],
-            form_number=data['retentions']['form_number'],
-            nit=data['retentions']['nit'],
-            reason=data['retentions']['reason'],
-            direction_code=data['retentions']['direction_code'],
-            period=data['retentions']['period'],
+            pdf_url=data["retentions"]["pdf_url"],
+            pdf=base_client.Download(self, data["retentions"]["pdf_url"]),
+            fields=[Field(**field) for field in data["retentions"]["fields"].values()],
+            year=data["retentions"]["year"],
+            form_number=data["retentions"]["form_number"],
+            nit=data["retentions"]["nit"],
+            reason=data["retentions"]["reason"],
+            direction_code=data["retentions"]["direction_code"],
+            period=data["retentions"]["period"],
         )

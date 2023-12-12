@@ -1,35 +1,36 @@
-from collections import namedtuple
+from typing import Optional
+from pydantic import BaseModel
+from datetime import datetime
 
 
-QueryResult = namedtuple('QueryResult', [
-    'document_data',
-    'personal_data',
-    'pdf_url',
-    'pdf',
-])
+class DocumentData(BaseModel):
+    foja: str
+    clave_entidad_registro: str
+    num_acta: str
+    tomo: str
+    anio_reg: str
+    municipio_registro: str
+    libro: str
+    entidad_registro: str
+    clave_municipio_registro: str
 
-DocumentData = namedtuple('DocumentData', {
-    'foja',
-    'clave_entidad_registro',
-    'num_acta',
-    'tomo',
-    'anio_reg',
-    'municipio_registro',
-    'libro',
-    'entidad_registro',
-    'clave_municipio_registro',
-})
 
-PersonalData = namedtuple('DocumentData', [
-    'sexo',
-    'entidad',
-    'nacionalidad',
-    'status_curp',
-    'nombres',
-    'segundo_apellido',
-    'clave_entidad',
-    'doc_probatorio',
-    'fecha_nacimiento',
-    'primer_apellido',
-    'curp',
-])
+class PersonalData(BaseModel):
+    sexo: str
+    entidad: str
+    nacionalidad: str
+    status_curp: str
+    nombres: str
+    segundo_apellido: str
+    clave_entidad: str
+    doc_probatorio: int
+    fecha_nacimiento: datetime
+    primer_apellido: str
+    curp: str
+
+
+class QueryResult(BaseModel):
+    document_data: DocumentData
+    personal_data: PersonalData
+    pdf_url: str
+    pdf: Optional[object]

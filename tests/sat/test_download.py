@@ -7,14 +7,13 @@ from tests.base_test_case import BaseTestCase
 
 @requests_mock.Mocker()
 class TestSession(BaseTestCase):
-
     def setUp(self):
         super(TestSession, self).setUp()
-        self.client = SatAPIClient('test_api_key', 'testing')
+        self.client = SatAPIClient("test_api_key", "sandbox")
 
     def test_download_file(self, m):
-        file_url = '/download/file.txt'
-        file_content = 'content'
+        file_url = "/download/file.txt"
+        file_content = "content"
         m.get(file_url, text=file_content)
         download = Download(self.client, file_url)
         self.assertEqual(download.get_file().decode(), file_content)

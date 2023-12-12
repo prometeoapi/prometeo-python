@@ -10,7 +10,7 @@ Checking the existence of a curp
    from prometeo import Client
    from prometeo.curp import exceptions
 
-   client = Client('<YOUR_API_KEY>', environment='testing')
+   client = Client('<YOUR_API_KEY>', environment='sandbox')
    try:
        result = client.curp.query('ABCD12345EFGH')
    except exceptions.CurpError as e:

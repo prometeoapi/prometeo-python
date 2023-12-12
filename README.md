@@ -11,7 +11,7 @@ Complete client documentation is available at [Read the docs](https://readthedoc
 
 ### Prerequisites
 
-* Python version 2.7 and 3.5+
+* Python version 3.7
 * An API Key ([contact us](mailto:info@prometeoapi.com) to get one!)
 
 ### Install package
@@ -31,10 +31,10 @@ Go to [your dashboard](https://test.prometeo.qualia.uy/dashboard/), there you'll
 from prometeo import Client
 
 
-client = Client('<YOUR_API_KEY>', environment='testing')
+client = Client('<YOUR_API_KEY>', environment='sandbox')
 ```
 
-The `environment` argument is either `testing` for the sandbox or `production` for the production environment.
+The `environment` argument is either `sandbox` for the sandbox or `production` for the production environment.
 
 ### Listing movements
 

@@ -5,8 +5,7 @@ from .sat import SatAPIClient
 
 
 class Client(object):
-
-    def __init__(self, api_key, environment='testing'):
+    def __init__(self, api_key, environment="sandbox"):
         self._api_key = api_key
         self._environment = environment
         self._banking = None
@@ -17,31 +16,23 @@ class Client(object):
     @property
     def banking(self):
         if self._banking is None:
-            self._banking = BankingAPIClient(
-                self._api_key, self._environment
-            )
+            self._banking = BankingAPIClient(self._api_key, self._environment)
         return self._banking
 
     @property
     def dian(self):
         if self._dian is None:
-            self._dian = DianAPIClient(
-                self._api_key, self._environment
-            )
+            self._dian = DianAPIClient(self._api_key, self._environment)
         return self._dian
 
     @property
     def sat(self):
         if self._sat is None:
-            self._sat = SatAPIClient(
-                self._api_key, self._environment
-            )
+            self._sat = SatAPIClient(self._api_key, self._environment)
         return self._sat
 
     @property
     def curp(self):
         if self._curp is None:
-            self._curp = CurpAPIClient(
-                self._api_key, self._environment
-            )
+            self._curp = CurpAPIClient(self._api_key, self._environment)
         return self._curp

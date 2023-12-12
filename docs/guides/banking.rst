@@ -5,13 +5,13 @@ Banking API
 Initialize the client
 ---------------------
 
-To initialize the client you'll need to provide your api key and the environment (either ``testing`` or ``production``)
+To initialize the client you'll need to provide your api key and the environment (either ``sandbox`` or ``production``)
 
 .. code-block:: python
 
     from prometeo import Client
 
-    client = Client('<YOUR_API_KEY>', environment='testing')
+    client = Client('<YOUR_API_KEY>', environment='sandbox')
 
 
 Log in

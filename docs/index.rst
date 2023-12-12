@@ -23,7 +23,7 @@ Go to `your dashboard <https://test.prometeo.qualia.uy/dashboard/>`_, there you'
 
     from prometeo import Client
 
-    client = Client('<YOUR_API_KEY>', environment='testing')
+    client = Client('<YOUR_API_KEY>', environment='sandbox')
 
 
 The ``environment`` argument is either ``sandbox`` for the sandbox or ``production`` for the production environment.

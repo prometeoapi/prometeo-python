@@ -5,9 +5,8 @@ from prometeo import Client
 
 
 class BaseTestCase(unittest.TestCase):
-
     def setUp(self):
-        self.client = Client('test_key')
+        self.client = Client("test_key")
 
     def load_json(self, file_name):
         with open("tests/fixtures/{}.json".format(file_name)) as f:

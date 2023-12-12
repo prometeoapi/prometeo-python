@@ -3,67 +3,69 @@ from enum import Enum
 
 from prometeo import exceptions, base_client, base_session
 from .models import (
-    CFDIBill, CFDIDownloadItem, DownloadRequest as DownloadRequestModel,
-    PdfFile, DownloadFile, AcknowledgementResult as AcknowledgementResultModel,
+    CFDIBill,
+    CFDIDownloadItem,
+    DownloadRequest as DownloadRequestModel,
+    PdfFile,
+    DownloadFile,
+    AcknowledgementResult as AcknowledgementResultModel,
 )
 
 
-TESTING_URL = 'https://test.sat-api.qualia.uy'
-PRODUCTION_URL = 'https://api.sat-api.qualia.uy'
-SANDBOX_URL = 'https://fiscal.sandbox.prometeoapi.com'
+PRODUCTION_URL = "https://fiscal.prometeoapi.net"
+SANDBOX_URL = "https://fiscal.sandbox.prometeoapi.com"
 
 
 class LoginScope(Enum):
-    CFDI = 'cfdi'
-    SIAT = 'siat'
+    CFDI = "cfdi"
+    SIAT = "siat"
 
 
 class DownloadAction(Enum):
-    BULK_DOWNLOAD = 'bulk_download'
-    METADATA_DOWNLOAD = 'metadata_download'
-    PDF_EXPORT = 'pdf_export'
-    LIST = 'list'
+    BULK_DOWNLOAD = "bulk_download"
+    METADATA_DOWNLOAD = "metadata_download"
+    PDF_EXPORT = "pdf_export"
+    LIST = "list"
 
 
 class BillStatus(Enum):
-    ANY = 'any'
-    CANCELLED = 'cancelled'
-    VALID = 'valid'
+    ANY = "any"
+    CANCELLED = "cancelled"
+    VALID = "valid"
 
 
 class Motive(Enum):
-    ALL = 'all'
-    AF = 'af'
-    DE = 'de'
-    CO = 'co'
-    FC = 'fc'
-    MONTHLY = 'monthly'
+    ALL = "all"
+    AF = "af"
+    DE = "de"
+    CO = "co"
+    FC = "fc"
+    MONTHLY = "monthly"
 
 
 class DocumentType(Enum):
-    ALL = 'all'
-    CT = 'ct'
-    B = 'b'
-    PL = 'pl'
-    XF = 'xf'
-    XC = 'xc'
+    ALL = "all"
+    CT = "ct"
+    B = "b"
+    PL = "pl"
+    XF = "xf"
+    XC = "xc"
 
 
 class Status(Enum):
-    ALL = 'all'
-    RECEIVED = 'received'
-    ACCEPTED = 'accepted'
-    REJECTED = 'rejected'
+    ALL = "all"
+    RECEIVED = "received"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
 
 
 class SendType(Enum):
-    ALL = 'all'
-    N = 'n'
-    C = 'c'
+    ALL = "all"
+    N = "n"
+    C = "c"
 
 
 class Session(base_session.BaseSession):
-
     def logout(self):
         """
         Logs out of SAT. You won't be able to use this session after logout.
@@ -105,15 +107,19 @@ class Session(base_session.BaseSession):
         :rtype: List of :class:`~DownloadRequest`
         """
         requests = self._client.get_emitted(
-            self._session_key, date_start, date_end,
-            status, DownloadAction.BULK_DOWNLOAD
+            self._session_key,
+            date_start,
+            date_end,
+            status,
+            DownloadAction.BULK_DOWNLOAD,
         )
         return [
             DownloadRequest(
                 self._client,
                 self._session_key,
                 request.request_id,
-            ) for request in requests
+            )
+            for request in requests
         ]
 
     def get_received_bills(self, year, month, status):
@@ -158,7 +164,8 @@ class Session(base_session.BaseSession):
                 self._client,
                 self._session_key,
                 request.request_id,
-            ) for request in requests
+            )
+            for request in requests
         ]
 
     def get_downloads(self):
@@ -172,12 +179,12 @@ class Session(base_session.BaseSession):
                 self._client,
                 self._session_key,
                 request.request_id,
-            ) for request in self._client.get_downloads(self._session_key)
+            )
+            for request in self._client.get_downloads(self._session_key)
         ]
 
     def get_acknowledgements(
-            self, year, month_start, month_end,
-            motive, document_type, status, send_type
+        self, year, month_start, month_end, motive, document_type, status, send_type
     ):
         """
         Gets a list of acknowledgements for a range of dates
@@ -206,8 +213,14 @@ class Session(base_session.BaseSession):
         :rtype: List of :class:`AcknowledgementResult`
         """
         acks = self._client.get_acknowledgements(
-            self._session_key, year, month_start, month_end,
-            motive, document_type, status, send_type
+            self._session_key,
+            year,
+            month_start,
+            month_end,
+            motive,
+            document_type,
+            status,
+            send_type,
         )
         return [
             AcknowledgementResult(self._client, self._session_key, ack) for ack in acks
@@ -220,9 +233,8 @@ class SatAPIClient(base_client.BaseClient):
     """
 
     ENVIRONMENTS = {
-        'testing': TESTING_URL,
-        'production': PRODUCTION_URL,
-        'sandbox': SANDBOX_URL,
+        "production": PRODUCTION_URL,
+        "sandbox": SANDBOX_URL,
     }
 
     session_class = Session
@@ -244,130 +256,171 @@ class SatAPIClient(base_client.BaseClient):
 
         :rtype: :class:`Session`
         """
-        response = self.call_api('POST', '/login/', data={
-            'provider': 'sat',
-            'rfc': rfc,
-            'password': password,
-            'scope': scope.value,
-        })
-        if response['status'] == 'logged_in':
-            return Session(self, response['status'], response['session_key'])
-        elif response['status'] == 'wrong_credentials':
-            raise exceptions.WrongCredentialsError(response['message'])
+        response = self.call_api(
+            "POST",
+            "/login/",
+            data={
+                "provider": "sat",
+                "rfc": rfc,
+                "password": password,
+                "scope": scope.value,
+            },
+        )
+        if response["status"] == "logged_in":
+            return Session(self, response["status"], response["session_key"])
+        elif response["status"] == "wrong_credentials":
+            raise exceptions.WrongCredentialsError(response["message"])
         else:
-            raise exceptions.ClientError(response['message'])
+            raise exceptions.ClientError(response["message"])
 
     def logout(self, session_key):
-        self.call_api('GET', '/logout/', params={
-            'session_key': session_key,
-        })
+        self.call_api(
+            "GET",
+            "/logout/",
+            params={
+                "session_key": session_key,
+            },
+        )
 
     def _handle_bill_parsing(self, action, data):
         if action == DownloadAction.LIST:
             return [
                 CFDIBill(
-                    id=bill['id'],
-                    emitter_rfc=bill['emitter_rfc'],
-                    emitter_reason=bill['emitter_reason'],
-                    receiver_rfc=bill['receiver_rfc'],
-                    receiver_reason=bill['receiver_reason'],
+                    id=bill["id"],
+                    emitter_rfc=bill["emitter_rfc"],
+                    emitter_reason=bill["emitter_reason"],
+                    receiver_rfc=bill["receiver_rfc"],
+                    receiver_reason=bill["receiver_reason"],
                     emitted_date=datetime.strptime(
-                        bill['emitted_date'], '%Y-%m-%dT%H:%M:%S'
+                        bill["emitted_date"], "%Y-%m-%dT%H:%M:%S"
                     ),
                     certification_date=datetime.strptime(
-                        bill['certification_date'], '%Y-%m-%dT%H:%M:%S'
+                        bill["certification_date"], "%Y-%m-%dT%H:%M:%S"
                     ),
-                    certification_pac=bill['certification_pac'],
-                    total_value=bill['total_value'],
-                    effect=bill['effect'],
-                    status=BillStatus(bill['status']),
-                ) for bill in data
+                    certification_pac=bill["certification_pac"],
+                    total_value=bill["total_value"],
+                    effect=bill["effect"],
+                    status=BillStatus(bill["status"]),
+                )
+                for bill in data
             ]
         elif action == DownloadAction.BULK_DOWNLOAD:
             return [
-                DownloadRequestModel(request_id=request['request_id'])
+                DownloadRequestModel(request_id=request["request_id"])
                 for request in data
             ]
         elif action == DownloadAction.METADATA_DOWNLOAD:
             return [
-                DownloadRequestModel(request_id=request['request_id'])
+                DownloadRequestModel(request_id=request["request_id"])
                 for request in data
             ]
         elif action == DownloadAction.PDF_EXPORT:
-            return [
-                PdfFile(pdf_url=download['pdf_url'])
-                for download in data
-            ]
+            return [PdfFile(pdf_url=download["pdf_url"]) for download in data]
 
     def get_emitted(self, session_key, date_start, date_end, status, action):
-        data = self.call_api('GET', '/cfdi/emitted/', params={
-            'session_key': session_key,
-            'date_start': date_start.strftime('%d/%m/%Y'),
-            'date_end': date_end.strftime('%d/%m/%Y'),
-            'status': status.value,
-            'action': action.value,
-        })
-        return self._handle_bill_parsing(action, data['emitted'])
+        data = self.call_api(
+            "GET",
+            "/cfdi/emitted/",
+            params={
+                "session_key": session_key,
+                "date_start": date_start.strftime("%d/%m/%Y"),
+                "date_end": date_end.strftime("%d/%m/%Y"),
+                "status": status.value,
+                "action": action.value,
+            },
+        )
+        return self._handle_bill_parsing(action, data["emitted"])
 
     def download_emitted(self, session_key, bill_id):
-        data = self.call_api('GET', '/cfdi/emitted/{}/'.format(bill_id), params={
-            'session_key': session_key,
-        })
-        return DownloadFile(**data['download'])
+        data = self.call_api(
+            "GET",
+            "/cfdi/emitted/{}/".format(bill_id),
+            params={
+                "session_key": session_key,
+            },
+        )
+        return DownloadFile(**data["download"])
 
     def get_received(self, session_key, year, month, status, action):
-        data = self.call_api('GET', '/cfdi/received/', params={
-            'session_key': session_key,
-            'year': year,
-            'month': month,
-            'status': status.value,
-            'action': action.value,
-        })
-        return self._handle_bill_parsing(action, data['received'])
+        data = self.call_api(
+            "GET",
+            "/cfdi/received/",
+            params={
+                "session_key": session_key,
+                "year": year,
+                "month": month,
+                "status": status.value,
+                "action": action.value,
+            },
+        )
+        return self._handle_bill_parsing(action, data["received"])
 
     def download_received(self, session_key, bill_id):
-        data = self.call_api('GET', '/cfdi/received/{}/'.format(bill_id), params={
-            'session_key': session_key,
-        })
-        return DownloadFile(**data['download'])
+        data = self.call_api(
+            "GET",
+            "/cfdi/received/{}/".format(bill_id),
+            params={
+                "session_key": session_key,
+            },
+        )
+        return DownloadFile(**data["download"])
 
     def get_downloads(self, session_key):
-        data = self.call_api('GET', '/cfdi/download/', params={
-            'session_key': session_key,
-        })
-        return [
-            CFDIDownloadItem(**item) for item in data['downloads']
-        ]
+        data = self.call_api(
+            "GET",
+            "/cfdi/download/",
+            params={
+                "session_key": session_key,
+            },
+        )
+        return [CFDIDownloadItem(**item) for item in data["downloads"]]
 
     def get_download(self, session_key, request_id):
-        data = self.call_api('GET', '/cfdi/download/{}/'.format(request_id), params={
-            'session_key': session_key,
-        })
-        return DownloadFile(**data['download'])
+        data = self.call_api(
+            "GET",
+            "/cfdi/download/{}/".format(request_id),
+            params={
+                "session_key": session_key,
+            },
+        )
+        return DownloadFile(**data["download"])
 
     def get_acknowledgements(
-            self, session_key, year, month_start, month_end,
-            motive, document_type, status, send_type
+        self,
+        session_key,
+        year,
+        month_start,
+        month_end,
+        motive,
+        document_type,
+        status,
+        send_type,
     ):
-        data = self.call_api('GET', '/ccee/acknowledgment/', params={
-            'session_key': session_key,
-            'year': year,
-            'month_start': month_start,
-            'month_end': month_end,
-            'motive': motive.value,
-            'document_type': document_type.value,
-            'status': status.value,
-            'send_type': send_type.value,
-        })
-        return [
-            AcknowledgementResultModel(**result) for result in data['results']
-        ]
+        data = self.call_api(
+            "GET",
+            "/ccee/acknowledgment/",
+            params={
+                "session_key": session_key,
+                "year": year,
+                "month_start": month_start,
+                "month_end": month_end,
+                "motive": motive.value,
+                "document_type": document_type.value,
+                "status": status.value,
+                "send_type": send_type.value,
+            },
+        )
+        return [AcknowledgementResultModel(**result) for result in data["results"]]
 
     def download_acknowledgement(self, session_key, ack_id):
-        data = self.call_api('GET', '/ccee/acknowledgment/{}/'.format(ack_id), params={
-            'session_key': session_key,
-        })
-        return DownloadFile(**data['download'])
+        data = self.call_api(
+            "GET",
+            "/ccee/acknowledgment/{}/".format(ack_id),
+            params={
+                "session_key": session_key,
+            },
+        )
+        return DownloadFile(**data["download"])
 
 
 class AcknowledgementResult(object):
@@ -401,6 +454,7 @@ class DownloadRequest(object):
     """
     A request for bulk downloading of bills.
     """
+
     def __init__(self, client, session_key, request_id):
         self._download = None
         self._client = client

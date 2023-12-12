@@ -13,12 +13,11 @@ class BaseClient(object):
 
     session_class = None
 
-    def make_request(self, method, url, *args, **kwargs):
+    def make_request(self, method, url, headers=None, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
-        headers = {
-            'X-API-Key': self._api_key,
-        }
+        headers = headers or {}
+        headers["X-API-Key"] = self._api_key
         return self._client_session.request(
             method, full_url, headers=headers, *args, **kwargs
         )
@@ -29,7 +28,7 @@ class BaseClient(object):
         """
         pass
 
-    def call_api(self, method, url, *args, **kwargs):
+    def call_api(self, method, url, headers=None, *args, **kwargs):
         """
         Calls an API endpoint, using the configured api key and environment.
 
@@ -41,23 +40,23 @@ class BaseClient(object):
 
         :rtype: JSON data as a python object.
         """
-        response = self.make_request(method, url, *args, **kwargs)
+        response = self.make_request(method, url, headers, *args, **kwargs)
         try:
             data = response.json()
         except ValueError:
             data = {}
         if response.status_code == 400:
-            raise exceptions.BadRequestError(data.get('message'))
+            raise exceptions.BadRequestError(data.get("message"))
         elif response.status_code == 401:
-            raise exceptions.UnauthorizedError(data.get('message'))
-        elif response.status_code == 403 and data.get('status') != 'wrong_credentials':
-            raise exceptions.ForbiddenError(data.get('message'))
+            raise exceptions.UnauthorizedError(data.get("message"))
+        elif response.status_code == 403 and data.get("status") != "wrong_credentials":
+            raise exceptions.ForbiddenError(data.get("message"))
         elif response.status_code == 404:
-            raise exceptions.NotFoundError(data.get('message'))
+            raise exceptions.NotFoundError(data.get("message"))
         elif response.status_code == 500:
-            raise exceptions.InternalAPIError(data.get('message', response.text))
+            raise exceptions.InternalAPIError(data.get("message", response.text))
         elif response.status_code == 503:
-            raise exceptions.ProviderUnavailableError(data.get('message'))
+            raise exceptions.ProviderUnavailableError(data.get("message"))
         self.on_response(data)
         return data
 
@@ -100,5 +99,5 @@ class Download(object):
 
         :rtype: bytes
         """
-        resp = self._client.make_request('GET', self.url)
+        resp = self._client.make_request("GET", self.url)
         return resp.content
