@@ -115,24 +115,27 @@ class TestCase(unittest.TestCase):
             self.client.call_api("GET", "/test/")
 
     def test_raw_response(self, m):
-        m.get("/test/", json={
-            "name": "test",
-            "aliases": ["alias_test"],
-            "country": "UY",
-            "endpoints_status": None,
-            "account_type": [
-                {
-                    "name": "pers",
-                    "label_es": "Cuenta Personal",
-                    "label_en": "Personal Account",
-                },
-                {
-                    "name": "corp",
-                    "label_es": "Cuenta Corporativa",
-                    "label_en": "Corporate Account",
-                },
-            ],
-        })
+        m.get(
+            "/test/",
+            json={
+                "name": "test",
+                "aliases": ["alias_test"],
+                "country": "UY",
+                "endpoints_status": None,
+                "account_type": [
+                    {
+                        "name": "pers",
+                        "label_es": "Cuenta Personal",
+                        "label_en": "Personal Account",
+                    },
+                    {
+                        "name": "corp",
+                        "label_es": "Cuenta Corporativa",
+                        "label_en": "Corporate Account",
+                    },
+                ],
+            },
+        )
         client = base_client.BaseClient(self.api_key, self.environment, True)
         respose = client.call_api("GET", "/test/")
         self.assertEqual(200, respose.status_code)

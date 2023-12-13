@@ -373,6 +373,30 @@ class BankingAPIClient(base_client.BaseClient):
             headers=headers,
         )
 
+    def login_procedure(self, session_key, **kwargs):
+        return self.call_api(
+            "POST",
+            "/login-procedure/",
+            data={
+                **kwargs,
+            },
+            headers={"X-Session-Key": session_key},
+        )
+
+    def get_owner_info(self, session_key):
+        return self.call_api(
+            "GET",
+            "/info/",
+            headers={"X-Session-Key": session_key},
+        )
+
+    def get_transfer_authorization_methods(self, session_key):
+        return self.call_api(
+            "GET",
+            "/transfer/mfa-methods",
+            headers={"X-Session-Key": session_key},
+        )
+
     def get_clients(self, session_key):
         return self.call_api(
             "GET",
@@ -463,7 +487,7 @@ class BankingAPIClient(base_client.BaseClient):
         payment_intent_id=None,
         external_id=None,
         mobile_os=None,
-        **kwargs
+        **kwargs,
     ):
         return self.call_api(
             "POST",
@@ -488,7 +512,25 @@ class BankingAPIClient(base_client.BaseClient):
                 "destination_bank_code": destination_bank_code,
                 "mobile_os": mobile_os,
                 "external_id": external_id,
-                **kwargs
+                **kwargs,
+            },
+        )
+
+    def retry_preprocess_transfer(
+        self,
+        session_key,
+        request_id,
+        **kwargs,
+    ):
+        return self.call_api(
+            "POST",
+            "/transfer/preprocess/retry",
+            headers={
+                "X-Session-Key": session_key,
+            },
+            data={
+                "request_id": request_id,
+                **kwargs,
             },
         )
 
