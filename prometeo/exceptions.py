@@ -37,3 +37,9 @@ class ProviderUnavailableError(PrometeoError):
 
 class InvalidSessionKeyError(PrometeoError):
     pass
+
+
+class InvalidParameterError(PrometeoError):
+    def __init__(self, params, message):
+        self.params = params
+        self.message = message

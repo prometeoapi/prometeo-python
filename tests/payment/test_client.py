@@ -63,7 +63,6 @@ class TestClient(BaseTestCase):
         )
 
     def test_create_intent_successfully(self, m):
-        m.post(f"/api/v1/payment-intent/", json=..., status_code=200)
         self.mock_post_request(
             m, "/api/v1/payment-intent/", "create_intent_response_success"
         )

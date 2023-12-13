@@ -1,0 +1,7 @@
+{
+    "data": null,
+    "errors": {
+      "code": 400,
+      "message": "Invalid parameter: account_number, document_number. Some description indicating error"
+    }
+  }

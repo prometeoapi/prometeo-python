@@ -1,0 +1,16 @@
+{
+  "data": {
+    "valid": true,
+    "message": "Cuenta valida",
+    "account_number": "404040406",
+    "bank_code": "012",
+    "country_code": "UY",
+    "branch_code": "180",
+    "document_type": "RFC",
+    "document_number": "CRM6702109K6",
+    "beneficiary_name": "CRUZ ROJA MEXICANA",
+    "account_currency": "MXP",
+    "account_type": null
+  },
+  "errors": null
+}
