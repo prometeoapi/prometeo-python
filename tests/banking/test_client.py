@@ -5,6 +5,9 @@ import requests_mock
 
 from prometeo import exceptions
 from prometeo.banking import exceptions as banking_exceptions
+from prometeo.banking.client import Account, CreditCard
+from prometeo.banking.models import Account as AccountModel
+from prometeo.banking.models import CreditCard as CreditCardModel
 from tests.base_test_case import BaseTestCase
 
 
@@ -18,7 +21,8 @@ class TestClient(BaseTestCase):
                 "key": "123456",
             },
         )
-        session = self.client.banking.login(
+        session = self.client.banking.get_session()
+        session = session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -36,7 +40,8 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(exceptions.WrongCredentialsError):
-            self.client.banking.login(
+            session = self.client.banking.get_session()
+            session.login(
                 provider="test_provider",
                 username="test_username",
                 password="test_password",
@@ -52,7 +57,8 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(banking_exceptions.BankingClientError):
-            self.client.banking.login(
+            session = self.client.banking.get_session()
+            session.login(
                 provider="test_provider",
                 username="test_username",
                 password="test_password",
@@ -75,7 +81,8 @@ class TestClient(BaseTestCase):
             },
         )
         m.get("/client/1/", json={"status": "success"})
-        session = self.client.banking.login(
+        session = self.client.banking.get_session()
+        session = session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -102,7 +109,8 @@ class TestClient(BaseTestCase):
                 "key": session_key,
             },
         )
-        session = self.client.banking.login(
+        session = self.client.banking.get_session()
+        session = session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -151,7 +159,8 @@ class TestClient(BaseTestCase):
             },
         )
         session_key = "test_session_key"
-        accounts = self.client.banking.get_accounts(session_key)
+        session = self.client.banking.get_session(session_key)
+        accounts = session.get_accounts()
         self.assertEqual("/account/", m.last_request.path)
         self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
         self.assertEqual(2, len(accounts))
@@ -190,9 +199,19 @@ class TestClient(BaseTestCase):
         currency_code = "USD"
         date_start = datetime(2019, 1, 1)
         date_end = datetime(2019, 12, 1)
-        movements = self.client.banking.get_movements(
-            session_key, account_number, currency_code, date_start, date_end
+        account = Account(
+            self.client.banking,
+            session_key,
+            AccountModel(
+                id="12345",
+                name="Cuenta total",
+                number="001234567",
+                branch="02 - 18 De Julio",
+                currency="USD",
+                balance=1234.95,
+            ),
         )
+        movements = account.get_movements(date_start, date_end)
         qs = parse_qs(urlparse(m.last_request.url).query)
         self.assertEqual("/movement/", m.last_request.path)
         self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
@@ -223,7 +242,8 @@ class TestClient(BaseTestCase):
             },
         )
         session_key = "test_session_key"
-        cards = self.client.banking.get_credit_cards(session_key)
+        session = self.client.banking.get_session(session_key)
+        cards = session.get_credit_cards()
         self.assertEqual("/credit-card/", m.last_request.path)
         self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
         self.assertEqual(1, len(cards))
@@ -261,9 +281,20 @@ class TestClient(BaseTestCase):
         currency_code = "USD"
         date_start = datetime(2019, 1, 1)
         date_end = datetime(2019, 12, 1)
-        movements = self.client.banking.get_credit_card_movements(
-            session_key, card_number, currency_code, date_start, date_end
+        card = CreditCard(
+            self.client.banking,
+            session_key,
+            CreditCardModel(
+                id="12345",
+                name="Cuenta total",
+                number=card_number,
+                close_date=datetime(2019, 11, 4),
+                due_date=datetime(2019, 11, 20),
+                balance_local=12345.42,
+                balance_dollar=67.89,
+            ),
         )
+        movements = card.get_movements(currency_code, date_start, date_end)
         qs = parse_qs(urlparse(m.last_request.url).query)
         self.assertEqual("/credit-card/1234567/movements", m.last_request.path)
         self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
@@ -284,7 +315,8 @@ class TestClient(BaseTestCase):
                 "status": "success",
             },
         )
-        providers = self.client.banking.get_providers()
+        session = self.client.banking.get_session()
+        providers = session.get_providers()
         self.assertEqual(1, len(providers))
         self.assertEqual("test", providers[0].code)
         self.assertEqual("UY", providers[0].country)
@@ -364,7 +396,8 @@ class TestClient(BaseTestCase):
                 "status": "success",
             },
         )
-        provider = self.client.banking.get_provider_detail("test")
+        session = self.client.banking.get_session()
+        provider = session.get_provider_detail("test")
         self.assertEqual("UY", provider.country)
         self.assertEqual("test", provider.name)
         self.assertEqual(4, len(provider.auth_fields))
@@ -375,9 +408,8 @@ class TestClient(BaseTestCase):
             "/provider/santander_pers_uy/?key=type&value=UY",
             "provider_details_santander",
         )
-        provider = self.client.banking.get_provider_detail(
-            "santander_pers_uy", "type", "UY"
-        )
+        session = self.client.banking.get_session()
+        provider = session.get_provider_detail("santander_pers_uy", "type", "UY")
         self.assertEqual("UY", provider.country)
         self.assertEqual("santander_pers_uy", provider.name)
         self.assertEqual(4, len(provider.auth_fields))
@@ -391,12 +423,14 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(exceptions.NotFoundError):
-            self.client.banking.get_provider_detail("invalid")
+            session = self.client.banking.get_session()
+            session.get_provider_detail("invalid")
 
     def test_logout(self, m):
         m.get("/logout/", json={"status": "logged_out"})
         session_key = "test_session_key"
-        self.client.banking.logout(session_key)
+        session = self.client.banking.get_session(session_key)
+        session.logout()
         self.assertEqual("/logout/", m.last_request.path)
         self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
 
@@ -425,8 +459,8 @@ class TestClient(BaseTestCase):
         concept = "descripcion de transferencia"
         destination_owner_name = "John Doe"
         branch = "62"
-        preprocess = self.client.banking.preprocess_transfer(
-            session_key,
+        session = self.client.banking.get_session(session_key)
+        preprocess = session.preprocess_transfer(
             origin_account,
             destination_institution,
             destination_account,
@@ -458,8 +492,9 @@ class TestClient(BaseTestCase):
         request_id = "0b7d6b32d1be4c11bde21e7ddc08cc36"
         authorization_type = "cardCode"
         authorization_data = "1, 2, 3"
-        confirmation = self.client.banking.confirm_transfer(
-            session_key, request_id, authorization_type, authorization_data
+        session = self.client.banking.get_session(session_key)
+        confirmation = session.confirm_transfer(
+            request_id, authorization_type, authorization_data
         )
         self.assertEqual(True, confirmation.success)
         self.assertNotEqual(None, confirmation.message)
@@ -478,15 +513,18 @@ class TestClient(BaseTestCase):
             },
         )
         session_key = "test_session_key"
-        institutions = self.client.banking.list_transfer_institutions(session_key)
+        session = self.client.banking.get_session(session_key)
+        institutions = session.list_transfer_institutions()
         self.assertNotEqual(0, len(institutions))
 
     def test_invalid_session_key(self, m):
         m.get("/account/", json={"message": "Invalid key", "status": "error"})
         with self.assertRaises(exceptions.InvalidSessionKeyError):
-            self.client.banking.get_accounts("invalid_session_key")
+            session = self.client.banking.get_session()
+            session.get_accounts()
 
     def test_generic_client_error(self, m):
         m.get("/account/", json={"message": "Some generic error", "status": "error"})
         with self.assertRaises(banking_exceptions.BankingClientError):
-            self.client.banking.get_accounts("invalid_session_key")
+            session = self.client.banking.get_session()
+            session.get_accounts()

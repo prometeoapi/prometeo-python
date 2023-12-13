@@ -13,6 +13,19 @@ class BaseClient(object):
 
     session_class = None
 
+    def __init__(self, api_key, environment, raw_responses=False):
+        self._api_key = api_key
+        if environment not in self.ENVIRONMENTS:
+            valid_envs = ", ".join(self.ENVIRONMENTS.keys())
+            raise exceptions.ClientError(
+                'Invalid environment "{}", options are {}'.format(
+                    environment, valid_envs
+                )
+            )
+        self._environment = environment
+        self._client_session = requests.Session()
+        self._raw_responses = raw_responses
+
     def make_request(self, method, url, headers=None, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
@@ -58,18 +71,19 @@ class BaseClient(object):
         :rtype: JSON data as a python object.
         """
         response = self.make_request(method, url, headers, *args, **kwargs)
-        try:
-            data = response.json()
-        except ValueError:
-            data = {}
-        self.on_error(response, data)
-        self.on_response(data)
-        return data
+        if not self._raw_responses:
+            try:
+                data = response.json()
+            except ValueError:
+                data = {}
+            self.on_error(response, data)
+            self.on_response(data)
+            return data
+        return response
 
-    def get_session(self, session_key):
+    def get_session(self, session_key=""):
         """
         Restore a session from its session key
-
         :param session_key: The session key
         :type session_key: str
 
@@ -77,17 +91,16 @@ class BaseClient(object):
         """
         return self.session_class(self, None, session_key)
 
-    def __init__(self, api_key, environment):
-        self._api_key = api_key
-        if environment not in self.ENVIRONMENTS:
-            valid_envs = ", ".join(self.ENVIRONMENTS.keys())
-            raise exceptions.ClientError(
-                'Invalid environment "{}", options are {}'.format(
-                    environment, valid_envs
-                )
-            )
-        self._environment = environment
-        self._client_session = requests.Session()
+    def new_session(self):
+        """
+        Creates a new session
+
+        :param session_key: The session key
+        :type session_key: str
+
+        :rtype: :class:`Session`
+        """
+        return self.session_class(self, None, "")
 
 
 class Download(object):

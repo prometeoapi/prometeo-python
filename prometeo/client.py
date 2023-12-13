@@ -7,9 +7,10 @@ from .account_validation import AccountValidationAPIClient
 
 
 class Client(object):
-    def __init__(self, api_key, environment="sandbox"):
+    def __init__(self, api_key, environment="sandbox", raw_responses=False):
         self._api_key = api_key
         self._environment = environment
+        self._raw_responses = raw_responses
         self._banking = None
         self._dian = None
         self._sat = None
@@ -20,37 +21,47 @@ class Client(object):
     @property
     def banking(self):
         if self._banking is None:
-            self._banking = BankingAPIClient(self._api_key, self._environment)
+            self._banking = BankingAPIClient(
+                self._api_key, self._environment, self._raw_responses
+            )
         return self._banking
 
     @property
     def dian(self):
         if self._dian is None:
-            self._dian = DianAPIClient(self._api_key, self._environment)
+            self._dian = DianAPIClient(
+                self._api_key, self._environment, self._raw_responses
+            )
         return self._dian
 
     @property
     def sat(self):
         if self._sat is None:
-            self._sat = SatAPIClient(self._api_key, self._environment)
+            self._sat = SatAPIClient(
+                self._api_key, self._environment, self._raw_responses
+            )
         return self._sat
 
     @property
     def curp(self):
         if self._curp is None:
-            self._curp = CurpAPIClient(self._api_key, self._environment)
+            self._curp = CurpAPIClient(
+                self._api_key, self._environment, self._raw_responses
+            )
         return self._curp
 
     @property
     def payment(self):
         if self._payment is None:
-            self._payment = PaymentAPIClient(self._api_key, self._environment)
+            self._payment = PaymentAPIClient(
+                self._api_key, self._environment, self._raw_responses
+            )
         return self._payment
 
     @property
     def account_validation(self):
         if self._account_validation is None:
             self._account_validation = AccountValidationAPIClient(
-                self._api_key, self._environment
+                self._api_key, self._environment, self._raw_responses
             )
         return self._account_validation

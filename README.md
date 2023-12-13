@@ -43,7 +43,8 @@ The following example logs in to the sandboxed bank and retrieves a list of move
 ```python
 from datetime import datetime
 
-session = client.banking.login(provider='test', username='12345', password='gfdsa')
+session = client.banking.new_session()
+session = session.login(provider='test', username='12345', password='gfdsa')
 accounts = session.get_accounts()
 account = accounts[0]
 print(account.number, ' - ', account.name)
@@ -69,6 +70,17 @@ for movement in movements:
 providers = client.banking.get_providers()
 for provider in providers:
     print(provider.name, provider.country)
+```
+
+## Account Validation API
+
+### Validating Account in MX
+
+```python
+result = client.account_validation.validate(
+    account_number="999000000000000014",
+    country_code="MX"
+)
 ```
 
 
