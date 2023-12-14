@@ -1,4 +1,4 @@
-from prometeo import exceptions, base_client
+from prometeo import exceptions, base_client, utils
 from .exceptions import PaymentInvalidParameterClientError
 from typing import Optional, List
 from .models import CreatePaymentIntentResponse, PaymentIntent
@@ -26,7 +26,8 @@ class PaymentAPIClient(base_client.BaseClient):
                 first_parameter, data.get(first_parameter)
             )
 
-    def create_intent(
+    @utils.adapt_async_sync
+    async def create_intent(
         self,
         widget_id: str,
         currency: str,
@@ -52,7 +53,7 @@ class PaymentAPIClient(base_client.BaseClient):
         :return: The payment intent id if it was created, None instead.
         :rtype: CreatePaymentIntentResponse
         """
-        data = self.call_api(
+        data = await self.call_api(
             "POST",
             "/api/v1/payment-intent/",
             json={
@@ -67,7 +68,8 @@ class PaymentAPIClient(base_client.BaseClient):
         )
         return CreatePaymentIntentResponse(**data)
 
-    def get_transaction_data(self, intent_id: str) -> PaymentIntent:
+    @utils.adapt_async_sync
+    async def get_transaction_data(self, intent_id: str) -> PaymentIntent:
         """
         Get transaction data from intent.
         :param intent_id: The intent id
@@ -75,5 +77,5 @@ class PaymentAPIClient(base_client.BaseClient):
         :return: The payment intent transaction data
         :rtype: PaymentIntent
         """
-        data = self.call_api("GET", f"/api/v1/payment-intent/{intent_id}")
+        data = await self.call_api("GET", f"/api/v1/payment-intent/{intent_id}")
         return PaymentIntent(**data)

@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 
-from prometeo import exceptions, base_client, base_session
+from prometeo import exceptions, base_client, base_session, utils
 from .models import (
     CompanyInfo,
     Member,
@@ -82,23 +82,26 @@ class DocumentType(Enum):
 
 
 class Session(base_session.BaseSession):
-    def get_company_info(self):
+    @utils.adapt_async_sync
+    async def get_company_info(self):
         """
         Get information about the company or person (form 001).
 
         :rtype: :class:`~prometeo.dian.models.CompanyInfo`
         """
-        return self._client.get_company_info(self._session_key)
+        return await self._client.get_company_info(self._session_key)
 
-    def get_balances(self):
+    @utils.adapt_async_sync
+    async def get_balances(self):
         """
         Get balances.
 
         :rtype: list of :class:`~prometeo.dian.models.Balance`
         """
-        return self._client.get_balances(self._session_key)
+        return await self._client.get_balances(self._session_key)
 
-    def get_rent_declaration(self, year):
+    @utils.adapt_async_sync
+    async def get_rent_declaration(self, year):
         """
         Get rent declaration information (form 110 for companies and 210 for persons)
 
@@ -107,9 +110,10 @@ class Session(base_session.BaseSession):
 
         :rtype: :class:`~prometeo.dian.models.RentDeclaration`
         """
-        return self._client.get_rent_declaration(self._session_key, year)
+        return await self._client.get_rent_declaration(self._session_key, year)
 
-    def get_vat_declaration(self, year, periodicity, period):
+    @utils.adapt_async_sync
+    async def get_vat_declaration(self, year, periodicity, period):
         """
         Get VAT declaration information (form 300)
 
@@ -124,11 +128,12 @@ class Session(base_session.BaseSession):
 
         :rtype: :class:`~prometeo.dian.models.VATDeclaration`
         """
-        return self._client.get_vat_declaration(
+        return await self._client.get_vat_declaration(
             self._session_key, year, periodicity, period
         )
 
-    def get_numeration(self, type, date_start, date_end):
+    @utils.adapt_async_sync
+    async def get_numeration(self, type, date_start, date_end):
         """
         Get bill numeration (form 1876)
 
@@ -143,11 +148,12 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~prometeo.dian.models.Numeration`
         """
-        return self._client.get_numeration(
+        return await self._client.get_numeration(
             self._session_key, type, date_start, date_end
         )
 
-    def get_retentions(self, year, period):
+    @utils.adapt_async_sync
+    async def get_retentions(self, year, period):
         """
         Get retentions information (form 350)
 
@@ -159,7 +165,7 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~prometeo.dian.models.Retentions`
         """
-        return self._client.get_retentions(self._session_key, year, period)
+        return await self._client.get_retentions(self._session_key, year, period)
 
 
 class DianAPIClient(base_client.BaseClient):
@@ -174,7 +180,8 @@ class DianAPIClient(base_client.BaseClient):
 
     session_class = Session
 
-    def login(self, document_type, document, password, nit=None):
+    @utils.adapt_async_sync
+    async def login(self, document_type, document, password, nit=None):
         """
         Log in to DIAN
 
@@ -200,7 +207,7 @@ class DianAPIClient(base_client.BaseClient):
         }
         if nit is not None:
             data["nit"] = nit
-        response = self.call_api("POST", "/login/", data=data)
+        response = await self.call_api("POST", "/login/", data=data)
         if response["status"] == "logged_in":
             return Session(self, response["status"], response["session_key"])
         elif response["status"] == "wrong_credentials":
@@ -208,14 +215,16 @@ class DianAPIClient(base_client.BaseClient):
         else:
             raise exceptions.ClientError(response["message"])
 
-    def get_company_info(self, session_key):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_company_info(self, session_key):
+        response = await self.call_api(
             "GET",
             "/company-info/",
             params={
                 "session_key": session_key,
             },
-        )["info"]
+        )
+        data = response["info"]
         return CompanyInfo(
             accountant=Accountant(
                 document=data["accountant"]["document"],
@@ -256,8 +265,9 @@ class DianAPIClient(base_client.BaseClient):
             ],
         )
 
-    def get_balances(self, session_key):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_balances(self, session_key):
+        data = await self.call_api(
             "GET",
             "/balances/",
             params={
@@ -266,8 +276,9 @@ class DianAPIClient(base_client.BaseClient):
         )
         return [Balance(**balance) for balance in data["balances"]]
 
-    def get_rent_declaration(self, session_key, year):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_rent_declaration(self, session_key, year):
+        data = await self.call_api(
             "GET",
             "/rent/",
             params={
@@ -291,8 +302,9 @@ class DianAPIClient(base_client.BaseClient):
             previous_form=data["declaration"]["previous_form"],
         )
 
-    def get_vat_declaration(self, session_key, year, periodicity, period):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_vat_declaration(self, session_key, year, periodicity, period):
+        data = await self.call_api(
             "GET",
             "/vat/",
             params={
@@ -318,8 +330,9 @@ class DianAPIClient(base_client.BaseClient):
             period=data["declaration"]["period"],
         )
 
-    def get_numeration(self, session_key, type, date_start, date_end):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_numeration(self, session_key, type, date_start, date_end):
+        data = await self.call_api(
             "GET",
             "/numeration/",
             params={
@@ -362,8 +375,9 @@ class DianAPIClient(base_client.BaseClient):
             )
         return numerations
 
-    def get_retentions(self, session_key, year, period):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_retentions(self, session_key, year, period):
+        data = await self.call_api(
             "GET",
             "/retentions/",
             params={

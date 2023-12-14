@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from six.moves.urllib.parse import parse_qs, urlparse
-import requests_mock
+
 
 from prometeo import exceptions
 from prometeo.banking import exceptions as banking_exceptions
@@ -9,12 +9,14 @@ from prometeo.banking.client import Account, CreditCard
 from prometeo.banking.models import Account as AccountModel
 from prometeo.banking.models import CreditCard as CreditCardModel
 from tests.base_test_case import BaseTestCase
+import respx
 
 
-@requests_mock.Mocker()
 class TestClient(BaseTestCase):
-    def test_login_success(self, m):
-        m.post(
+    @respx.mock
+    def test_login_success(self):
+        self.mock_post_request(
+            respx,
             "/login/",
             json={
                 "status": "logged_in",
@@ -30,8 +32,10 @@ class TestClient(BaseTestCase):
         self.assertEqual("logged_in", session.get_status())
         self.assertEqual("123456", session.get_session_key())
 
-    def test_login_wrong_credentials(self, m):
-        m.post(
+    @respx.mock
+    def test_login_wrong_credentials(self):
+        self.mock_post_request(
+            respx,
             "/login/",
             status_code=403,
             json={
@@ -47,8 +51,10 @@ class TestClient(BaseTestCase):
                 password="test_password",
             )
 
-    def test_generic_login_error(self, m):
-        m.post(
+    @respx.mock
+    def test_generic_login_error(self):
+        self.mock_post_request(
+            respx,
             "/login/",
             status_code=200,
             json={
@@ -64,23 +70,25 @@ class TestClient(BaseTestCase):
                 password="test_password",
             )
 
-    def test_login_select_client(self, m):
-        history = m.request_history
-        m.post(
+    @respx.mock
+    def test_login_select_client(self):
+        self.mock_post_request(
+            respx,
             "/login/",
             json={
                 "status": "select_client",
                 "key": "123456",
             },
         )
-        m.get(
+        self.mock_get_request(
+            respx,
             "/client/",
             json={
                 "status": "success",
                 "clients": {"0": "First Client", "1": "Second Client"},
             },
         )
-        m.get("/client/1/", json={"status": "success"})
+        self.mock_get_request(respx, "/client/1/", json={"status": "success"})
         session = self.client.banking.get_session()
         session = session.login(
             provider="test_provider",
@@ -91,16 +99,19 @@ class TestClient(BaseTestCase):
         self.assertEqual("123456", session.get_session_key())
 
         clients = session.get_clients()
-        self.assertEqual("/client/", history[-1].path)
+        history = respx.calls
+        self.assertEqual("/client/", history[-1].request.url.path)
 
         client = [client for client in clients if client.id == "1"][0]
         session.select_client(client)
-        self.assertEqual("/client/1/", history[-1].path)
+        self.assertEqual("/client/1/", history[-1].request.url.path)
 
-    def test_login_interactive(self, m):
+    @respx.mock
+    def test_login_interactive(self):
         session_key = "123456"
         personal_question = "¿Cuántos baños tenia la casa de mis padres?"
-        m.post(
+        self.mock_post_request(
+            respx,
             "/login/",
             json={
                 "status": "interaction_required",
@@ -119,7 +130,8 @@ class TestClient(BaseTestCase):
         self.assertEqual(session_key, session.get_session_key())
         self.assertEqual(personal_question, session.get_interactive_context())
 
-        m.post(
+        self.mock_post_request(
+            respx,
             "/login/",
             json={
                 "status": "logged_in",
@@ -129,12 +141,18 @@ class TestClient(BaseTestCase):
         session.finish_login(
             "test_provider", "test_username", "test_password", challenge_answer
         )
-        request_body = parse_qs(m.last_request.text)
-        self.assertEqual(request_body["personal_question"][0], challenge_answer)
-        self.assertEqual(m.last_request.headers["X-Session-Key"], session_key)
+        last_request = respx.calls.last.request
+        request_body = parse_qs(str(last_request.content))
+        self.assertIn(
+            challenge_answer,
+            request_body["personal_question"][0],
+        )
+        self.assertEqual(last_request.headers["X-Session-Key"], session_key)
 
-    def test_get_accounts(self, m):
-        m.get(
+    @respx.mock
+    def test_get_accounts(self):
+        self.mock_get_request(
+            respx,
             "/account/",
             json={
                 "accounts": [
@@ -161,14 +179,17 @@ class TestClient(BaseTestCase):
         session_key = "test_session_key"
         session = self.client.banking.get_session(session_key)
         accounts = session.get_accounts()
-        self.assertEqual("/account/", m.last_request.path)
-        self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
+        last_request = respx.calls.last.request
+        self.assertEqual("/account/", str(last_request.url.path))
+        self.assertEqual(session_key, last_request.headers["X-Session-Key"])
         self.assertEqual(2, len(accounts))
         self.assertEqual("Cuenta total", accounts[0].name)
         self.assertEqual("Caja De Ahorro Atm", accounts[1].name)
 
-    def test_get_movements(self, m):
-        m.get(
+    @respx.mock
+    def test_get_movements(self):
+        self.mock_get_request(
+            respx,
             "/movement/",
             json={
                 "movements": [
@@ -212,9 +233,10 @@ class TestClient(BaseTestCase):
             ),
         )
         movements = account.get_movements(date_start, date_end)
-        qs = parse_qs(urlparse(m.last_request.url).query)
-        self.assertEqual("/movement/", m.last_request.path)
-        self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
+        last_request = respx.calls.last.request
+        qs = parse_qs(urlparse(str(last_request.url)).query)
+        self.assertEqual("/movement/", last_request.url.path)
+        self.assertEqual(session_key, last_request.headers["X-Session-Key"])
         self.assertEqual(account_number, qs["account"][0])
         self.assertEqual(currency_code, qs["currency"][0])
         self.assertEqual("01/01/2019", qs["date_start"][0])
@@ -223,8 +245,10 @@ class TestClient(BaseTestCase):
         self.assertEqual(datetime(2019, 1, 12), movements[0].date)
         self.assertEqual(datetime(2019, 7, 5), movements[1].date)
 
-    def test_get_credit_cards(self, m):
-        m.get(
+    @respx.mock
+    def test_get_credit_cards(self):
+        self.mock_get_request(
+            respx,
             "/credit-card/",
             json={
                 "credit_cards": [
@@ -244,15 +268,18 @@ class TestClient(BaseTestCase):
         session_key = "test_session_key"
         session = self.client.banking.get_session(session_key)
         cards = session.get_credit_cards()
-        self.assertEqual("/credit-card/", m.last_request.path)
-        self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
+        last_request = respx.calls.last.request
+        self.assertEqual("/credit-card/", last_request.url.path)
+        self.assertEqual(session_key, last_request.headers["X-Session-Key"])
         self.assertEqual(1, len(cards))
         self.assertEqual("Vi Int Sumaclub Plus", cards[0].name)
         self.assertEqual("770012345678", cards[0].number)
         self.assertEqual(datetime(2019, 11, 20), cards[0].due_date)
 
-    def test_get_credit_card_movements(self, m):
-        m.get(
+    @respx.mock
+    def test_get_credit_card_movements(self):
+        self.mock_get_request(
+            respx,
             "/credit-card/1234567/movements",
             json={
                 "movements": [
@@ -295,9 +322,10 @@ class TestClient(BaseTestCase):
             ),
         )
         movements = card.get_movements(currency_code, date_start, date_end)
-        qs = parse_qs(urlparse(m.last_request.url).query)
-        self.assertEqual("/credit-card/1234567/movements", m.last_request.path)
-        self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
+        last_request = respx.calls.last.request
+        qs = parse_qs(urlparse(str(last_request.url)).query)
+        self.assertEqual("/credit-card/1234567/movements", last_request.url.path)
+        self.assertEqual(session_key, last_request.headers["X-Session-Key"])
         self.assertEqual(currency_code, qs["currency"][0])
         self.assertEqual("01/01/2019", qs["date_start"][0])
         self.assertEqual("01/12/2019", qs["date_end"][0])
@@ -305,8 +333,10 @@ class TestClient(BaseTestCase):
         self.assertEqual(datetime(2019, 1, 12), movements[0].date)
         self.assertEqual(datetime(2019, 7, 5), movements[1].date)
 
-    def test_get_providers(self, m):
-        m.get(
+    @respx.mock
+    def test_get_providers(self):
+        self.mock_get_request(
+            respx,
             "/provider/",
             json={
                 "providers": [
@@ -322,8 +352,10 @@ class TestClient(BaseTestCase):
         self.assertEqual("UY", providers[0].country)
         self.assertEqual("Test Provider", providers[0].name)
 
-    def test_get_provider_detail(self, m):
-        m.get(
+    @respx.mock
+    def test_get_provider_detail(self):
+        self.mock_get_request(
+            respx,
             "/provider/test/",
             json={
                 "provider": {
@@ -402,9 +434,10 @@ class TestClient(BaseTestCase):
         self.assertEqual("test", provider.name)
         self.assertEqual(4, len(provider.auth_fields))
 
-    def test_get_provider_detail_filtered_options(self, m):
+    @respx.mock
+    def test_get_provider_detail_filtered_options(self):
         self.mock_get_request(
-            m,
+            respx,
             "/provider/santander_pers_uy/?key=type&value=UY",
             "provider_details_santander",
         )
@@ -414,8 +447,10 @@ class TestClient(BaseTestCase):
         self.assertEqual("santander_pers_uy", provider.name)
         self.assertEqual(4, len(provider.auth_fields))
 
-    def test_provider_doesnt_exist(self, m):
-        m.get(
+    @respx.mock
+    def test_provider_doesnt_exist(self):
+        self.mock_get_request(
+            respx,
             "/provider/invalid/",
             status_code=404,
             json={
@@ -426,16 +461,20 @@ class TestClient(BaseTestCase):
             session = self.client.banking.get_session()
             session.get_provider_detail("invalid")
 
-    def test_logout(self, m):
-        m.get("/logout/", json={"status": "logged_out"})
+    @respx.mock
+    def test_logout(self):
+        self.mock_get_request(respx, "/logout/", json={"status": "logged_out"})
         session_key = "test_session_key"
         session = self.client.banking.get_session(session_key)
         session.logout()
-        self.assertEqual("/logout/", m.last_request.path)
-        self.assertEqual(session_key, m.last_request.headers["X-Session-Key"])
+        last_request = respx.calls.last.request
+        self.assertEqual("/logout/", last_request.url.path)
+        self.assertEqual(session_key, last_request.headers["X-Session-Key"])
 
-    def test_preprocess_transfer(self, m):
-        m.post(
+    @respx.mock
+    def test_preprocess_transfer(self):
+        self.mock_post_request(
+            respx,
             "/transfer/preprocess",
             json={
                 "result": {
@@ -471,14 +510,15 @@ class TestClient(BaseTestCase):
             branch,
         )
         self.assertEqual(True, preprocess.approved)
-        print(preprocess.authorization_devices)
         self.assertEqual(3, len(preprocess.authorization_devices[0].data))
         self.assertEqual("cardCode", preprocess.authorization_devices[0].type)
         self.assertEqual("0b7d6b32d1be4c11bde21e7ddc08cc36", preprocess.request_id)
         self.assertEqual(None, preprocess.message)
 
-    def test_confirm_transfer(self, m):
-        m.post(
+    @respx.mock
+    def test_confirm_transfer(self):
+        self.mock_post_request(
+            respx,
             "/transfer/confirm",
             json={
                 "status": "success",
@@ -499,8 +539,10 @@ class TestClient(BaseTestCase):
         self.assertEqual(True, confirmation.success)
         self.assertNotEqual(None, confirmation.message)
 
-    def test_list_transfer_institutions(self, m):
-        m.get(
+    @respx.mock
+    def test_list_transfer_institutions(self):
+        self.mock_get_request(
+            respx,
             "/transfer/destinations",
             json={
                 "destinations": [
@@ -517,14 +559,22 @@ class TestClient(BaseTestCase):
         institutions = session.list_transfer_institutions()
         self.assertNotEqual(0, len(institutions))
 
-    def test_invalid_session_key(self, m):
-        m.get("/account/", json={"message": "Invalid key", "status": "error"})
+    @respx.mock
+    def test_invalid_session_key(self):
+        self.mock_get_request(
+            respx, "/account/", json={"message": "Invalid key", "status": "error"}
+        )
         with self.assertRaises(exceptions.InvalidSessionKeyError):
             session = self.client.banking.get_session()
             session.get_accounts()
 
-    def test_generic_client_error(self, m):
-        m.get("/account/", json={"message": "Some generic error", "status": "error"})
+    @respx.mock
+    def test_generic_client_error(self):
+        self.mock_get_request(
+            respx,
+            "/account/",
+            json={"message": "Some generic error", "status": "error"},
+        )
         with self.assertRaises(banking_exceptions.BankingClientError):
             session = self.client.banking.get_session()
             session.get_accounts()

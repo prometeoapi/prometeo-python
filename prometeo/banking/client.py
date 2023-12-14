@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from prometeo import exceptions, base_client, base_session
+from prometeo import exceptions, base_client, base_session, utils
 from .models import (
     Client as Client,
     Account as AccountModel,
@@ -30,7 +30,8 @@ class Session(base_session.BaseSession):
         self._interactive_context = context
         self._interactive_field = field
 
-    def login(self, provider, username, password, **kwargs):
+    @utils.adapt_async_sync
+    async def login(self, provider, username, password, **kwargs):
         """
         Start log in process with the provider
 
@@ -58,7 +59,7 @@ class Session(base_session.BaseSession):
             "password": password,
             **kwargs,
         }
-        response = self._client.login(**data)
+        response = await self._client.login(**data)
         if response["status"] in ["logged_in", "select_client"]:
             session_key = response.get("key") or self._session_key
             return Session(self._client, response["status"], session_key)
@@ -75,8 +76,9 @@ class Session(base_session.BaseSession):
         else:
             raise BankingClientError(response["message"])
 
-    def finish_login(self, provider, username, password, answer):
-        return self.login(
+    @utils.adapt_async_sync
+    async def finish_login(self, provider, username, password, answer):
+        return await self.login(
             provider,
             username,
             password,
@@ -84,34 +86,37 @@ class Session(base_session.BaseSession):
             **{self._interactive_field: answer},
         )
 
-    def get_clients(self):
+    @utils.adapt_async_sync
+    async def get_clients(self):
         """
         List the user's clients. Returns an empty list if the bank doesn't uses clients.
 
         :rtype: List of :class:`~prometeo.banking.models.Client`
         """
-        response = self._client.get_clients(self._session_key)
+        response = await self._client.get_clients(self._session_key)
         clients = []
         for id, name in response["clients"].items():
             clients.append(Client(id=id, name=name))
         return clients
 
-    def select_client(self, client):
+    @utils.adapt_async_sync
+    async def select_client(self, client):
         """
         Selects the client to use for this session.
 
         :param client_id: The id of the client, obtained from listing the clients
         :type client_id: str
         """
-        self._client.select_client(self._session_key, client.id)
+        await self._client.select_client(self._session_key, client.id)
 
-    def get_accounts(self):
+    @utils.adapt_async_sync
+    async def get_accounts(self):
         """
         List all the user's accounts
 
         :rtype: List of :class:`~prometeo.banking.models.Account`
         """
-        data = self._client.get_accounts(self._session_key)
+        data = await self._client.get_accounts(self._session_key)
         accounts_data = [AccountModel(**account) for account in data["accounts"]]
         accounts = []
         for account_data in accounts_data:
@@ -124,13 +129,14 @@ class Session(base_session.BaseSession):
             )
         return accounts
 
-    def get_credit_cards(self):
+    @utils.adapt_async_sync
+    async def get_credit_cards(self):
         """
         List all the user's credit cards
 
         :rtype: List of :class:`~prometeo.banking.models.CreditCard`
         """
-        data = self._client.get_credit_cards(self._session_key)
+        data = await self._client.get_credit_cards(self._session_key)
         cards_data = [
             CreditCardModel(
                 id=credit_card["id"],
@@ -154,6 +160,7 @@ class Session(base_session.BaseSession):
             )
         return cards
 
+    @utils.adapt_async_sync
     def get_interactive_context(self):
         """
         Necessary information to answer the login challenge, like a security question.
@@ -162,16 +169,18 @@ class Session(base_session.BaseSession):
         """
         return self._interactive_context
 
-    def get_providers(self):
+    @utils.adapt_async_sync
+    async def get_providers(self):
         """
         List all available banks.
 
         :rtype: :class:`~prometeo.banking.models.Provider`
         """
-        data = self._client.get_providers()
+        data = await self._client.get_providers()
         return [Provider(**provider) for provider in data["providers"]]
 
-    def get_provider_detail(self, provider_code, key=None, value=None):
+    @utils.adapt_async_sync
+    async def get_provider_detail(self, provider_code, key=None, value=None):
         """
         Get more detailed information about a bank.
 
@@ -187,16 +196,18 @@ class Session(base_session.BaseSession):
 
         :rtype: :class:`~prometeo.banking.models.ProviderDetail`
         """
-        data = self._client.get_provider_detail(provider_code, key, value)
+        data = await self._client.get_provider_detail(provider_code, key, value)
         return ProviderDetail(**data["provider"])
 
-    def logout(self):
+    @utils.adapt_async_sync
+    async def logout(self):
         """
         Logs the user out and invalidates its session.
         """
-        self._client.logout(self._session_key)
+        await self._client.logout(self._session_key)
 
-    def preprocess_transfer(
+    @utils.adapt_async_sync
+    async def preprocess_transfer(
         self,
         origin_account,
         destination_institution,
@@ -272,7 +283,7 @@ class Session(base_session.BaseSession):
 
         :rtype: :class:`~prometeo.banking.models.PreprocessTransfer`
         """
-        data = self._client.preprocess_transfer(
+        data = await self._client.preprocess_transfer(
             self._session_key,
             origin_account,
             destination_institution,
@@ -285,7 +296,8 @@ class Session(base_session.BaseSession):
         )
         return PreprocessTransfer(**data["result"])
 
-    def confirm_transfer(
+    @utils.adapt_async_sync
+    async def confirm_transfer(
         self,
         request_id,
         authorization_type,
@@ -319,7 +331,7 @@ class Session(base_session.BaseSession):
 
         :rtype: :class:`~prometeo.banking.models.ConfirmTransfer`
         """
-        data = self._client.confirm_transfer(
+        data = await self._client.confirm_transfer(
             self._session_key,
             request_id,
             authorization_type,
@@ -328,13 +340,14 @@ class Session(base_session.BaseSession):
         )
         return ConfirmTransfer(**data["transfer"])
 
-    def list_transfer_institutions(self):
+    @utils.adapt_async_sync
+    async def list_transfer_institutions(self):
         """
         List transfer institutions.
 
         :rtype: :class:`~prometeo.banking.models.TransferInstitution`
         """
-        data = self._client.list_transfer_institutions(self._session_key)
+        data = await self._client.list_transfer_institutions(self._session_key)
         return [
             TransferInstitution(**institution) for institution in data["destinations"]
         ]
@@ -359,9 +372,10 @@ class BankingAPIClient(base_client.BaseClient):
             else:
                 raise BankingClientError(data["message"])
 
-    def login(self, provider, username, password, session_key=None, **kwargs):
+    @utils.adapt_async_sync
+    async def login(self, provider, username, password, session_key=None, **kwargs):
         headers = {"X-Session-Key": session_key} if session_key else {}
-        return self.call_api(
+        return await self.call_api(
             "POST",
             "/login/",
             data={
@@ -373,8 +387,9 @@ class BankingAPIClient(base_client.BaseClient):
             headers=headers,
         )
 
-    def login_procedure(self, session_key, **kwargs):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def login_procedure(self, session_key, **kwargs):
+        return await self.call_api(
             "POST",
             "/login-procedure/",
             data={
@@ -383,45 +398,51 @@ class BankingAPIClient(base_client.BaseClient):
             headers={"X-Session-Key": session_key},
         )
 
-    def get_owner_info(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def get_owner_info(self, session_key):
+        return await self.call_api(
             "GET",
             "/info/",
             headers={"X-Session-Key": session_key},
         )
 
-    def get_transfer_authorization_methods(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def get_transfer_authorization_methods(self, session_key):
+        return await self.call_api(
             "GET",
             "/transfer/mfa-methods",
             headers={"X-Session-Key": session_key},
         )
 
-    def get_clients(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def get_clients(self, session_key):
+        return await self.call_api(
             "GET",
             "/client/",
             headers={"X-Session-Key": session_key},
         )
 
-    def select_client(self, session_key, client_id):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def select_client(self, session_key, client_id):
+        return await self.call_api(
             "GET",
             "/client/{}/".format(client_id),
             headers={"X-Session-Key": session_key},
         )
 
-    def get_accounts(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def get_accounts(self, session_key):
+        return await self.call_api(
             "GET",
             "/account/",
             headers={"X-Session-Key": session_key},
         )
 
-    def get_movements(
+    @utils.adapt_async_sync
+    async def get_movements(
         self, session_key, account_number, currency_code, date_start, date_end
     ):
-        return self.call_api(
+        return await self.call_api(
             "GET",
             "/movement/",
             headers={"X-Session-Key": session_key},
@@ -433,17 +454,19 @@ class BankingAPIClient(base_client.BaseClient):
             },
         )
 
-    def get_credit_cards(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def get_credit_cards(self, session_key):
+        return await self.call_api(
             "GET",
             "/credit-card/",
             headers={"X-Session-Key": session_key},
         )
 
-    def get_credit_card_movements(
+    @utils.adapt_async_sync
+    async def get_credit_card_movements(
         self, session_key, card_number, currency_code, date_start, date_end
     ):
-        return self.call_api(
+        return await self.call_api(
             "GET",
             f"/credit-card/{card_number}/movements",
             headers={"X-Session-Key": session_key},
@@ -454,21 +477,25 @@ class BankingAPIClient(base_client.BaseClient):
             },
         )
 
-    def get_providers(self):
-        return self.call_api("GET", "/provider/")
+    @utils.adapt_async_sync
+    async def get_providers(self):
+        return await self.call_api("GET", "/provider/")
 
-    def get_provider_detail(self, provider_code, key=None, value=None):
+    @utils.adapt_async_sync
+    async def get_provider_detail(self, provider_code, key=None, value=None):
         params = {"key": key, "value": value} if key and value else None
-        return self.call_api("GET", f"/provider/{provider_code}/", params=params)
+        return await self.call_api("GET", f"/provider/{provider_code}/", params=params)
 
-    def logout(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def logout(self, session_key):
+        return await self.call_api(
             "GET",
             "/logout/",
             headers={"X-Session-Key": session_key},
         )
 
-    def preprocess_transfer(
+    @utils.adapt_async_sync
+    async def preprocess_transfer(
         self,
         session_key,
         origin_account,
@@ -484,12 +511,12 @@ class BankingAPIClient(base_client.BaseClient):
         document_number=None,
         country=None,
         destination_bank_code=None,
-        payment_intent_id=None,
+        payment_intent_id="",
         external_id=None,
         mobile_os=None,
         **kwargs,
     ):
-        return self.call_api(
+        return await self.call_api(
             "POST",
             "/transfer/preprocess",
             headers={
@@ -516,13 +543,14 @@ class BankingAPIClient(base_client.BaseClient):
             },
         )
 
-    def retry_preprocess_transfer(
+    @utils.adapt_async_sync
+    async def retry_preprocess_transfer(
         self,
         session_key,
         request_id,
         **kwargs,
     ):
-        return self.call_api(
+        return await self.call_api(
             "POST",
             "/transfer/preprocess/retry",
             headers={
@@ -534,7 +562,8 @@ class BankingAPIClient(base_client.BaseClient):
             },
         )
 
-    def confirm_transfer(
+    @utils.adapt_async_sync
+    async def confirm_transfer(
         self,
         session_key,
         request_id,
@@ -542,7 +571,7 @@ class BankingAPIClient(base_client.BaseClient):
         authorization_data,
         authorization_device_number=None,
     ):
-        return self.call_api(
+        return await self.call_api(
             "POST",
             "/transfer/confirm",
             headers={"X-Session-Key": session_key},
@@ -554,8 +583,9 @@ class BankingAPIClient(base_client.BaseClient):
             },
         )
 
-    def list_transfer_institutions(self, session_key):
-        return self.call_api(
+    @utils.adapt_async_sync
+    async def list_transfer_institutions(self, session_key):
+        return await self.call_api(
             "GET",
             "/transfer/destinations",
             headers={"X-Session-Key": session_key},
@@ -578,7 +608,8 @@ class Account(object):
         self.currency = account_data.currency
         self.balance = account_data.balance
 
-    def get_movements(self, date_start, date_end):
+    @utils.adapt_async_sync
+    async def get_movements(self, date_start, date_end):
         """
         List an account's movements for a range of dates.
 
@@ -590,7 +621,7 @@ class Account(object):
 
         :rtype: List of :class:`~prometeo.banking.models.Movement`
         """
-        data = self._client.get_movements(
+        data = await self._client.get_movements(
             self._session_key,
             self.number,
             self.currency,
@@ -628,7 +659,8 @@ class CreditCard(object):
         self.balance_local = card_data.balance_local
         self.balance_dollar = card_data.balance_dollar
 
-    def get_movements(self, currency_code, date_start, date_end):
+    @utils.adapt_async_sync
+    async def get_movements(self, currency_code, date_start, date_end):
         """
         List credit card's movements for a range of dates.
 
@@ -640,7 +672,7 @@ class CreditCard(object):
 
         :rtype: List of :class:`~prometeo.banking.models.Movement`
         """
-        data = self._client.get_credit_card_movements(
+        data = await self._client.get_credit_card_movements(
             self._session_key,
             self.number,
             currency_code,

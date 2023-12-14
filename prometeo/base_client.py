@@ -1,7 +1,7 @@
 from six.moves.urllib.parse import urljoin
-import requests
+import httpx
 
-from prometeo import exceptions
+from prometeo import exceptions, utils
 
 
 class BaseClient(object):
@@ -23,15 +23,16 @@ class BaseClient(object):
                 )
             )
         self._environment = environment
-        self._client_session = requests.Session()
+        self._client_session = httpx.AsyncClient()
         self._raw_responses = raw_responses
 
-    def make_request(self, method, url, headers=None, *args, **kwargs):
+    @utils.adapt_async_sync
+    async def make_request(self, method, url, headers=None, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = headers or {}
         headers["X-API-Key"] = self._api_key
-        return self._client_session.request(
+        return await self._client_session.request(
             method, full_url, headers=headers, *args, **kwargs
         )
 
@@ -58,7 +59,8 @@ class BaseClient(object):
         elif response.status_code == 503:
             raise exceptions.ProviderUnavailableError(data.get("message"))
 
-    def call_api(self, method, url, headers=None, *args, **kwargs):
+    @utils.adapt_async_sync
+    async def call_api(self, method, url, headers=None, *args, **kwargs):
         """
         Calls an API endpoint, using the configured api key and environment.
 
@@ -70,7 +72,7 @@ class BaseClient(object):
 
         :rtype: JSON data as a python object.
         """
-        response = self.make_request(method, url, headers, *args, **kwargs)
+        response = await self.make_request(method, url, headers, *args, **kwargs)
         if not self._raw_responses:
             try:
                 data = response.json()
@@ -112,11 +114,12 @@ class Download(object):
         self._client = client
         self.url = url
 
-    def get_file(self):
+    @utils.adapt_async_sync
+    async def get_file(self):
         """
         Downloads the file and returns its contents.
 
         :rtype: bytes
         """
-        resp = self._client.make_request("GET", self.url)
+        resp = await self._client.make_request("GET", self.url)
         return resp.content

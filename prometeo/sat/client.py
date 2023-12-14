@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from prometeo import exceptions, base_client, base_session
+from prometeo import exceptions, base_client, base_session, utils
 from .models import (
     CFDIBill,
     CFDIDownloadItem,
@@ -66,13 +66,15 @@ class SendType(Enum):
 
 
 class Session(base_session.BaseSession):
-    def logout(self):
+    @utils.adapt_async_sync
+    async def logout(self):
         """
         Logs out of SAT. You won't be able to use this session after logout.
         """
-        self._client.logout(self._session_key)
+        await self._client.logout(self._session_key)
 
-    def get_emitted_bills(self, date_start, date_end, status):
+    @utils.adapt_async_sync
+    async def get_emitted_bills(self, date_start, date_end, status):
         """
         List all emitted bills in a range of dates.
 
@@ -87,11 +89,12 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~prometeo.sat.models.CFDIBill`
         """
-        return self._client.get_emitted(
+        return await self._client.get_emitted(
             self._session_key, date_start, date_end, status, DownloadAction.LIST
         )
 
-    def download_emitted_bills(self, date_start, date_end, status):
+    @utils.adapt_async_sync
+    async def download_emitted_bills(self, date_start, date_end, status):
         """
         Creates a request to download all the emitted bills in a range of dates.
 
@@ -106,7 +109,7 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~DownloadRequest`
         """
-        requests = self._client.get_emitted(
+        requests = await self._client.get_emitted(
             self._session_key,
             date_start,
             date_end,
@@ -122,7 +125,8 @@ class Session(base_session.BaseSession):
             for request in requests
         ]
 
-    def get_received_bills(self, year, month, status):
+    @utils.adapt_async_sync
+    async def get_received_bills(self, year, month, status):
         """
         List all received bills in a range of dates.
 
@@ -137,11 +141,12 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~prometeo.sat.models.CFDIBill`
         """
-        return self._client.get_received(
+        return await self._client.get_received(
             self._session_key, year, month, status, DownloadAction.LIST
         )
 
-    def download_received_bills(self, year, month, status):
+    @utils.adapt_async_sync
+    async def download_received_bills(self, year, month, status):
         """
         Creates a request to download all the received bills in a range of dates.
 
@@ -156,7 +161,7 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`~DownloadRequest`
         """
-        requests = self._client.get_received(
+        requests = await self._client.get_received(
             self._session_key, year, month, status, DownloadAction.BULK_DOWNLOAD
         )
         return [
@@ -168,22 +173,25 @@ class Session(base_session.BaseSession):
             for request in requests
         ]
 
-    def get_downloads(self):
+    @utils.adapt_async_sync
+    async def get_downloads(self):
         """
         Gets a list of available downloads
 
         :rtype: List of :class:`DownloadRequest`
         """
+        requests = await self._client.get_downloads(self._session_key)
         return [
             DownloadRequest(
                 self._client,
                 self._session_key,
                 request.request_id,
             )
-            for request in self._client.get_downloads(self._session_key)
+            for request in requests
         ]
 
-    def get_acknowledgements(
+    @utils.adapt_async_sync
+    async def get_acknowledgements(
         self, year, month_start, month_end, motive, document_type, status, send_type
     ):
         """
@@ -212,7 +220,7 @@ class Session(base_session.BaseSession):
 
         :rtype: List of :class:`AcknowledgementResult`
         """
-        acks = self._client.get_acknowledgements(
+        acks = await self._client.get_acknowledgements(
             self._session_key,
             year,
             month_start,
@@ -239,7 +247,8 @@ class SatAPIClient(base_client.BaseClient):
 
     session_class = Session
 
-    def login(self, rfc, password, scope):
+    @utils.adapt_async_sync
+    async def login(self, rfc, password, scope):
         """
         Log in to SAT
 
@@ -256,7 +265,7 @@ class SatAPIClient(base_client.BaseClient):
 
         :rtype: :class:`Session`
         """
-        response = self.call_api(
+        response = await self.call_api(
             "POST",
             "/login/",
             data={
@@ -273,8 +282,9 @@ class SatAPIClient(base_client.BaseClient):
         else:
             raise exceptions.ClientError(response["message"])
 
-    def logout(self, session_key):
-        self.call_api(
+    @utils.adapt_async_sync
+    async def logout(self, session_key):
+        await self.call_api(
             "GET",
             "/logout/",
             params={
@@ -317,8 +327,9 @@ class SatAPIClient(base_client.BaseClient):
         elif action == DownloadAction.PDF_EXPORT:
             return [PdfFile(pdf_url=download["pdf_url"]) for download in data]
 
-    def get_emitted(self, session_key, date_start, date_end, status, action):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_emitted(self, session_key, date_start, date_end, status, action):
+        data = await self.call_api(
             "GET",
             "/cfdi/emitted/",
             params={
@@ -331,8 +342,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return self._handle_bill_parsing(action, data["emitted"])
 
-    def download_emitted(self, session_key, bill_id):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def download_emitted(self, session_key, bill_id):
+        data = await self.call_api(
             "GET",
             "/cfdi/emitted/{}/".format(bill_id),
             params={
@@ -341,8 +353,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return DownloadFile(**data["download"])
 
-    def get_received(self, session_key, year, month, status, action):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_received(self, session_key, year, month, status, action):
+        data = await self.call_api(
             "GET",
             "/cfdi/received/",
             params={
@@ -355,8 +368,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return self._handle_bill_parsing(action, data["received"])
 
-    def download_received(self, session_key, bill_id):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def download_received(self, session_key, bill_id):
+        data = await self.call_api(
             "GET",
             "/cfdi/received/{}/".format(bill_id),
             params={
@@ -365,8 +379,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return DownloadFile(**data["download"])
 
-    def get_downloads(self, session_key):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_downloads(self, session_key):
+        data = await self.call_api(
             "GET",
             "/cfdi/download/",
             params={
@@ -375,8 +390,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return [CFDIDownloadItem(**item) for item in data["downloads"]]
 
-    def get_download(self, session_key, request_id):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def get_download(self, session_key, request_id):
+        data = await self.call_api(
             "GET",
             "/cfdi/download/{}/".format(request_id),
             params={
@@ -385,7 +401,8 @@ class SatAPIClient(base_client.BaseClient):
         )
         return DownloadFile(**data["download"])
 
-    def get_acknowledgements(
+    @utils.adapt_async_sync
+    async def get_acknowledgements(
         self,
         session_key,
         year,
@@ -396,7 +413,7 @@ class SatAPIClient(base_client.BaseClient):
         status,
         send_type,
     ):
-        data = self.call_api(
+        data = await self.call_api(
             "GET",
             "/ccee/acknowledgment/",
             params={
@@ -412,8 +429,9 @@ class SatAPIClient(base_client.BaseClient):
         )
         return [AcknowledgementResultModel(**result) for result in data["results"]]
 
-    def download_acknowledgement(self, session_key, ack_id):
-        data = self.call_api(
+    @utils.adapt_async_sync
+    async def download_acknowledgement(self, session_key, ack_id):
+        data = await self.call_api(
             "GET",
             "/ccee/acknowledgment/{}/".format(ack_id),
             params={
@@ -440,13 +458,16 @@ class AcknowledgementResult(object):
         self.reception_date = data.reception_date
         self.status = data.status
 
-    def get_download(self):
+    @utils.adapt_async_sync
+    async def get_download(self):
         """
         Download the acknowledgement data
 
         :rtype: :class:`Download`
         """
-        download = self._client.download_acknowledgement(self._session_key, self.id)
+        download = await self._client.download_acknowledgement(
+            self._session_key, self.id
+        )
         return base_client.Download(self._client, download.download_url)
 
 
@@ -461,25 +482,29 @@ class DownloadRequest(object):
         self._session_key = session_key
         self.request_id = request_id
 
-    def get_download(self):
+    @utils.adapt_async_sync
+    async def get_download(self):
         """
         Download the generated zip file with all the xmls
 
         :rtype: :class:`Download`
         """
         if self._download is None:
-            download = self._client.get_download(self._session_key, self.request_id)
+            download = await self._client.get_download(
+                self._session_key, self.request_id
+            )
             self._download = base_client.Download(self._client, download.download_url)
         return self._download
 
-    def is_ready(self):
+    @utils.adapt_async_sync
+    async def is_ready(self):
         """
         Check if the request is ready to download.
 
         :rtype: bool
         """
         try:
-            self.get_download()
+            await self.get_download()
             return True
         except exceptions.NotFoundError:
             return False

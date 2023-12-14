@@ -1,4 +1,4 @@
-from prometeo import exceptions, base_client
+from prometeo import exceptions, base_client, utils
 from .exceptions import (
     InvalidAccountError,
     PendingValidationError,
@@ -61,7 +61,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
         elif error_code == 514:
             raise CountryNotAvailableError(error_message)
 
-    def validate(
+    @utils.adapt_async_sync
+    async def validate(
         self,
         account_number: str,
         country_code: str,
@@ -70,7 +71,7 @@ class AccountValidationAPIClient(base_client.BaseClient):
         branch_code: Optional[str] = None,
         account_type: Optional[List[str]] = None,
     ) -> AccountData:
-        data = self.call_api(
+        data = await self.call_api(
             "POST",
             "/validate-account/",
             data={

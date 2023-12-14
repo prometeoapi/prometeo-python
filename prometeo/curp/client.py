@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime
 
-from prometeo import base_client
+from prometeo import base_client, utils
 from .models import QueryResult, DocumentData, PersonalData
 from .exceptions import CurpError
 
@@ -100,7 +100,8 @@ class CurpAPIClient(base_client.BaseClient):
             pdf=base_client.Download(self, response_data["pdf_url"]),
         )
 
-    def query(self, curp):
+    @utils.adapt_async_sync
+    async def query(self, curp):
         """
         Find the personal data associated with a CURP
 
@@ -109,7 +110,7 @@ class CurpAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.curp.models.QueryResult`
         """
-        response = self.call_api(
+        response = await self.call_api(
             "POST",
             "/query",
             data={
@@ -120,7 +121,8 @@ class CurpAPIClient(base_client.BaseClient):
             raise CurpError(response["errors"]["detail"])
         return self._make_result(response["data"])
 
-    def reverse_query(
+    @utils.adapt_async_sync
+    async def reverse_query(
         self, state, birthdate, name, first_surname, last_surname, gender
     ):
         """
@@ -146,7 +148,7 @@ class CurpAPIClient(base_client.BaseClient):
 
         :rtype: :class:`~prometeo.curp.models.QueryResult`
         """
-        response = self.call_api(
+        response = await self.call_api(
             "POST",
             "/reverse-query",
             data={

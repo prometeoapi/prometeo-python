@@ -1,15 +1,13 @@
-import unittest
 from datetime import datetime
 
 from prometeo.banking.client import BankingAPIClient, CreditCard
 from prometeo.banking.models import CreditCard as CreditCardModel
 
-from six.moves.urllib.parse import parse_qs, urlparse
-import requests_mock
+import respx
+from tests.base_test_case import BaseTestCase
 
 
-@requests_mock.Mocker()
-class TestCreditCard(unittest.TestCase):
+class TestCreditCard(BaseTestCase):
     def setUp(self):
         client = BankingAPIClient("test_api_key", "sandbox")
         self.session_key = "test_session_key"
@@ -24,8 +22,10 @@ class TestCreditCard(unittest.TestCase):
         )
         self.card = CreditCard(client, self.session_key, card)
 
-    def test_get_movements(self, m):
-        m.get(
+    @respx.mock
+    def test_get_movements(self):
+        self.mock_get_request(
+            respx,
             "/credit-card/001234567890/movements",
             json={
                 "movements": [
@@ -55,9 +55,10 @@ class TestCreditCard(unittest.TestCase):
         date_start = datetime(2019, 1, 1)
         date_end = datetime(2019, 12, 1)
         movements = self.card.get_movements("USD", date_start, date_end)
-        qs = parse_qs(urlparse(m.last_request.url).query)
-        self.assertEqual(self.session_key, m.last_request.headers["X-Session-Key"])
-        self.assertEqual("USD", qs["currency"][0])
-        self.assertEqual("01/01/2019", qs["date_start"][0])
-        self.assertEqual("01/12/2019", qs["date_end"][0])
+
+        last_request = respx.calls.last.request
+        self.assertEqual(self.session_key, last_request.headers["X-Session-Key"])
+        self.assertEqual("USD", self.qs(last_request)["currency"][0])
+        self.assertEqual("01/01/2019", self.qs(last_request)["date_start"][0])
+        self.assertEqual("01/12/2019", self.qs(last_request)["date_end"][0])
         self.assertEqual(2, len(movements))
