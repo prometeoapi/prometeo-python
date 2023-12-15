@@ -71,6 +71,32 @@ class AccountValidationAPIClient(base_client.BaseClient):
         branch_code: Optional[str] = None,
         account_type: Optional[List[str]] = None,
     ) -> AccountData:
+        """
+        Validate bank account information.
+
+        :param account_number: The account number to be validated.
+        :type account_number: str
+
+        :param country_code: The country code associated with the account.
+        :type country_code: str
+
+        :param bank_code: The bank code if available.
+        :type bank_code: Optional[str]
+
+        :param document_number: The document number associated with the account.
+        :type document_number: Optional[str]
+
+        :param branch_code: The branch code if available.
+        :type branch_code: Optional[str]
+
+        :param account_type: A list of account types to consider.
+        :type account_type: Optional[List[str]]
+
+        :return: An object containing validated account information.
+        :rtype: AccountData
+        :raises: Any exceptions raised during the validation process.
+        """
+
         data = await self.call_api(
             "POST",
             "/validate-account/",

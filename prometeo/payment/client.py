@@ -38,18 +38,25 @@ class PaymentAPIClient(base_client.BaseClient):
     ) -> CreatePaymentIntentResponse:
         """
         Create payment intent.
+
         :param widget_id: The widget id
         :type widget_id: str
+
         :param currency: The payment currency
         :type currency: str
+
         :param amount: The payment amount
         :type amount: str
+
         :param external_id: The external id from merchant
         :type external_id: str
+
         :param concept: The payment concept
         :type concept: str
+
         :param bank_codes: Select Bank Codes to show in Widget
         :type bank_codes: List[str]
+
         :return: The payment intent id if it was created, None instead.
         :rtype: CreatePaymentIntentResponse
         """
@@ -72,8 +79,10 @@ class PaymentAPIClient(base_client.BaseClient):
     async def get_transaction_data(self, intent_id: str) -> PaymentIntent:
         """
         Get transaction data from intent.
+
         :param intent_id: The intent id
         :type intent_id: str
+
         :return: The payment intent transaction data
         :rtype: PaymentIntent
         """
