@@ -23,8 +23,8 @@ class TestClient(BaseTestCase):
                 "key": "123456",
             },
         )
-        session = self.client.banking.get_session()
-        session = session.login(
+        session = self.client.banking.new_session()
+        session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -44,7 +44,7 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(exceptions.WrongCredentialsError):
-            session = self.client.banking.get_session()
+            session = self.client.banking.new_session()
             session.login(
                 provider="test_provider",
                 username="test_username",
@@ -63,7 +63,7 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(banking_exceptions.BankingClientError):
-            session = self.client.banking.get_session()
+            session = self.client.banking.new_session()
             session.login(
                 provider="test_provider",
                 username="test_username",
@@ -89,8 +89,8 @@ class TestClient(BaseTestCase):
             },
         )
         self.mock_get_request(respx, "/client/1/", json={"status": "success"})
-        session = self.client.banking.get_session()
-        session = session.login(
+        session = self.client.banking.new_session()
+        session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -120,8 +120,8 @@ class TestClient(BaseTestCase):
                 "key": session_key,
             },
         )
-        session = self.client.banking.get_session()
-        session = session.login(
+        session = self.client.banking.new_session()
+        session.login(
             provider="test_provider",
             username="test_username",
             password="test_password",
@@ -345,7 +345,7 @@ class TestClient(BaseTestCase):
                 "status": "success",
             },
         )
-        session = self.client.banking.get_session()
+        session = self.client.banking.new_session()
         providers = session.get_providers()
         self.assertEqual(1, len(providers))
         self.assertEqual("test", providers[0].code)
@@ -428,7 +428,7 @@ class TestClient(BaseTestCase):
                 "status": "success",
             },
         )
-        session = self.client.banking.get_session()
+        session = self.client.banking.new_session()
         provider = session.get_provider_detail("test")
         self.assertEqual("UY", provider.country)
         self.assertEqual("test", provider.name)
@@ -441,7 +441,7 @@ class TestClient(BaseTestCase):
             "/provider/santander_pers_uy/?key=type&value=UY",
             "provider_details_santander",
         )
-        session = self.client.banking.get_session()
+        session = self.client.banking.new_session()
         provider = session.get_provider_detail("santander_pers_uy", "type", "UY")
         self.assertEqual("UY", provider.country)
         self.assertEqual("santander_pers_uy", provider.name)
@@ -458,7 +458,7 @@ class TestClient(BaseTestCase):
             },
         )
         with self.assertRaises(exceptions.NotFoundError):
-            session = self.client.banking.get_session()
+            session = self.client.banking.new_session()
             session.get_provider_detail("invalid")
 
     @respx.mock
@@ -565,7 +565,7 @@ class TestClient(BaseTestCase):
             respx, "/account/", json={"message": "Invalid key", "status": "error"}
         )
         with self.assertRaises(exceptions.InvalidSessionKeyError):
-            session = self.client.banking.get_session()
+            session = self.client.banking.new_session()
             session.get_accounts()
 
     @respx.mock
@@ -576,5 +576,5 @@ class TestClient(BaseTestCase):
             json={"message": "Some generic error", "status": "error"},
         )
         with self.assertRaises(banking_exceptions.BankingClientError):
-            session = self.client.banking.get_session()
+            session = self.client.banking.new_session()
             session.get_accounts()

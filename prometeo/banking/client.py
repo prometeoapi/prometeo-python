@@ -61,16 +61,13 @@ class Session(base_session.BaseSession):
         }
         response = await self._client.login(**data)
         if response["status"] in ["logged_in", "select_client"]:
-            session_key = response.get("key") or self._session_key
-            return Session(self._client, response["status"], session_key)
+            self._session_key = response.get("key") or self._session_key
+            self._status = response["status"]
         elif response["status"] == "interaction_required":
-            return Session(
-                self._client,
-                response["status"],
-                response["key"],
-                response["context"],
-                response["field"],
-            )
+            self._session_key = response.get("key")
+            self._status = response["status"]
+            self._interactive_context = response["context"]
+            self._interactive_field = response["field"]
         elif response["status"] == "wrong_credentials":
             raise exceptions.WrongCredentialsError(response["message"])
         else:
