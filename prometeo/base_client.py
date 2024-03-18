@@ -13,7 +13,7 @@ class BaseClient(object):
 
     session_class = None
 
-    def __init__(self, api_key, environment, raw_responses=False):
+    def __init__(self, api_key, environment, raw_responses=False, proxy=None):
         self._api_key = api_key
         if environment not in self.ENVIRONMENTS:
             valid_envs = ", ".join(self.ENVIRONMENTS.keys())
@@ -23,7 +23,7 @@ class BaseClient(object):
                 )
             )
         self._environment = environment
-        self._client_session = httpx.AsyncClient()
+        self._client_session = httpx.AsyncClient(proxy=proxy)
         self._raw_responses = raw_responses
 
     @utils.adapt_async_sync
