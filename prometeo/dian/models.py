@@ -1,143 +1,147 @@
-from collections import namedtuple
+from typing import List, Optional
+from pydantic import BaseModel
+from datetime import datetime
 
 
-CompanyInfo = namedtuple('CompanyInfo', [
-    'accountant',
-    'capital_composition',
-    'reason',
-    'pdf_url',
-    'pdf',
-    'location',
-    'name',
-    'constitution_date',
-    'representation',
-    'members',
-])
+class Balance(BaseModel):
+    type: str
+    amount: float
+    value: float
 
-Accountant = namedtuple('Accountant', [
-    'document',
-    'start_date',
-    'name',
-    'professional_card',
-])
 
-CapitalComposition = namedtuple('CapitalComposition', [
-    'national',
-    'national_private',
-    'national_public',
-    'foreign',
-    'foreign_private',
-    'foreign_public',
-])
+class Name(BaseModel):
+    first_surname: str
+    second_surname: str
+    first_name: str
+    other_names: str
 
-Location = namedtuple('Location', [
-    'country',
-    'city',
-    'phone1',
-    'phone2',
-    'department',
-    'address',
-    'email',
-])
 
-Representative = namedtuple('Representative', [
-    'document',
-    'document_type',
-    'name',
-    'representation_type',
-    'start_date',
-])
+class Field(BaseModel):
+    name: str
+    number: int
+    value: float
 
-Member = namedtuple('Member', [
-    'document_type',
-    'document',
-    'nationality',
-    'name',
-    'start_date'
-])
 
-Name = namedtuple('Name', [
-    'first_surname',
-    'second_surname',
-    'first_name',
-    'other_names'
-])
+class NumerationRange(BaseModel):
+    from_number: int
+    to_number: int
+    mode: str
+    establishment: str
+    prefix: str
+    type: str
 
-Balance = namedtuple('Balance', [
-    'type',
-    'amount',
-    'value'
-])
 
-RentDeclaration = namedtuple('RentDeclaration', [
-    'pdf_url',
-    'pdf',
-    'fields',
-    'year',
-    'form_number',
-    'nit',
-    'dv',
-    'name',
-    'reason',
-    'direction_code',
-    'economic_activity',
-    'correction_code',
-    'previous_form'
-])
+class Numeration(BaseModel):
+    nit: Optional[str]
+    dv: Optional[str]
+    name: Optional[Name]
+    reason: Optional[str]
+    address: Optional[str]
+    country: Optional[str]
+    department: Optional[str]
+    municipality: Optional[str]
+    ranges: List[NumerationRange]
+    pdf_url: Optional[str]
+    pdf_available: Optional[bool]
 
-Field = namedtuple('Field', [
-    'name',
-    'number',
-    'value'
-])
 
-VATDeclaration = namedtuple('VATDeclaration', [
-    'pdf_url',
-    'pdf',
-    'fields',
-    'year',
-    'period',
-    'form_number',
-    'nit',
-    'dv',
-    'name',
-    'reason',
-    'direction_code',
-    'correction_code',
-    'previous_form'
-])
+class RentDeclaration(BaseModel):
+    pdf_url: Optional[str]
+    pdf: Optional[object]
+    fields: List[Field]
+    year: int
+    form_number: int
+    nit: str
+    dv: str
+    name: Name
+    reason: str
+    direction_code: str
+    economic_activity: str
+    correction_code: str
+    previous_form: Optional[str]
 
-Numeration = namedtuple('Numeration', [
-    'nit',
-    'dv',
-    'name',
-    'reason',
-    'address',
-    'country',
-    'department',
-    'municipality',
-    'ranges',
-    'pdf_url',
-    'pdf_available'
-])
 
-NumerationRange = namedtuple('Range', [
-    'from_number',
-    'to_number',
-    'mode',
-    'establishment',
-    'prefix',
-    'type'
-])
+class VATDeclaration(BaseModel):
+    pdf_url: Optional[str]
+    pdf: Optional[object]
+    fields: List[Field]
+    year: int
+    period: str
+    form_number: int
+    nit: str
+    dv: str
+    name: Name
+    reason: str
+    direction_code: str
+    correction_code: str
+    previous_form: Optional[str]
 
-Retentions = namedtuple('Retentions', [
-    'pdf_url',
-    'pdf',
-    'fields',
-    'year',
-    'period',
-    'form_number',
-    'nit',
-    'reason',
-    'direction_code'
-])
+
+class Retentions(BaseModel):
+    pdf_url: Optional[str]
+    pdf: Optional[object]
+    fields: List[Field]
+    year: int
+    period: int
+    form_number: int
+    nit: str
+    reason: str
+    direction_code: str
+
+
+class Representative(BaseModel):
+    document: str
+    document_type: str
+    name: Name
+    representation_type: str
+    start_date: datetime
+
+
+class Member(BaseModel):
+    document_type: str
+    document: str
+    nationality: str
+    name: Name
+    start_date: datetime
+
+
+class Location(BaseModel):
+    country: str
+    city: str
+    phone1: str
+    phone2: str
+    department: str
+    address: str
+    email: str
+
+
+class CapitalComposition(BaseModel):
+    national: str
+    national_private: str
+    national_public: str
+    foreign: str
+    foreign_private: str
+    foreign_public: str
+
+
+class Accountant(BaseModel):
+    document: str
+    start_date: datetime
+    name: str
+    professional_card: str
+
+
+class CompanyInfo(BaseModel):
+    accountant: Accountant
+    capital_composition: CapitalComposition
+    reason: str
+    pdf_url: Optional[str]
+    pdf: Optional[object]
+    location: Location
+    name: str
+    constitution_date: datetime
+    representation: List[Representative]
+    members: List[Member]
+
+    class Config:
+        validate_assignment = True

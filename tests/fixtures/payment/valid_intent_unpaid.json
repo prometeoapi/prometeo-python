@@ -1,0 +1,23 @@
+{
+    "intent_id": "bea71e55-a1ec-4e5f-a5c0-c0e10b1a571c",
+    "product_id": "AAA40e3c-6f4d-4017-ab9f-BBBBcf3fe5e2",
+    "product_type": "widget",
+    "external_id": null,
+    "concept": "asd 2 219422025",
+    "currency": "PEN",
+    "amount": "1118.86",
+    "status_history": [
+      {
+        "status": "intent_created",
+        "message": null,
+        "error_type": null,
+        "error_code": null,
+        "provider_code": null,
+        "timestamp": "2023-06-10T13:37:36.574578Z"
+      }
+    ],
+    "customer": null,
+    "current_status": "intent_created",
+    "email": null,
+    "bank_codes": []
+  }

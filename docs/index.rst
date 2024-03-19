@@ -21,12 +21,31 @@ Go to `your dashboard <https://test.prometeo.qualia.uy/dashboard/>`_, there you'
 
 .. code-block:: python
 
-    from prometeo import Client
+   from prometeo import Client
 
-    client = Client('<YOUR_API_KEY>', environment='testing')
+   client = Client('<YOUR_API_KEY>', environment='sandbox')
 
 
 The ``environment`` argument is either ``sandbox`` for the sandbox or ``production`` for the production environment.
+
+Async/Sync support
+---------------------
+
+All methods from the client module can be called from both an async and sync context.
+
+For example, in an async context, you can use:
+
+.. code-block:: python
+
+   result = await client.banking.get_providers()
+
+
+The equivalent in a sync context is:
+
+.. code-block:: python
+
+   result = client.banking.get_providers()
+
 
 .. note::
 

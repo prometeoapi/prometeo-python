@@ -1,5 +1,3 @@
-
-
 class BaseSession(object):
     """
     Base class that handles calling the API endpoints that use session keys.

@@ -1,0 +1,9 @@
+{
+    "intent_id": "52abd9b2-7a8d-4e8b-b724-0b68701d2e0e",
+    "external_id": "bf5d88cc-f60c-4612-8739-15b3244fcd04",
+    "concept": "PROM123452 REF454243",
+    "currency": "USD",
+    "amount": "1.00",
+    "email": null,
+    "bank_codes": ["test"]
+  }

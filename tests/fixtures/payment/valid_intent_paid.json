@@ -1,0 +1,60 @@
+{
+  "intent_id": "9999e375-9999-4da0-a4fd-85e5a04c9999",
+  "product_id": "cafcafe-cafe-4bb1-b4c5-3e34183a9999",
+  "product_type": "widget",
+  "external_id": "W3b-BBVV28E2|cafecafe-cafe-4563-a6b1-8a0471c5d4e2",
+  "concept": "Orden 47200110",
+  "currency": "UYU",
+  "amount": "133.89",
+  "status_history": [
+    {
+      "status": "intent_created",
+      "message": null,
+      "error_type": null,
+      "error_code": null,
+      "provider_code": null,
+      "timestamp": "2023-12-04T12:42:11.532070Z"
+    },
+    {
+      "status": "logged_in",
+      "message": null,
+      "error_type": "logged_in",
+      "error_code": null,
+      "provider_code": "itau_pers_uy",
+      "timestamp": "2023-12-04T12:42:50.693275Z"
+    },
+    {
+      "status": "accounts_listed",
+      "message": null,
+      "error_type": null,
+      "error_code": null,
+      "provider_code": "itau_pers_uy",
+      "timestamp": "2023-12-04T12:42:54.521913Z"
+    },
+    {
+      "status": "intent_preprocessed",
+      "message": "Destination account - 11055613*****1",
+      "error_type": null,
+      "error_code": null,
+      "provider_code": "itau_pers_uy",
+      "timestamp": "2023-12-04T12:43:31.149106Z"
+    },
+    {
+      "status": "intent_approved",
+      "message": "Transaction number: 087***6",
+      "error_type": null,
+      "error_code": null,
+      "provider_code": "itau_pers_uy",
+      "timestamp": "2023-12-04T12:43:51.422995Z"
+    }
+  ],
+  "customer": {
+    "name": "CAMILA OZUNA",
+    "document_type": null,
+    "document_number": "99901169",
+    "email": "ozuna1@gmail.com"
+  },
+  "current_status": "intent_approved",
+  "email": null,
+  "bank_codes": []
+}
