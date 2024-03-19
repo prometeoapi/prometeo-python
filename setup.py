@@ -18,7 +18,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude="tests"),
     package_data={"README": ["README.md"]},
     include_package_data=True,
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
