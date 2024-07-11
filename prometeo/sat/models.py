@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import Any
 
 
 class CFDIBill(BaseModel):
@@ -13,8 +14,7 @@ class CFDIBill(BaseModel):
     certification_pac: str
     total_value: float
     effect: str
-    status: str
-
+    status: Any
 
 class CFDIDownloadItem(BaseModel):
     request_id: str

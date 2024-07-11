@@ -310,7 +310,7 @@ class SatAPIClient(base_client.BaseClient):
                     certification_pac=bill["certification_pac"],
                     total_value=bill["total_value"],
                     effect=bill["effect"],
-                    status=BillStatus(bill["status"]),
+                    status=BillStatus(bill["status"]).value,
                 )
                 for bill in data
             ]
