@@ -1,0 +1,16 @@
+{
+  "data": {
+    "valid": true,
+    "message": "Cuenta valida",
+    "account_number": "1001",
+    "bank_code": "999",
+    "country_code": "BR",
+    "branch_code": "1010",
+    "document_type": "CPF/CNPJ",
+    "document_number": "58.547.642/0001-95",
+    "beneficiary_name": "JOÃO DAS NEVES",
+    "account_currency": "BRL",
+    "account_type": "CHECKING"
+  },
+  "errors": null
+}

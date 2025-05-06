@@ -1,0 +1,7 @@
+{
+  "data": null,
+  "errors": {
+    "code": 503,
+    "message": "Error de comunicación"
+  }
+}

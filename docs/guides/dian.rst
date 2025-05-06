@@ -12,7 +12,7 @@ Initialize the client:
     from prometeo import Client
     from prometeo.dian import DocumentType
 
-    client = Client('<YOUR_API_KEY>', environment='testing')
+    client = Client('<YOUR_API_KEY>', environment='sandbox')
 
 Supply the NIT to log in as a company
 

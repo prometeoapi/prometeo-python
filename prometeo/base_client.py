@@ -1,7 +1,7 @@
 from six.moves.urllib.parse import urljoin
-import requests
+import httpx
 
-from prometeo import exceptions
+from prometeo import exceptions, utils
 
 
 class BaseClient(object):
@@ -13,13 +13,26 @@ class BaseClient(object):
 
     session_class = None
 
-    def make_request(self, method, url, *args, **kwargs):
+    def __init__(self, api_key, environment, raw_responses=False, proxy=None):
+        self._api_key = api_key
+        if environment not in self.ENVIRONMENTS:
+            valid_envs = ", ".join(self.ENVIRONMENTS.keys())
+            raise exceptions.ClientError(
+                'Invalid environment "{}", options are {}'.format(
+                    environment, valid_envs
+                )
+            )
+        self._environment = environment
+        self._client_session = httpx.AsyncClient(proxy=proxy)
+        self._raw_responses = raw_responses
+
+    @utils.adapt_async_sync
+    async def make_request(self, method, url, headers=None, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
-        headers = {
-            'X-API-Key': self._api_key,
-        }
-        return self._client_session.request(
+        headers = headers or {}
+        headers["X-API-Key"] = self._api_key
+        return await self._client_session.request(
             method, full_url, headers=headers, *args, **kwargs
         )
 
@@ -29,7 +42,25 @@ class BaseClient(object):
         """
         pass
 
-    def call_api(self, method, url, *args, **kwargs):
+    def on_error(self, response, data):
+        """
+        Check errors on response
+        """
+        if response.status_code == 400:
+            raise exceptions.BadRequestError(data.get("message"))
+        elif response.status_code == 401:
+            raise exceptions.UnauthorizedError(data.get("message"))
+        elif response.status_code == 403 and data.get("status") != "wrong_credentials":
+            raise exceptions.ForbiddenError(data.get("message"))
+        elif response.status_code == 404:
+            raise exceptions.NotFoundError(data.get("message"))
+        elif response.status_code == 500:
+            raise exceptions.InternalAPIError(data.get("message", response.text))
+        elif response.status_code == 503:
+            raise exceptions.ProviderUnavailableError(data.get("message"))
+
+    @utils.adapt_async_sync
+    async def call_api(self, method, url, headers=None, *args, **kwargs):
         """
         Calls an API endpoint, using the configured api key and environment.
 
@@ -41,30 +72,20 @@ class BaseClient(object):
 
         :rtype: JSON data as a python object.
         """
-        response = self.make_request(method, url, *args, **kwargs)
-        try:
-            data = response.json()
-        except ValueError:
-            data = {}
-        if response.status_code == 400:
-            raise exceptions.BadRequestError(data.get('message'))
-        elif response.status_code == 401:
-            raise exceptions.UnauthorizedError(data.get('message'))
-        elif response.status_code == 403 and data.get('status') != 'wrong_credentials':
-            raise exceptions.ForbiddenError(data.get('message'))
-        elif response.status_code == 404:
-            raise exceptions.NotFoundError(data.get('message'))
-        elif response.status_code == 500:
-            raise exceptions.InternalAPIError(data.get('message', response.text))
-        elif response.status_code == 503:
-            raise exceptions.ProviderUnavailableError(data.get('message'))
-        self.on_response(data)
-        return data
+        response = await self.make_request(method, url, headers, *args, **kwargs)
+        if not self._raw_responses:
+            try:
+                data = response.json()
+            except ValueError:
+                data = {}
+            self.on_error(response, data)
+            self.on_response(data)
+            return data
+        return response
 
-    def get_session(self, session_key):
+    def get_session(self, session_key=""):
         """
         Restore a session from its session key
-
         :param session_key: The session key
         :type session_key: str
 
@@ -72,17 +93,16 @@ class BaseClient(object):
         """
         return self.session_class(self, None, session_key)
 
-    def __init__(self, api_key, environment):
-        self._api_key = api_key
-        if environment not in self.ENVIRONMENTS:
-            valid_envs = ", ".join(self.ENVIRONMENTS.keys())
-            raise exceptions.ClientError(
-                'Invalid environment "{}", options are {}'.format(
-                    environment, valid_envs
-                )
-            )
-        self._environment = environment
-        self._client_session = requests.Session()
+    def new_session(self):
+        """
+        Creates a new session
+
+        :param session_key: The session key
+        :type session_key: str
+
+        :rtype: :class:`Session`
+        """
+        return self.session_class(self, None, "")
 
 
 class Download(object):
@@ -94,11 +114,12 @@ class Download(object):
         self._client = client
         self.url = url
 
-    def get_file(self):
+    @utils.adapt_async_sync
+    async def get_file(self):
         """
         Downloads the file and returns its contents.
 
         :rtype: bytes
         """
-        resp = self._client.make_request('GET', self.url)
+        resp = await self._client.make_request("GET", self.url)
         return resp.content

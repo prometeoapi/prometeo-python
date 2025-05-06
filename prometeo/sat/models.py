@@ -1,50 +1,45 @@
-from collections import namedtuple
+from datetime import datetime
+from pydantic import BaseModel
 
 
-CFDIBill = namedtuple('CFDIBill', [
-    'id',
-    'emitter_rfc',
-    'emitter_reason',
-    'receiver_rfc',
-    'receiver_reason',
-    'emitted_date',
-    'certification_date',
-    'certification_pac',
-    'total_value',
-    'effect',
-    'status'
-])
+class CFDIBill(BaseModel):
+    id: str
+    emitter_rfc: str
+    emitter_reason: str
+    receiver_rfc: str
+    receiver_reason: str
+    emitted_date: datetime
+    certification_date: datetime
+    certification_pac: str
+    total_value: float
+    effect: str
+    status: str
 
 
-CFDIDownloadItem = namedtuple('CFDIDownloadItem', [
-    'request_id',
-    'type',
-    'count'
-])
+class CFDIDownloadItem(BaseModel):
+    request_id: str
+    type: str
+    count: int
 
 
-DownloadRequest = namedtuple('DownloadRequest', [
-    'request_id'
-])
+class DownloadRequest(BaseModel):
+    request_id: str
 
 
-PdfFile = namedtuple('PdfFile', [
-    'pdf_url'
-])
+class PdfFile(BaseModel):
+    pdf_url: str
 
 
-DownloadFile = namedtuple('DownloadFile', [
-    'download_url'
-])
+class DownloadFile(BaseModel):
+    download_url: str
 
 
-AcknowledgementResult = namedtuple('AcknowledgementResult', [
-    'id',
-    'period',
-    'motive',
-    'document_type',
-    'send_type',
-    'file_name',
-    'reception_date',
-    'status'
-])
+class AcknowledgementResult(BaseModel):
+    id: str
+    period: str
+    motive: str
+    document_type: str
+    send_type: str
+    file_name: str
+    reception_date: str
+    status: str

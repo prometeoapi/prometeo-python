@@ -1,0 +1,7 @@
+{
+    "data": null,
+    "errors": {
+      "code": 512,
+      "message": "Método no disponible en el proveedor"
+    }
+}
