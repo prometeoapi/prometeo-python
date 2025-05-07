@@ -237,6 +237,7 @@ download_requests = session.download_emitted_bills(
     date_end=datetime(2020, 2, 1),
     status=BillStatus.ANY,
 )
+
 for request in download_requests:
     download = request.get_download()
     content = download.get_file().read()
@@ -264,9 +265,9 @@ for ack in acks:
 
 We are using the ```tox``` testing library [tox](https://tox.readthedocs.io/en/latest/)
 
-To run the tests imlpemented inside the ```tests``` folder simply run the following command inside your project: 
+To run the tests imlpemented inside the ```tests``` folder simply run the following command inside your project:
 ```tox```
- 
+
 This will run tests for both python 2 and 3. To restrict the result to only python3 use:
 ```tox -e py3```
 
@@ -281,7 +282,7 @@ This will generate the HTML files inside the ```docs/_build``` folder.
 
 1. Do not install ```pip install prometeo``` package inside the same virtual enviroment where this project is running as it may cause conflicts while running unittest.
 
-2. To use the local files insted of the production source code, install it with 
+2. To use the local files insted of the production source code, install it with
 ```pip install prometeo --no-index --find-links file:///srv/pkg/mypackage```
 
 ## License
