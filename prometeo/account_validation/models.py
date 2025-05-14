@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Union, List, Optional
 from pydantic import BaseModel
 
 
@@ -12,5 +12,5 @@ class AccountData(BaseModel):
     document_type: Optional[str]
     document_number: Optional[str]
     beneficiary_name: Optional[str]
-    account_currency: Optional[str]
+    account_currency: Optional[Union[str, List[str]]]
     account_type: Optional[str]
