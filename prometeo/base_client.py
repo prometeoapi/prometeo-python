@@ -1,6 +1,8 @@
 from six.moves.urllib.parse import urljoin
 import httpx
 
+from typing import Dict
+
 from prometeo import exceptions, utils
 
 
@@ -26,11 +28,24 @@ class BaseClient(object):
         self._client_session = httpx.AsyncClient(proxy=proxy)
         self._raw_responses = raw_responses
 
+    def _pop_nulls(self, data: Dict) -> Dict:
+        return {k: v for k, v in data.items() if v is not None}
+
     @utils.adapt_async_sync
-    async def make_request(self, method, url, headers=None, *args, **kwargs):
+    async def make_request(
+        self,
+        method,
+        url,
+        headers=None,
+        body=None,
+        *args,
+        **kwargs
+    ):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = headers or {}
+        if body:
+            body = self._pop_nulls(body)
         headers["X-API-Key"] = self._api_key
         return await self._client_session.request(
             method, full_url, headers=headers, *args, **kwargs
