@@ -66,38 +66,47 @@ class CurpAPIClient(base_client.BaseClient):
         "sandbox": SANDBOX_URL,
     }
 
+    def _parse_date(self, date_str):
+        if not date_str:
+            return None
+        for fmt in ("%Y-%m-%d", "%d/%m/%Y"):
+            try:
+                return datetime.strptime(date_str, fmt)
+            except ValueError:
+                continue
+        return None
+
     def _make_result(self, response_data):
-        document_data = response_data["document_data"]
-        personal_data = response_data["personal_data"]
+        document_data = response_data.get("document_data", {})
+        personal_data = response_data.get("personal_data", {})
+        raw_birthdate = personal_data.get("fechaNacimiento")
         return QueryResult(
             document_data=DocumentData(
-                foja=document_data["foja"],
-                clave_entidad_registro=document_data["claveEntidadRegistro"],
-                num_acta=document_data["numActa"],
-                tomo=document_data["tomo"],
-                anio_reg=document_data["anioReg"],
-                municipio_registro=document_data["municipioRegistro"],
-                libro=document_data["libro"],
-                entidad_registro=document_data["entidadRegistro"],
-                clave_municipio_registro=document_data["claveMunicipioRegistro"],
+                foja=document_data.get("foja"),
+                clave_entidad_registro=document_data.get("claveEntidadRegistro"),
+                num_acta=document_data.get("numActa"),
+                tomo=document_data.get("tomo"),
+                anio_reg=document_data.get("anioReg"),
+                municipio_registro=document_data.get("municipioRegistro"),
+                libro=document_data.get("libro"),
+                entidad_registro=document_data.get("entidadRegistro"),
+                clave_municipio_registro=document_data.get("claveMunicipioRegistro"),
             ),
             personal_data=PersonalData(
-                sexo=personal_data["sexo"],
-                entidad=personal_data["entidad"],
-                nacionalidad=personal_data["nacionalidad"],
-                status_curp=personal_data["statusCurp"],
-                nombres=personal_data["nombres"],
-                segundo_apellido=personal_data["segundoApellido"],
-                clave_entidad=personal_data["claveEntidad"],
-                doc_probatorio=personal_data["docProbatorio"],
-                fecha_nacimiento=datetime.strptime(
-                    personal_data["fechaNacimiento"], "%d/%m/%Y"
-                ),
-                primer_apellido=personal_data["primerApellido"],
-                curp=personal_data["curp"],
+                sexo=personal_data.get("sexo"),
+                entidad=personal_data.get("entidad"),
+                nacionalidad=personal_data.get("nacionalidad"),
+                status_curp=personal_data.get("statusCurp"),
+                nombres=personal_data.get("nombres"),
+                segundo_apellido=personal_data.get("segundoApellido"),
+                clave_entidad=personal_data.get("claveEntidad"),
+                doc_probatorio=personal_data.get("docProbatorio"),
+                fecha_nacimiento=self._parse_date(raw_birthdate),
+                primer_apellido=personal_data.get("primerApellido"),
+                curp=personal_data.get("curp"),
             ),
-            pdf_url=response_data["pdf_url"],
-            pdf=base_client.Download(self, response_data["pdf_url"]),
+            pdf_url=response_data.get("pdf_url", ""),
+            pdf=base_client.Download(self, response_data.get("pdf_url", "")),
         )
 
     @utils.adapt_async_sync
