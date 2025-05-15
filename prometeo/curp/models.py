@@ -2,6 +2,7 @@ from typing import Optional, Union
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class DocumentData(BaseModel):
     foja: Optional[str] = None
     clave_entidad_registro: str
@@ -12,6 +13,7 @@ class DocumentData(BaseModel):
     libro: Optional[str] = None
     entidad_registro: str
     clave_municipio_registro: str
+
 
 class PersonalData(BaseModel):
     sexo: str
@@ -25,6 +27,7 @@ class PersonalData(BaseModel):
     fecha_nacimiento: datetime
     primer_apellido: str
     curp: str
+
 
 class QueryResult(BaseModel):
     document_data: DocumentData
