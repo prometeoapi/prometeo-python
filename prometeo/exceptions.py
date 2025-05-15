@@ -44,6 +44,9 @@ class InvalidParameterError(PrometeoError):
         self.params = params
         self.message = message
 
+    def __str__(self):
+        return self.message
+
 
 class MissingParameterError(InvalidParameterError):
     pass

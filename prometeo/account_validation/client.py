@@ -33,9 +33,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
         match = re.match(pattern, error_message)
         if match:
             parameters = match.group(1)
-            message = match.group(2)
-            return parameters.split(", "), message.strip()
-        return None, None
+            return parameters.split(", "), error_message
+        return None, error_message
 
     def on_error(self, response, data):
         errors = data.get("errors", {}) or {}
