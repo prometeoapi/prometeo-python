@@ -15,7 +15,15 @@ class BaseClient(object):
 
     session_class = None
 
-    def __init__(self, api_key, environment, raw_responses=False, proxy=None):
+    def __init__(
+        self,
+        api_key,
+        environment,
+        raw_responses=False,
+        proxy=None,
+        *args,
+        **kwargs
+    ):
         self._api_key = api_key
         if environment not in self.ENVIRONMENTS:
             valid_envs = ", ".join(self.ENVIRONMENTS.keys())
@@ -25,7 +33,7 @@ class BaseClient(object):
                 )
             )
         self._environment = environment
-        self._client_session = httpx.AsyncClient(proxy=proxy)
+        self._client_session = httpx.AsyncClient(proxy=proxy, *args, **kwargs)
         self._raw_responses = raw_responses
 
     def _pop_nulls(self, data: Dict) -> Dict:
@@ -37,18 +45,18 @@ class BaseClient(object):
         method,
         url,
         headers=None,
-        body=None,
+        data=None,
         *args,
         **kwargs
     ):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = headers or {}
-        if body:
-            body = self._pop_nulls(body)
+        if data:
+            data = self._pop_nulls(data)
         headers["X-API-Key"] = self._api_key
         return await self._client_session.request(
-            method, full_url, headers=headers, *args, **kwargs
+            method, full_url, headers=headers, data=data, *args, **kwargs
         )
 
     def on_response(self, response_data):
