@@ -78,6 +78,7 @@ class AccountValidationAPIClient(base_client.BaseClient):
         document_type: Optional[str] = None,
         branch_code: Optional[str] = None,
         account_type: Optional[str] = None,
+        beneficiary_name: Optional[str] = None,
     ) -> AccountData:
         """
         Validate bank account information.
@@ -119,6 +120,7 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 "branch_code": branch_code,
                 "bank_code": bank_code,
                 "account_type": account_type,
+                "beneficiary_name":beneficiary_name,
             },
         )
         return AccountData(**data.get("data"))
