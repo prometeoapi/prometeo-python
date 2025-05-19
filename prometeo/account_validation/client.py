@@ -104,6 +104,9 @@ class AccountValidationAPIClient(base_client.BaseClient):
         :param account_type: The account types.
         :type account_type: Optional[str]
 
+        :param beneficiary_name: Account owner's name.
+        :type beneficiary_name: Optional[str]
+
         :return: An object containing validated account information.
         :rtype: AccountData
         :raises: Any exceptions raised during the validation process.
