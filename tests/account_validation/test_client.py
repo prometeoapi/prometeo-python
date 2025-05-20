@@ -1,10 +1,6 @@
 import respx
 
 from prometeo import exceptions
-from prometeo.account_validation.exceptions import (
-    PendingValidationError,
-    InvalidCurrencyAccountError
-)
 from prometeo.account_validation import exceptions as av_exceptions
 from tests.base_test_case import BaseTestCase
 
@@ -60,7 +56,7 @@ class TestAccountValidationClient(BaseTestCase):
     def test_pending_validation(self):
         self.mock_post_request(respx, "/validate-account/", "pending_validation")
 
-        with self.assertRaises(PendingValidationError) as e:
+        with self.assertRaises(av_exceptions.PendingValidationError) as e:
             self.client.account_validation.validate(
                 account_number="999",
                 country_code="MX",
@@ -141,7 +137,7 @@ class TestAccountValidationClient(BaseTestCase):
     
     @respx.mock
     def test_invalid_currency_account(self):
-        with self.assertRaises(InvalidCurrencyAccountError):
+        with self.assertRaises(av_exceptions.InvalidCurrencyAccountError):
             self.mock_post_request(
                 respx, "/validate-account/", "credit_account_in_another_currency"
             )
