@@ -1,6 +1,10 @@
 import respx
 
 from prometeo import exceptions
+from prometeo.account_validation.exceptions import (
+    PendingValidationError,
+    InvalidCurrencyAccountError
+)
 from prometeo.account_validation import exceptions as av_exceptions
 from tests.base_test_case import BaseTestCase
 
@@ -38,6 +42,30 @@ class TestAccountValidationClient(BaseTestCase):
 
         self.assertIn("account_number", e.exception.params)
         self.assertIn("Some description indicating error", e.exception.message)
+    
+    @respx.mock
+    def test_missing_parameters_many_errors(self):
+        self.mock_post_request(respx, "/validate-account/", "missing_parameters")
+
+        with self.assertRaises(exceptions.MissingParameterError) as e:
+            self.client.account_validation.validate(
+                account_number="999",
+                country_code="UY",
+            )
+
+        self.assertIn("bank_code", e.exception.params)
+        self.assertIn("Missing parameter", e.exception.message)
+    
+    @respx.mock
+    def test_pending_validation(self):
+        self.mock_post_request(respx, "/validate-account/", "pending_validation")
+
+        with self.assertRaises(PendingValidationError) as e:
+            self.client.account_validation.validate(
+                account_number="999",
+                country_code="MX",
+                beneficiary_name="TERESA REYES RODRIGUEZ",
+            )
 
     @respx.mock
     def test_invalid_account(self):
@@ -60,7 +88,7 @@ class TestAccountValidationClient(BaseTestCase):
             account_number="***",
             country_code="BR",
         )
-        self.assertEqual(data.beneficiary_name, "JOÃO DAS NEVES")
+        self.assertEqual(data.beneficiary_name.encode('cp1252').decode('utf-8'), "JOÃO DAS NEVES")
 
         self.mock_post_request(respx, "/validate-account/", "valid_account_mx")
         data = self.client.account_validation.validate(
@@ -109,6 +137,17 @@ class TestAccountValidationClient(BaseTestCase):
                 branch_code="00001",
                 bank_code="999",
                 account_type="CHECKING",
+            )
+    
+    @respx.mock
+    def test_invalid_currency_account(self):
+        with self.assertRaises(InvalidCurrencyAccountError):
+            self.mock_post_request(
+                respx, "/validate-account/", "credit_account_in_another_currency"
+            )
+            self.client.account_validation.validate(
+                account_number="012180001202379491",
+                country_code="MX",
             )
 
     @respx.mock
