@@ -6,6 +6,7 @@ from .exceptions import (
     CommunicationError,
     BankProviderNotAvailableError,
     CountryNotAvailableError,
+    InvalidCurrencyAccountError,
 )
 from typing import Optional, List, Tuple
 from .models import AccountData
@@ -53,6 +54,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 raise exceptions.MissingParameterError(
                     *self.extract_invalid_parameters(error_message, error_key)
                 )
+            elif "Cuenta credito en otra divisa" in error_message:
+                raise InvalidCurrencyAccountError(error_message)
         elif error_code == 404:
             raise InvalidAccountError(error_message)
         elif error_code == 202:
@@ -121,4 +124,6 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 "account_type": account_type,
             },
         )
+        
         return AccountData(**data.get("data"))
+  
