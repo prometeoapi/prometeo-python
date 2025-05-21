@@ -1,7 +1,7 @@
 {
-    "status": "success",
-    "transfer": {
-        "message": "Transferencia confirmada con exito",
-        "success": true
-    }
+  "status": "success",
+  "transfer": {
+    "message": "Transferencia confirmada con exito",
+    "success": true
+  }
 }

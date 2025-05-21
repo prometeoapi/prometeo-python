@@ -1,4 +1,4 @@
 {
-    "status": "logged_in",
-    "session_key": "123456"
+  "session_key": "123456",
+  "status": "logged_in"
 }

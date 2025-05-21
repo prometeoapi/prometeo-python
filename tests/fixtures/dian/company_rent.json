@@ -1,12 +1,9 @@
 {
-  "status": "success",
   "declaration": {
-    "previous_form": "",
-    "pdf_url": "/pdf/6368901ff39e2a5ec239823343c575923.pdf",
-    "reason": "Qualia Fintech SRL",
     "correction_code": "",
-    "year": 2016,
-    "form_number": "1112600018226",
+    "direction_code": "1 3",
+    "dv": "0",
+    "economic_activity": "2499",
     "fields": {
       "31": {
         "name": "Aportes al sistema de seguridad social",
@@ -15,8 +12,8 @@
       },
       "50": {
         "name": "Otros costos",
-        "value": 0,
-        "number": "50"
+        "number": "50",
+        "value": 0
       },
       "79": {
         "name": "Total retenciones a?o gravable",
@@ -29,25 +26,28 @@
         "value": 0
       },
       "85": {
-        "value": 0,
+        "name": "Saldo a pagar por impuesto",
         "number": "85",
-        "name": "Saldo a pagar por impuesto"
+        "value": 0
       },
       "88": {
-        "value": 0,
+        "name": "o Total saldo a favor",
         "number": "88",
-        "name": "o Total saldo a favor"
+        "value": 0
       }
     },
+    "form_number": "1112600018226",
     "name": {
-      "first_surname": "",
       "first_name": "",
-      "second_surname": "",
-      "other_names": ""
+      "first_surname": "",
+      "other_names": "",
+      "second_surname": ""
     },
-    "economic_activity": "2499",
     "nit": "333222251",
-    "dv": "0",
-    "direction_code": "1 3"
-  }
+    "pdf_url": "/pdf/6368901ff39e2a5ec239823343c575923.pdf",
+    "previous_form": "",
+    "reason": "Qualia Fintech SRL",
+    "year": 2016
+  },
+  "status": "success"
 }

@@ -2,6 +2,6 @@
   "data": null,
   "errors": {
     "code": 400,
-    "message": "Invalid parameter: account_number"
+    "message": "Missing parameter: bank_code"
   }
 }

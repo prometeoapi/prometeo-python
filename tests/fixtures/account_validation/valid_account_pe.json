@@ -1,16 +1,16 @@
 {
   "data": {
-    "valid": true,
-    "message": "Cuenta valida",
-    "account_number": "8983212878023",
-    "bank_code": "003",
-    "country_code": "PE",
-    "branch_code": null,
-    "document_type": "DNI",
-    "document_number": "72864101",
-    "beneficiary_name": "VILLANCA ROSALES ANDREA CLAUDIA",
     "account_currency": "USD",
-    "account_type": "SAVINGS"
+    "account_number": "8983212878023",
+    "account_type": "SAVINGS",
+    "bank_code": "003",
+    "beneficiary_name": "VILLANCA ROSALES ANDREA CLAUDIA",
+    "branch_code": null,
+    "country_code": "PE",
+    "document_number": "72864101",
+    "document_type": "DNI",
+    "message": "Cuenta valida",
+    "valid": true
   },
   "errors": null
 }

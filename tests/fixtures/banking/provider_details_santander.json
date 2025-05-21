@@ -1,158 +1,164 @@
 {
-    "status": "success",
-    "provider": {
-        "name": "santander_pers_uy",
-        "aliases": ["santander"],
-        "country": "UY",
-        "auth_fields": [
-            {
-                "name": "country_code",
-                "type": "choice",
-                "interactive": false,
-                "optional": true,
-                "label_es": "País",
-                "label_en": "Country",
-                "choices": [
-                    {
-                        "name": "AR",
-                        "label_es": "Argentina",
-                        "label_en": "Argentina"
-                    },
-                    {
-                        "name": "BO",
-                        "label_es": "Bolivia",
-                        "label_en": "Bolivia"
-                    },
-                    {
-                        "name": "BR",
-                        "label_es": "Brasil",
-                        "label_en": "Brasil"
-                    },
-                    {
-                        "name": "CO",
-                        "label_es": "Colombia",
-                        "label_en": "Colombia"
-                    },
-                    {
-                        "name": "CL",
-                        "label_es": "Chile",
-                        "label_en": "Chile"
-                    },
-                    {
-                        "name": "EC",
-                        "label_es": "Ecuador",
-                        "label_en": "Ecuador"
-                    },
-                    {
-                        "name": "MX",
-                        "label_es": "Mexico",
-                        "label_en": "Mexico"
-                    },
-                    {
-                        "name": "PY",
-                        "label_es": "Paraguay",
-                        "label_en": "Paraguay"
-                    },
-                    {"name": "PE", "label_es": "Peru", "label_en": "Peru"},
-                    {
-                        "name": "UY",
-                        "label_es": "Uruguay",
-                        "label_en": "Uruguay"
-                    },
-                    {
-                        "name": "VE",
-                        "label_es": "Venezuela",
-                        "label_en": "Venezuela"
-                    }
-                ],
-                "default": "UY"
-            },
-            {
-                "name": "type",
-                "type": "choice",
-                "interactive": false,
-                "optional": true,
-                "label_es": "Tipo de documento",
-                "label_en": "Document type",
-                "choices": [
-                    {
-                        "name": "cedula_nacional",
-                        "label_es": "Cedula de Identidad",
-                        "label_en": "National ID"
-                    },
-                    {
-                        "name": "no_residente",
-                        "label_es": "Otro Tipo de Documento No Residente",
-                        "label_en": "Another Non-resident Document"
-                    },
-                    {
-                        "name": "pasaporte",
-                        "label_es": "Pasaporte",
-                        "label_en": "Passport"
-                    },
-                    {
-                        "name": "rut",
-                        "label_es": "RUT - Registro Unico Tributario",
-                        "label_en": "Rut"
-                    },
-                    {
-                        "name": "numero_especial_bs",
-                        "label_es": "Numero especial dado por Banco Santander",
-                        "label_en": "Special Number Given By Bs"
-                    },
-                    {
-                        "name": "banco_prev_social",
-                        "label_es": "BPS: Banco de Prevision Social (PJ)",
-                        "label_en": "Bps: Social Security Bank (Pj)"
-                    },
-                    {
-                        "name": "pers_jur_correlativa",
-                        "label_es": "Persona Juridica Correlativa (BCU)",
-                        "label_en": "Correlative Legal Person (Bcu)"
-                    },
-                    {
-                        "name": "identificacion_registral",
-                        "label_es": "Identificacion Registral",
-                        "label_en": "Registry ID"
-                    },
-                    {
-                        "name": "swift",
-                        "label_es": "Codigo Swift",
-                        "label_en": "Swift Code"
-                    }
-                ]
-            },
-            {
-                "name": "username",
-                "type": "text",
-                "interactive": false,
-                "optional": false,
-                "label_es": "Número de Documento",
-                "label_en": "Document Number"
-            },
-            {
-                "name": "password",
-                "type": "password",
-                "interactive": false,
-                "optional": false,
-                "label_es": "Contraseña",
-                "label_en": "Password"
-            }
+  "provider": {
+    "account_type": [
+      {
+        "label_en": "Personal Account",
+        "label_es": "Cuenta Personal",
+        "name": "pers"
+      }
+    ],
+    "aliases": [
+      "santander"
+    ],
+    "auth_fields": [
+      {
+        "choices": [
+          {
+            "label_en": "Argentina",
+            "label_es": "Argentina",
+            "name": "AR"
+          },
+          {
+            "label_en": "Bolivia",
+            "label_es": "Bolivia",
+            "name": "BO"
+          },
+          {
+            "label_en": "Brasil",
+            "label_es": "Brasil",
+            "name": "BR"
+          },
+          {
+            "label_en": "Colombia",
+            "label_es": "Colombia",
+            "name": "CO"
+          },
+          {
+            "label_en": "Chile",
+            "label_es": "Chile",
+            "name": "CL"
+          },
+          {
+            "label_en": "Ecuador",
+            "label_es": "Ecuador",
+            "name": "EC"
+          },
+          {
+            "label_en": "Mexico",
+            "label_es": "Mexico",
+            "name": "MX"
+          },
+          {
+            "label_en": "Paraguay",
+            "label_es": "Paraguay",
+            "name": "PY"
+          },
+          {
+            "label_en": "Peru",
+            "label_es": "Peru",
+            "name": "PE"
+          },
+          {
+            "label_en": "Uruguay",
+            "label_es": "Uruguay",
+            "name": "UY"
+          },
+          {
+            "label_en": "Venezuela",
+            "label_es": "Venezuela",
+            "name": "VE"
+          }
         ],
-        "account_type": [
-            {
-                "name": "pers",
-                "label_es": "Cuenta Personal",
-                "label_en": "Personal Account"
-            }
+        "default": "UY",
+        "interactive": false,
+        "label_en": "Country",
+        "label_es": "Pa\u00eds",
+        "name": "country_code",
+        "optional": true,
+        "type": "choice"
+      },
+      {
+        "choices": [
+          {
+            "label_en": "National ID",
+            "label_es": "Cedula de Identidad",
+            "name": "cedula_nacional"
+          },
+          {
+            "label_en": "Another Non-resident Document",
+            "label_es": "Otro Tipo de Documento No Residente",
+            "name": "no_residente"
+          },
+          {
+            "label_en": "Passport",
+            "label_es": "Pasaporte",
+            "name": "pasaporte"
+          },
+          {
+            "label_en": "Rut",
+            "label_es": "RUT - Registro Unico Tributario",
+            "name": "rut"
+          },
+          {
+            "label_en": "Special Number Given By Bs",
+            "label_es": "Numero especial dado por Banco Santander",
+            "name": "numero_especial_bs"
+          },
+          {
+            "label_en": "Bps: Social Security Bank (Pj)",
+            "label_es": "BPS: Banco de Prevision Social (PJ)",
+            "name": "banco_prev_social"
+          },
+          {
+            "label_en": "Correlative Legal Person (Bcu)",
+            "label_es": "Persona Juridica Correlativa (BCU)",
+            "name": "pers_jur_correlativa"
+          },
+          {
+            "label_en": "Registry ID",
+            "label_es": "Identificacion Registral",
+            "name": "identificacion_registral"
+          },
+          {
+            "label_en": "Swift Code",
+            "label_es": "Codigo Swift",
+            "name": "swift"
+          }
         ],
-        "logo": "https://providers.prometeoapi.com/logos/santander_pers_uy.png",
-        "bank": {
-            "code": "santander",
-            "name": "Banco Santander",
-            "logo": "https://providers.prometeoapi.com/logos/santander.png"
-        },
-        "methods": null,
-        "endpoints_status": null
-    }
+        "interactive": false,
+        "label_en": "Document type",
+        "label_es": "Tipo de documento",
+        "name": "type",
+        "optional": true,
+        "type": "choice"
+      },
+      {
+        "interactive": false,
+        "label_en": "Document Number",
+        "label_es": "N\u00famero de Documento",
+        "name": "username",
+        "optional": false,
+        "type": "text"
+      },
+      {
+        "interactive": false,
+        "label_en": "Password",
+        "label_es": "Contrase\u00f1a",
+        "name": "password",
+        "optional": false,
+        "type": "password"
+      }
+    ],
+    "bank": {
+      "code": "santander",
+      "logo": "https://providers.prometeoapi.com/logos/santander.png",
+      "name": "Banco Santander"
+    },
+    "country": "UY",
+    "endpoints_status": null,
+    "logo": "https://providers.prometeoapi.com/logos/santander_pers_uy.png",
+    "methods": null,
+    "name": "santander_pers_uy"
+  },
+  "status": "success"
 }

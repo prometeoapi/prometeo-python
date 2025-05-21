@@ -1,15 +1,15 @@
 {
-  "status": "success",
   "balances": [
     {
-      "value": 0,
       "amount": 26,
-      "type": "al dia"
+      "type": "al dia",
+      "value": 0
     },
     {
-      "value": 47280000,
       "amount": 3,
-      "type": "saldo a favor"
+      "type": "saldo a favor",
+      "value": 47280000
     }
-  ]
+  ],
+  "status": "success"
 }
