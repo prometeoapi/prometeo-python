@@ -28,10 +28,6 @@ class AccountTypeChile(Enum):
 
 
 @extend_enum(AccountType)
-class AccountTypeChile(Enum):
-    CUENTA_EFECTIVO = "DEMAND"
-
-@extend_enum(AccountType)
 class AccountTypeEcuador(Enum):
     VIRTUAL_ACCOUNT ="VIRTUAL_ACCOUNT"
     ELECTRONIC_ROLE_ACCOUNT = "ROL_ELECTRONICO"
