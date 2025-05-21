@@ -8,8 +8,8 @@
       "municipality": null,
       "name": null,
       "nit": null,
-      "pdf_url": null,
       "pdf_available": false,
+      "pdf_url": null,
       "ranges": [
         {
           "establishment": "Qualia SRL",
@@ -17,7 +17,7 @@
           "mode": "COMPUTADOR",
           "prefix": "",
           "to": 2000,
-          "type": "AUTORIZACIÓN"
+          "type": "AUTORIZACI\u00d3N"
         }
       ],
       "reason": null

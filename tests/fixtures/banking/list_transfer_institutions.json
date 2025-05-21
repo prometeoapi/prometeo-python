@@ -1,21 +1,21 @@
 {
-    "destinations": [
-        {
-            "id": 0,
-            "name": "SANTANDER"
-        },
-        {
-            "id": 1,
-            "name": "B.R.O.U."
-        },
-        {
-            "id": 91,
-            "name": "B.H.U."
-        },
-        {
-            "id": 110,
-            "name": "BANDES"
-        }
-    ],
-    "status": "success"
+  "destinations": [
+    {
+      "id": 0,
+      "name": "SANTANDER"
+    },
+    {
+      "id": 1,
+      "name": "B.R.O.U."
+    },
+    {
+      "id": 91,
+      "name": "B.H.U."
+    },
+    {
+      "id": 110,
+      "name": "BANDES"
+    }
+  ],
+  "status": "success"
 }

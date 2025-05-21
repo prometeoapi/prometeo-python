@@ -48,6 +48,8 @@ class InvalidParameterError(AccountValidationClientError):
 
     pass
 
+
 class InvalidCurrencyAccountError(AccountValidationClientError):
-    """Exception raised when the account currency is not among the available currencies for the given country."""
+    """Exception raised when the account currency isn't valid for the country."""
+
     pass

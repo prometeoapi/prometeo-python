@@ -1,7 +1,7 @@
 {
-    "data": null,
-    "errors": {
-        "code": 202,
-        "message": "Validacion pendiente"
-    }
+  "data": null,
+  "errors": {
+    "code": 202,
+    "message": "Validacion pendiente"
+  }
 }

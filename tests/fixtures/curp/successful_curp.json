@@ -1,30 +1,30 @@
 {
-    "errors": null,
-    "data": {
-        "document_data": {
-            "foja": "",
-            "claveEntidadRegistro": "25",
-            "numActa": "00064",
-            "tomo": "",
-            "anioReg": "1988",
-            "municipioRegistro": "GUASAVE",
-            "libro": "0001",
-            "entidadRegistro": "SINALOA",
-            "claveMunicipioRegistro": "011"
-        },
-        "personal_data": {
-            "sexo": "HOMBRE",
-            "entidad": "DISTRITO FEDERAL",
-            "nacionalidad": "MEXICO",
-            "statusCurp": "RCN",
-            "nombres": "JOHN",
-            "segundoApellido": "PONCE",
-            "claveEntidad": "DF",
-            "docProbatorio": 1,
-            "fechaNacimiento": "04/03/1988",
-            "primerApellido": "DOE",
-            "curp": "ABCD880304HDFXNR45"
-        },
-        "pdf_url": "/pdf/50ad2ba127ae4cc384fd265e585a1f67.pdf"
+  "data": {
+    "document_data": {
+      "anioReg": "1988",
+      "claveEntidadRegistro": "25",
+      "claveMunicipioRegistro": "011",
+      "entidadRegistro": "SINALOA",
+      "foja": "",
+      "libro": "0001",
+      "municipioRegistro": "GUASAVE",
+      "numActa": "00064",
+      "tomo": ""
+    },
+    "pdf_url": "/pdf/50ad2ba127ae4cc384fd265e585a1f67.pdf",
+    "personal_data": {
+      "claveEntidad": "DF",
+      "curp": "ABCD880304HDFXNR45",
+      "docProbatorio": 1,
+      "entidad": "DISTRITO FEDERAL",
+      "fechaNacimiento": "04/03/1988",
+      "nacionalidad": "MEXICO",
+      "nombres": "JOHN",
+      "primerApellido": "DOE",
+      "segundoApellido": "PONCE",
+      "sexo": "HOMBRE",
+      "statusCurp": "RCN"
     }
+  },
+  "errors": null
 }

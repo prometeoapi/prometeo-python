@@ -8,7 +8,7 @@ from .exceptions import (
     CountryNotAvailableError,
     InvalidCurrencyAccountError,
 )
-from .codes import BankCodes,ISOCode,AccountType
+from .codes import BankCodes, ISOCode, AccountType
 from typing import Optional, Union, List, Tuple
 from .models import AccountData
 import re
@@ -76,12 +76,12 @@ class AccountValidationAPIClient(base_client.BaseClient):
     async def validate(
         self,
         account_number: str,
-        country_code: Union[str,ISOCode],
-        bank_code: Optional[Union[str, BankCodes]]= None,
+        country_code: Union[str, ISOCode],
+        bank_code: Optional[Union[str, BankCodes]] = None,
         document_number: Optional[str] = None,
         document_type: Optional[str] = None,
         branch_code: Optional[str] = None,
-        account_type: Optional[Union[str,AccountType]] = None,
+        account_type: Optional[Union[str, AccountType]] = None,
         beneficiary_name: Optional[str] = None,
     ) -> AccountData:
         """
@@ -127,9 +127,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 "branch_code": branch_code,
                 "bank_code": bank_code,
                 "account_type": account_type,
-                "beneficiary_name":beneficiary_name,
+                "beneficiary_name": beneficiary_name,
             },
         )
-        
+
         return AccountData(**data.get("data"))
-  

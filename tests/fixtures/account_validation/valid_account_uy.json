@@ -1,16 +1,16 @@
 {
   "data": {
-    "valid": true,
-    "message": "Cuenta valida",
-    "account_number": "1232131231",
-    "bank_code": "137",
-    "country_code": "UY",
-    "branch_code": null,
-    "document_type": null,
-    "document_number": null,
-    "beneficiary_name": "DANI*** DEC*** COL**",
     "account_currency": "USD,UYU",
-    "account_type": null
+    "account_number": "1232131231",
+    "account_type": null,
+    "bank_code": "137",
+    "beneficiary_name": "DANI*** DEC*** COL**",
+    "branch_code": null,
+    "country_code": "UY",
+    "document_number": null,
+    "document_type": null,
+    "message": "Cuenta valida",
+    "valid": true
   },
   "errors": null
 }

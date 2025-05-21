@@ -1,15 +1,8 @@
 {
-  "status": "success",
   "declaration": {
-    "pdf_url": "/pdf/8ff21e603a523l0a98c9cc8b0e9b3db1.pdf",
-    "previous_form": "",
-    "form_number": "3013623041391",
-    "year": "2017",
     "correction_code": "",
     "direction_code": "1 1",
     "dv": "0",
-    "reason": "Qualia Fintech SRL",
-    "nit": "123332211",
     "fields": {
       "31": {
         "name": "Por exportaci?n de servicios",
@@ -18,36 +11,43 @@
       },
       "32": {
         "name": "iPntoer rvneanctiaosn aal sociedades de comercializaci?n",
-        "value": 0,
-        "number": "32"
+        "number": "32",
+        "value": 0
       },
       "56": {
         "name": "Total compras netas realizadas durante el",
-        "value": 21530000,
-        "number": "56"
+        "number": "56",
+        "value": 21530000
       },
       "66": {
+        "name": "Por importaciones gravadas a tarifa del 5%",
         "number": "66",
-        "value": 0,
-        "name": "Por importaciones gravadas a tarifa del 5%"
+        "value": 0
       },
       "83": {
-        "value": 0,
+        "name": "Retenciones por IVA que le practicaron",
         "number": "83",
-        "name": "Retenciones por IVA que le practicaron"
+        "value": 0
       },
       "88": {
         "name": "Saldo a favor susceptible de devoluci?n y/ocompensaci?n por el presente per?odo",
-        "value": 0,
-        "number": "88"
+        "number": "88",
+        "value": 0
       }
     },
-    "period": "3",
+    "form_number": "3013623041391",
     "name": {
-      "other_names": "",
+      "first_name": "",
       "first_surname": "",
-      "second_surname": "",
-      "first_name": ""
-    }
-  }
+      "other_names": "",
+      "second_surname": ""
+    },
+    "nit": "123332211",
+    "pdf_url": "/pdf/8ff21e603a523l0a98c9cc8b0e9b3db1.pdf",
+    "period": "3",
+    "previous_form": "",
+    "reason": "Qualia Fintech SRL",
+    "year": "2017"
+  },
+  "status": "success"
 }

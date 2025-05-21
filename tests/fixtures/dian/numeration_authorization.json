@@ -5,7 +5,7 @@
       "country": "Colombia",
       "department": "Antioquia",
       "dv": "0",
-      "municipality": "Medellín",
+      "municipality": "Medell\u00edn",
       "name": {
         "first_name": "",
         "first_surname": "",
@@ -13,8 +13,8 @@
         "second_surname": ""
       },
       "nit": "902202672",
-      "pdf_url": "/pdf/25ebc593c917786864b9753cffa68b8f.pdf",
       "pdf_available": true,
+      "pdf_url": "/pdf/25ebc593c917786864b9753cffa68b8f.pdf",
       "ranges": [
         {
           "establishment": "Qualia SRL",
@@ -22,7 +22,7 @@
           "mode": "COMPUTADOR",
           "prefix": "",
           "to": 2000,
-          "type": "AUTORIZACIÓN"
+          "type": "AUTORIZACI\u00d3N"
         }
       ],
       "reason": "Qualia SRL"
