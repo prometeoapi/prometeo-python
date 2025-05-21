@@ -8,7 +8,8 @@ from .exceptions import (
     CountryNotAvailableError,
     InvalidCurrencyAccountError,
 )
-from typing import Optional, List, Tuple
+from .codes import BankCodes,ISOCode,AccountType
+from typing import Optional, Union, List, Tuple
 from .models import AccountData
 import re
 
@@ -75,12 +76,12 @@ class AccountValidationAPIClient(base_client.BaseClient):
     async def validate(
         self,
         account_number: str,
-        country_code: str,
-        bank_code: Optional[str] = None,
+        country_code: Union[str,ISOCode],
+        bank_code: Optional[Union[str, BankCodes]]= None,
         document_number: Optional[str] = None,
         document_type: Optional[str] = None,
         branch_code: Optional[str] = None,
-        account_type: Optional[str] = None,
+        account_type: Optional[Union[str,AccountType]] = None,
         beneficiary_name: Optional[str] = None,
     ) -> AccountData:
         """
@@ -90,10 +91,10 @@ class AccountValidationAPIClient(base_client.BaseClient):
         :type account_number: str
 
         :param country_code: The country code associated with the account.
-        :type country_code: str
+        :type country_code: Union[str,ISOCode]
 
         :param bank_code: The bank code if available.
-        :type bank_code: Optional[str]
+        :type bank_code: Optional[Union[str, BankCodes]]
 
         :param document_number: The document number associated with the account.
         :type document_number: Optional[str]
@@ -104,8 +105,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
         :param branch_code: The branch code if available.
         :type branch_code: Optional[str]
 
-        :param account_type: The account types.
-        :type account_type: Optional[str]
+        :param account_type: The account type to consider.
+        :type account_type: Optional[Union[str,AccountType]]
 
         :param beneficiary_name: Account owner's name.
         :type beneficiary_name: Optional[str]
