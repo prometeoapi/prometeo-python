@@ -1,7 +1,7 @@
 {
-    "data": null,
-    "errors": {
-        "code": "190001",
-        "detail": "Estimada/o usuaria/o, la clave que ingresaste no existe o no está validada. Por favor contacta o acude a la Oficina Estatal del Registro Civil ubicada en la capital de la Entidad Federativa donde fue registrado tu nacimiento. En la siguiente liga encontrarás los pasos a seguir para que tu CURP esté validada y poder consultarla e imprimirla: <br><a href=\"http://conafrec.registrocivil.gob.mx:8003/bd/CONAFREC_files/PDF/Normatividad_Registros_Civiles_CONAFREC.pdf\">http://conafrec.registrocivil.gob.mx:8003/bd/CONAFREC_files/PDF/Normatividad_Registros_Civiles_CONAFREC.pdf</a>"
-    }
+  "data": null,
+  "errors": {
+    "code": "190001",
+    "detail": "Estimada/o usuaria/o, la clave que ingresaste no existe o no est\u00e1 validada. Por favor contacta o acude a la Oficina Estatal del Registro Civil ubicada en la capital de la Entidad Federativa donde fue registrado tu nacimiento. En la siguiente liga encontrar\u00e1s los pasos a seguir para que tu CURP est\u00e9 validada y poder consultarla e imprimirla: <br><a href=\"http://conafrec.registrocivil.gob.mx:8003/bd/CONAFREC_files/PDF/Normatividad_Registros_Civiles_CONAFREC.pdf\">http://conafrec.registrocivil.gob.mx:8003/bd/CONAFREC_files/PDF/Normatividad_Registros_Civiles_CONAFREC.pdf</a>"
+  }
 }

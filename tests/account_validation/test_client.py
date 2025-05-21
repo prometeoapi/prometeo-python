@@ -38,7 +38,7 @@ class TestAccountValidationClient(BaseTestCase):
 
         self.assertIn("account_number", e.exception.params)
         self.assertIn("Some description indicating error", e.exception.message)
-    
+
     @respx.mock
     def test_missing_parameters_many_errors(self):
         self.mock_post_request(respx, "/validate-account/", "missing_parameters")
@@ -51,12 +51,12 @@ class TestAccountValidationClient(BaseTestCase):
 
         self.assertIn("bank_code", e.exception.params)
         self.assertIn("Missing parameter", e.exception.message)
-    
+
     @respx.mock
     def test_pending_validation(self):
         self.mock_post_request(respx, "/validate-account/", "pending_validation")
 
-        with self.assertRaises(av_exceptions.PendingValidationError) as e:
+        with self.assertRaises(av_exceptions.PendingValidationError):
             self.client.account_validation.validate(
                 account_number="999",
                 country_code="MX",
@@ -134,7 +134,7 @@ class TestAccountValidationClient(BaseTestCase):
                 bank_code="999",
                 account_type="CHECKING",
             )
-    
+
     @respx.mock
     def test_invalid_currency_account(self):
         with self.assertRaises(av_exceptions.InvalidCurrencyAccountError):

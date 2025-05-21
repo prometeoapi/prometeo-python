@@ -1,7 +1,7 @@
 {
-    "data": null,
-    "errors": {
-        "code": 400,
-        "message": "Cuenta credito en otra divisa"
-    }
+  "data": null,
+  "errors": {
+    "code": 400,
+    "message": "Cuenta credito en otra divisa"
+  }
 }

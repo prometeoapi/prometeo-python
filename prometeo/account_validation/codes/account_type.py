@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 def extend_enum(inherited_enum):
     def wrapper(added_enum):
         joined = {}
@@ -11,9 +12,11 @@ def extend_enum(inherited_enum):
 
     return wrapper
 
+
 class AccountType(Enum):
     CUENTA_CORRIENTE = "CHECKING"
     CUENTA_AHORRO = "SAVINGS"
+
 
 @extend_enum(AccountType)
 class AccountTypeBrasil(Enum):
@@ -22,6 +25,7 @@ class AccountTypeBrasil(Enum):
     ENTIDADES_PUBLICAS = "PUBLIC_ENTITY"
     PIX_KEY = "PIX_KEY"
 
+
 @extend_enum(AccountType)
 class AccountTypeChile(Enum):
     CUENTA_EFECTIVO = "DEMAND"
@@ -29,13 +33,7 @@ class AccountTypeChile(Enum):
 
 @extend_enum(AccountType)
 class AccountTypeEcuador(Enum):
-    VIRTUAL_ACCOUNT ="VIRTUAL_ACCOUNT"
+    VIRTUAL_ACCOUNT = "VIRTUAL_ACCOUNT"
     ELECTRONIC_ROLE_ACCOUNT = "ROL_ELECTRONICO"
     FRIEND_ACCOUNT = "CUENTA_AMIGA"
     DEBIT_CARD = "CARD"
-
-
-
-
-
-

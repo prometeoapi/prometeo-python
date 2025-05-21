@@ -1,7 +1,7 @@
 {
-    "data": null,
-    "errors": {
-        "code": 514,
-        "message": "Pais no disponible"
-    }
+  "data": null,
+  "errors": {
+    "code": 514,
+    "message": "Pais no disponible"
+  }
 }

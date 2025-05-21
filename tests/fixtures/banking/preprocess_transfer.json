@@ -1,18 +1,22 @@
 {
-    "result": {
-        "approved": true,
-        "authorization_devices": [
-            {
-                "data": ["F-4", "B-2", "G-7"],
-                "type": "cardCode"
-            },
-            {
-                "data": null,
-                "type": "pin"
-            }
+  "result": {
+    "approved": true,
+    "authorization_devices": [
+      {
+        "data": [
+          "F-4",
+          "B-2",
+          "G-7"
         ],
-        "message": null,
-        "request_id": "0b7d6b32d1be4c11bde21e7ddc08cc36"
-    },
-    "status": "success"
+        "type": "cardCode"
+      },
+      {
+        "data": null,
+        "type": "pin"
+      }
+    ],
+    "message": null,
+    "request_id": "0b7d6b32d1be4c11bde21e7ddc08cc36"
+  },
+  "status": "success"
 }

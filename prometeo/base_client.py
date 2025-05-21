@@ -16,13 +16,7 @@ class BaseClient(object):
     session_class = None
 
     def __init__(
-        self,
-        api_key,
-        environment,
-        raw_responses=False,
-        proxy=None,
-        *args,
-        **kwargs
+        self, api_key, environment, raw_responses=False, proxy=None, *args, **kwargs
     ):
         self._api_key = api_key
         if environment not in self.ENVIRONMENTS:
@@ -40,15 +34,7 @@ class BaseClient(object):
         return {k: v for k, v in data.items() if v is not None}
 
     @utils.adapt_async_sync
-    async def make_request(
-        self,
-        method,
-        url,
-        headers=None,
-        data=None,
-        *args,
-        **kwargs
-    ):
+    async def make_request(self, method, url, headers=None, data=None, *args, **kwargs):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = headers or {}

@@ -14,7 +14,7 @@ class Client(object):
         raw_responses=False,
         proxy=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         self._api_key = api_key
         self._environment = environment
@@ -38,7 +38,7 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._banking
 
@@ -51,7 +51,7 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._dian
 
@@ -64,7 +64,7 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._sat
 
@@ -77,7 +77,7 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._curp
 
@@ -90,7 +90,7 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._payment
 
@@ -103,6 +103,6 @@ class Client(object):
                 self._raw_responses,
                 self._proxy,
                 *self._args,
-                **self._kwargs
+                **self._kwargs,
             )
         return self._account_validation
