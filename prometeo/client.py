@@ -7,7 +7,15 @@ from .account_validation import AccountValidationAPIClient
 
 
 class Client(object):
-    def __init__(self, api_key, environment="sandbox", raw_responses=False, proxy=None):
+    def __init__(
+        self,
+        api_key,
+        environment="sandbox",
+        raw_responses=False,
+        proxy=None,
+        *args,
+        **kwargs
+    ):
         self._api_key = api_key
         self._environment = environment
         self._raw_responses = raw_responses
@@ -18,12 +26,19 @@ class Client(object):
         self._curp = None
         self._payment = None
         self._account_validation = None
+        self._args = args
+        self._kwargs = kwargs
 
     @property
     def banking(self):
         if self._banking is None:
             self._banking = BankingAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._banking
 
@@ -31,7 +46,12 @@ class Client(object):
     def dian(self):
         if self._dian is None:
             self._dian = DianAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._dian
 
@@ -39,7 +59,12 @@ class Client(object):
     def sat(self):
         if self._sat is None:
             self._sat = SatAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._sat
 
@@ -47,7 +72,12 @@ class Client(object):
     def curp(self):
         if self._curp is None:
             self._curp = CurpAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._curp
 
@@ -55,7 +85,12 @@ class Client(object):
     def payment(self):
         if self._payment is None:
             self._payment = PaymentAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._payment
 
@@ -63,6 +98,11 @@ class Client(object):
     def account_validation(self):
         if self._account_validation is None:
             self._account_validation = AccountValidationAPIClient(
-                self._api_key, self._environment, self._raw_responses, self._proxy
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs
             )
         return self._account_validation

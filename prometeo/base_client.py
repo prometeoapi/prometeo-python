@@ -1,6 +1,8 @@
 from six.moves.urllib.parse import urljoin
 import httpx
 
+from typing import Dict
+
 from prometeo import exceptions, utils
 
 
@@ -13,7 +15,15 @@ class BaseClient(object):
 
     session_class = None
 
-    def __init__(self, api_key, environment, raw_responses=False, proxy=None):
+    def __init__(
+        self,
+        api_key,
+        environment,
+        raw_responses=False,
+        proxy=None,
+        *args,
+        **kwargs
+    ):
         self._api_key = api_key
         if environment not in self.ENVIRONMENTS:
             valid_envs = ", ".join(self.ENVIRONMENTS.keys())
@@ -23,17 +33,30 @@ class BaseClient(object):
                 )
             )
         self._environment = environment
-        self._client_session = httpx.AsyncClient(proxy=proxy)
+        self._client_session = httpx.AsyncClient(proxy=proxy, *args, **kwargs)
         self._raw_responses = raw_responses
 
+    def _pop_nulls(self, data: Dict) -> Dict:
+        return {k: v for k, v in data.items() if v is not None}
+
     @utils.adapt_async_sync
-    async def make_request(self, method, url, headers=None, *args, **kwargs):
+    async def make_request(
+        self,
+        method,
+        url,
+        headers=None,
+        data=None,
+        *args,
+        **kwargs
+    ):
         base_url = self.ENVIRONMENTS[self._environment]
         full_url = urljoin(base_url, url)
         headers = headers or {}
+        if data:
+            data = self._pop_nulls(data)
         headers["X-API-Key"] = self._api_key
         return await self._client_session.request(
-            method, full_url, headers=headers, *args, **kwargs
+            method, full_url, headers=headers, data=data, *args, **kwargs
         )
 
     def on_response(self, response_data):
