@@ -84,7 +84,7 @@ class TestAccountValidationClient(BaseTestCase):
             account_number="***",
             country_code="BR",
         )
-        self.assertEqual(data.beneficiary_name.encode('cp1252').decode('utf-8'), "JOÃO DAS NEVES")
+        self.assertEqual(data.beneficiary_name, "JOÃO DAS NEVES")
 
         self.mock_post_request(respx, "/validate-account/", "valid_account_mx")
         data = self.client.account_validation.validate(
