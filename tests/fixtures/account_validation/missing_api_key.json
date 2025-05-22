@@ -1,0 +1,8 @@
+{
+    "data": null,
+    "errors": {
+        "code": 401,
+        "message": "Missing API key"
+    },
+    "provider": null
+}
