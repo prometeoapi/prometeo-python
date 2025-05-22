@@ -57,6 +57,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 )
             elif "Cuenta credito en otra divisa" in error_message:
                 raise InvalidCurrencyAccountError(error_message)
+        elif error_code == 401:
+            raise exceptions.UnauthorizedError(error_message)
         elif error_code == 404:
             raise InvalidAccountError(error_message)
         elif error_code == 202:

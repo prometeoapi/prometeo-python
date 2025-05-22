@@ -53,6 +53,17 @@ class TestAccountValidationClient(BaseTestCase):
         self.assertIn("Missing parameter", e.exception.message)
 
     @respx.mock
+    def test_missing_api_key(self):
+        self.mock_post_request(respx, "/validate-account/", "missing_api_key")
+
+        with self.assertRaises(exceptions.UnauthorizedError) as e:
+            self.client.account_validation.validate(
+                account_number="999", country_code="UY", bank_code="001"
+            )
+
+        self.assertIn("Missing API key", e.exception.message)
+
+    @respx.mock
     def test_pending_validation(self):
         self.mock_post_request(respx, "/validate-account/", "pending_validation")
 
