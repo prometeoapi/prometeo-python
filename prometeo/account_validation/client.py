@@ -39,6 +39,8 @@ class AccountValidationAPIClient(base_client.BaseClient):
         return None, error_message
 
     def on_error(self, response, data):
+        super().on_error(response, data)
+
         errors = data.get("errors", {}) or {}
         error_message = errors.get("message")
         error_code = errors.get("code")
@@ -57,14 +59,11 @@ class AccountValidationAPIClient(base_client.BaseClient):
                 )
             elif "Cuenta credito en otra divisa" in error_message:
                 raise InvalidCurrencyAccountError(error_message)
-        elif error_code == 401:
-            raise exceptions.UnauthorizedError(error_message)
+
         elif error_code == 404:
             raise InvalidAccountError(error_message)
         elif error_code == 202:
             raise PendingValidationError(error_message)
-        elif error_code == 500:
-            raise exceptions.InternalAPIError(error_message, response.text)
         elif error_code == 503:
             raise CommunicationError(error_message)
         elif error_code == 512:
