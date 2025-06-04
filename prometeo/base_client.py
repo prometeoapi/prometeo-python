@@ -41,9 +41,10 @@ class BaseClient(object):
         if data:
             data = self._pop_nulls(data)
         headers["X-API-Key"] = self._api_key
-        return await self._client_session.request(
+        response = await self._client_session.request(
             method, full_url, headers=headers, data=data, *args, **kwargs
         )
+        return response
 
     def on_response(self, response_data):
         """
