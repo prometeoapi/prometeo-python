@@ -178,10 +178,10 @@ class Transaction(BaseModel):
 class WithdrawalAccountInput(BaseModel):
     account_format: AccountFormatEnum
     account_number: str
-    description: Optional[str] = ""
-    selected: Optional[bool] = True
-    branch: Optional[str] = ""
-    bicfi: Optional[str] = ""
+    description: Optional[str] = None
+    selected: bool
+    branch: Optional[str] = None
+    bicfi: Optional[str] = None
 
 
 class CreatePayoutTransferResponse(BaseModel):
@@ -194,7 +194,7 @@ class CustomerAccountDetails(BaseModel):
     selected: Optional[bool]
     account_format: AccountFormatEnum
     account_number: str
-    branch: Optional[str] = ""
+    branch: Optional[str] = None
     bank: Union[str, Bank]
 
 

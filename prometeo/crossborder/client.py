@@ -163,7 +163,7 @@ class CrossBorderAPIClient(base_client.BaseClient):
     @utils.adapt_async_sync
     async def create_customer(self, data: CustomerInput) -> CustomerResponse:
         return CustomerResponse(
-            **await self.call_api("POST", "customer", json=data.dict())
+            **await self.call_api("POST", "customer", json=data.dict(exclude_none=True))
         )
 
     @utils.adapt_async_sync

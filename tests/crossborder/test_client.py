@@ -163,6 +163,7 @@ class TestCrossBorderClient(BaseTestCase):
                 withdrawal_account=WithdrawalAccountInput(
                     account_format="clabe",
                     account_number="123456789012345678",
+                    selected=True,
                 ),
             )
         )
