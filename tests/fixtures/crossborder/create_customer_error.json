@@ -1,0 +1,6 @@
+{
+    "code": "X2015",
+    "type": "invalid_account",
+    "message": "The submitted account number format is invalid",
+    "status": "error"
+}

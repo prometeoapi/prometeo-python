@@ -1,0 +1,37 @@
+{
+    "id": "4d6c83e6-44ce-4963-ac83-e644ced9631c",
+    "origin": "f3676011-5203-43db-a760-115203e3db5e",
+    "description": "Test Payout",
+    "external_id": "e5af7e6e-98f4-4e43-af7e-6e98f42e43ef",
+    "timestamp": "2024-09-30T18:00:58.087Z",
+    "reference": "XBDEV8G3UIRE22FXKS7F7K1WKBPN7S",
+    "currency": "MXN",
+    "amount": 10,
+    "customer": {
+      "name": "Jane Doe",
+      "tax_id_type": "rfc",
+      "tax_id": "DODJ2301016J3",
+      "external_id": "SOME_PREFIX:SOME_UNIQUE_ID",
+      "withdrawal_account": {
+        "id": "9c1dd10e-7c19-470d-9dd1-0e7c19670d64",
+        "account_format": "clabe",
+        "account_number": "012180826854179156",
+        "description": "Account",
+        "selected": true,
+        "branch": "0",
+        "bank": {
+          "code": "012",
+          "bicfi": "BBVAMXMMXXX",
+          "name": "BBVA",
+          "country": "MX"
+        }
+      }
+    },
+    "events": [
+      {
+        "state": "created",
+        "timestamp": "2024-09-30T18:00:58.087Z",
+        "message": "Payin created"
+      }
+    ]
+}

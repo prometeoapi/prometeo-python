@@ -1,0 +1,28 @@
+{
+    "id": "a7f9501c-6979-4400-92db-809d1d317e21",
+    "origin": "f3676011-5203-43db-a760-115203e3db5e",
+    "description": "Test Payout",
+    "external_id": "e5af7e6e-98f4-4e43-af7e-6e98f42e43ef",
+    "fee": 10,
+    "amount": 10,
+    "customer": {
+      "name": "Jane Doe",
+      "tax_id_type": "rfc",
+      "tax_id": "DODJ2301016J3",
+      "external_id": "SOME_PREFIX:SOME_UNIQUE_ID",
+      "withdrawal_account": {
+        "id": "f3676011-5203-43db-a760-115203e3db5e",
+        "account_number": "19395123123223150",
+        "branch": "0",
+        "description": "Test Payout",
+        "account_format": "clabe",
+        "selected": true,
+        "bank": {
+          "code": "012",
+          "bicfi": "BBVAMXMMXXX",
+          "name": "BBVA",
+          "country": "MX"
+        }
+      }
+    }
+  }

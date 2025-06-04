@@ -1,0 +1,196 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+      {
+          "id": "f03758fe-5e54-48f6-a7b1-a6a55c8905e2",
+          "external_id": "aaaa",
+          "concept": "ABC",
+          "amount": 1.12,
+          "reference": null,
+          "origin_account": null,
+          "customer": {
+              "id": "a680f5af-2a98-46df-bebd-b8482a983a99",
+              "name": "JOSE ALONSO GONZALEZ",
+              "tax_id_type": "rfc",
+              "tax_id": "GOAG7412221FL8",
+              "external_id": "BET:b6180c52-4dd3-4686-8d78-acd2056e39b1",
+              "virtual_account": {
+                  "account_number": "012180826854112322",
+                  "name": "Beta Tests",
+                  "active": true,
+                  "branch": "",
+                  "account_format": "clabe",
+                  "bank": {
+                      "code": "012",
+                      "bicfi": "BBVAMXMMXXX",
+                      "name": "BBVA",
+                      "country": "MX"
+                  }
+              }
+          },
+          "destination": {
+              "account_number": "012180826854112322",
+              "account_format": "clabe",
+              "branch": "",
+              "owner_name": "Beta Tests",
+              "tax_id_type": "rfc",
+              "tax_id": "PRO1232DU3",
+              "bank": {
+                  "code": "012",
+                  "bicfi": "BBVAMXMMXXX",
+                  "name": "BBVA",
+                  "country": "MX"
+              }
+          },
+          "events": [
+              {
+                  "id": "e4a8e7c7-e7e0-46d6-b3df-79e7e55d6831",
+                  "state": "cancelled",
+                  "timestamp": "2025-05-08T15:00:00.352893Z",
+                  "message": "Payin cancelled"
+              },
+              {
+                  "id": "20977b5f-c10f-48bb-89a9-01d4a3575478",
+                  "state": "pending",
+                  "timestamp": "2025-05-08T12:58:44.410199Z",
+                  "message": "Payin pending"
+              },
+              {
+                  "id": "f1034a46-62d1-4887-85c9-1d06a9d35bb0",
+                  "state": "created",
+                  "timestamp": "2025-05-08T12:58:44.410096Z",
+                  "message": "Payin created"
+              }
+          ],
+          "currency": "MXN"
+      },
+      {
+          "id": "181aa8eb-2213-48d5-a6db-31616b862966",
+          "external_id": "",
+          "concept": "ABC",
+          "amount": 1.1,
+          "reference": "",
+          "origin_account": null,
+          "customer": {
+              "id": "ee9b7e92-0ed6-4403-9a82-8b68b48c6a86",
+              "name": "Yolia niñas de la calle AC.",
+              "tax_id_type": "rfc",
+              "tax_id": "CES100720PY9",
+              "external_id": "ENGEL:some1-f",
+              "virtual_account": {
+                  "account_number": "012180826854179156",
+                  "name": "Prometeo",
+                  "active": false,
+                  "branch": "",
+                  "account_format": "clabe",
+                  "bank": {
+                      "code": "012",
+                      "bicfi": "BBVAMXMMXXX",
+                      "name": "BBVA",
+                      "country": "MX"
+                  }
+              }
+          },
+          "destination": {
+              "account_number": "012180826854179156",
+              "account_format": "clabe",
+              "branch": "",
+              "owner_name": "Prometeo",
+              "tax_id_type": "rfc",
+              "tax_id": "PRO1232DU3",
+              "bank": {
+                  "code": "012",
+                  "bicfi": "BBVAMXMMXXX",
+                  "name": "BBVA",
+                  "country": "MX"
+              }
+          },
+          "events": [
+              {
+                  "id": "7c9392a3-e821-4ca6-bb8c-1f3c8d43b85a",
+                  "state": "cancelled",
+                  "timestamp": "2025-04-07T20:40:00.641669Z",
+                  "message": null
+              },
+              {
+                  "id": "eacb1e50-b6b6-4aed-9402-2245535d0d89",
+                  "state": "pending",
+                  "timestamp": "2025-04-07T18:36:24.709142Z",
+                  "message": null
+              },
+              {
+                  "id": "fb09b58b-90c9-4760-9a50-620ce7832de9",
+                  "state": "created",
+                  "timestamp": "2025-04-07T18:36:24.709059Z",
+                  "message": null
+              }
+          ],
+          "currency": "MXN"
+      },
+      {
+          "id": "42a91977-8d86-44fe-bcde-1f0e4daf88c7",
+          "external_id": "",
+          "concept": "ABC",
+          "amount": 0.2,
+          "reference": "",
+          "origin_account": null,
+          "customer": {
+              "id": "ee9b7e92-0ed6-4403-9a82-8b68b48c6a86",
+              "name": "Yolia niñas de la calle AC.",
+              "tax_id_type": "rfc",
+              "tax_id": "XXS100720PY9",
+              "external_id": "ENGEL:some1-f",
+              "virtual_account": {
+                  "account_number": "012180826854179156",
+                  "name": "Prometeo",
+                  "active": true,
+                  "branch": "",
+                  "account_format": "clabe",
+                  "bank": {
+                      "code": "012",
+                      "bicfi": "BBVAMXMMXXX",
+                      "name": "BBVA",
+                      "country": "MX"
+                  }
+              }
+          },
+          "destination": {
+              "account_number": "012180826854179156",
+              "account_format": "clabe",
+              "branch": "",
+              "owner_name": "Prometeo",
+              "tax_id_type": "rfc",
+              "tax_id": "PRO1232DU3",
+              "bank": {
+                  "code": "012",
+                  "bicfi": "BBVAMXMMXXX",
+                  "name": "BBVA",
+                  "country": "MX"
+              }
+          },
+          "events": [
+              {
+                  "id": "1857d50c-92f4-4135-adfc-0f77b881fd70",
+                  "state": "settled",
+                  "timestamp": "2025-04-07T20:52:55Z",
+                  "message": "Settled"
+              },
+              {
+                  "id": "d5f2c711-f9aa-49b3-8e43-94e631e31e90",
+                  "state": "pending",
+                  "timestamp": "2025-04-07T20:09:11.211420Z",
+                  "message": null
+              },
+              {
+                  "id": "a4d4d7f3-17e7-42ad-8387-b4ecdc865f44",
+                  "state": "created",
+                  "timestamp": "2025-04-07T20:09:11.211189Z",
+                  "message": null
+              }
+          ],
+          "currency": "MXN"
+      }
+    ]
+}

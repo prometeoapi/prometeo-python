@@ -1,0 +1,21 @@
+{
+    "id": "f03758fe-5e54-48f6-a7b1-a6a55c8905e2",
+    "customer": {
+        "name": "Customer Name",
+        "tax_id_type": "cnpj",
+        "tax_id": "12345678901234",
+        "external_id": "customer_id",
+        "virtual_account": {
+            "account_format": "clabe",
+            "account_number": "0123456789",
+            "name": "Customer Name",
+            "bank": {
+                "name": "BBVA",
+                "code": "012",
+                "bicfi": "BBVAMX",
+                "country": "MX"
+            }
+        },
+        "qr_code": null
+    }
+}
