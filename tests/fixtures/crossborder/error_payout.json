@@ -1,0 +1,6 @@
+{
+    "code": "X2011",
+    "type": "insufficient_amount",
+    "message": "Insufficient amount for the transaction",
+    "status": "error"
+}

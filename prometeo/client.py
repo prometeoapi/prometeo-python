@@ -4,6 +4,7 @@ from .dian import DianAPIClient
 from .sat import SatAPIClient
 from .payment import PaymentAPIClient
 from .account_validation import AccountValidationAPIClient
+from .crossborder import CrossBorderAPIClient
 
 
 class Client(object):
@@ -26,6 +27,7 @@ class Client(object):
         self._curp = None
         self._payment = None
         self._account_validation = None
+        self._crossborder = None
         self._args = args
         self._kwargs = kwargs
 
@@ -41,6 +43,19 @@ class Client(object):
                 **self._kwargs,
             )
         return self._banking
+
+    @property
+    def crossborder(self):
+        if self._crossborder is None:
+            self._crossborder = CrossBorderAPIClient(
+                self._api_key,
+                self._environment,
+                self._raw_responses,
+                self._proxy,
+                *self._args,
+                **self._kwargs,
+            )
+        return self._crossborder
 
     @property
     def dian(self):

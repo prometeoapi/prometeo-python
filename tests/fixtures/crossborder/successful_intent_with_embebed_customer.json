@@ -1,0 +1,23 @@
+{
+    "id":"80e61a67-1f0a-45b0-9cd8-4ab8e8788f5e",
+    "customer":{
+        "id":"6084b94b-0821-4443-9528-66cd1d773ba9",
+        "name":"John Doe",
+        "tax_id_type":"rfc",
+        "tax_id":"TFPC450703MEA",
+        "external_id":"15ebdc53-fa56-4996-9dec-2225f8a9c288",
+        "virtual_account":{
+            "account_number":"646948502400001788",
+            "name":"Beta Tests",
+            "active":true,
+            "branch":"",
+            "account_format":"clabe",
+            "banks":{
+                "code":"646",
+                "bicfi":"CUAFMXMX",
+                "name":"STP",
+                "country":"MX"
+            }
+        }
+    }
+}

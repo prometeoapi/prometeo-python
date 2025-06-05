@@ -1,0 +1,6 @@
+{
+    "code": "X1004",
+    "type": "permission_denied",
+    "message": "You do not have permission to perform this action",
+    "status": "error"
+}

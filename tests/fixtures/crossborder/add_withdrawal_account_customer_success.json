@@ -1,0 +1,46 @@
+{
+  "name": "Jane Doe",
+  "tax_id_type": "rfc",
+  "tax_id": "DODJ2301016J3",
+  "external_id": "SOME_PREFIX:SOME_UNIQUE_ID",
+  "withdrawal_accounts": [
+    {
+      "id": "9c1dd10e-7c19-470d-9dd1-0e7c19670d64",
+      "account_format": "clabe",
+      "account_number": "012180826854179156",
+      "description": "Account",
+      "selected": true,
+      "branch": "0",
+      "bank": {
+        "code": "012",
+        "bicfi": "BBVAMXMMXXX",
+        "name": "BBVA",
+        "country": "MX"
+      }
+    },
+    {
+      "id": "9c1dd10e-7c19-470d-9dd1-0e7c19670d65",
+      "account_format": "clabe",
+      "account_number": "012180826854179159",
+      "description": "Account",
+      "selected": true,
+      "branch": "0",
+      "bank": {
+        "code": "012",
+        "bicfi": "BBVAMXMMXXX",
+        "name": "BBVA",
+        "country": "MX"
+      }
+    }
+  ],
+  "virtual_accounts": [],
+  "qr_codes": [
+    {
+      "emv_code": "00020101021226830014...",
+      "img": "base64...",
+      "external_link": "https://example.com/?hash=...",
+      "expire_date": "2026-12-31 23:59:59"
+    }
+  ],
+  "id": "9c1dd10e-7c19-470d-9dd1-0e7c19670d65"
+}

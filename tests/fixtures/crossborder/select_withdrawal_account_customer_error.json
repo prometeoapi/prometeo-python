@@ -1,0 +1,6 @@
+{
+    "code": "X1005",
+    "type": "not_found",
+    "message": "No WithdrawalAccount matches the given query.",
+    "status": "error"
+}

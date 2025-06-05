@@ -1,0 +1,8 @@
+{
+    "code": "X1001",
+    "description": [{
+        "field_name": "destination_id",
+        "error_detail": ["Invalid destination_id"]
+    }],
+    "message": "Validation error"
+}

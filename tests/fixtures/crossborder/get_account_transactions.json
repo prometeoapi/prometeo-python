@@ -1,0 +1,38 @@
+{
+    "count": 123,
+    "next": "http://api.example.org/account/ae186b2c-065d-4f4b-993f-d510015eafb3/transactions?page=4",
+    "previous": "http://api.example.org/account/ae186b2c-065d-4f4b-993f-d510015eafb3/transactions?page=2",
+    "results": [
+      {
+        "id": "a7fb4503-2b75-4ac3-9348-5cc626942626",
+        "amount": 10,
+        "timestamp": "2025-04-04T00:00:00.000Z",
+        "detail": "646010502400000002",
+        "type": "TransactionType.ACH_PAYMENT",
+        "reference": "XBDEV8G3UIRE22FXKS7F7K1WKBPN7S",
+        "state": "TransactionState.COMPLETED",
+        "origin": {
+          "account_details": {
+            "format": "CLABE",
+            "number": "646010502400000002"
+          },
+          "tax_information": {
+            "type": "RFC",
+            "tax_id": "PRO221220DU3"
+          },
+          "beneficiary_name": "Prometeo"
+        },
+        "destination": {
+          "account_details": {
+            "format": "CLABE",
+            "number": "012420001083122815"
+          },
+          "tax_information": {
+            "type": "RFC",
+            "tax_id": "GABC890413RY5"
+          },
+          "beneficiary_name": "Prometeo"
+        }
+      }
+    ]
+}

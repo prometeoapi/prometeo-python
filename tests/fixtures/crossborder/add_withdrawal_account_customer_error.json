@@ -1,0 +1,14 @@
+{
+    "code": "X1001",
+    "type": "validation_error",
+    "message": "Invalid input provided",
+    "status": "error",
+    "description": [
+      {
+        "field_name": "field",
+        "error_detail": [
+          "Error message description"
+        ]
+      }
+    ]
+  }

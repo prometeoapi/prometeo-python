@@ -1,0 +1,22 @@
+{
+    "id": "a624a513-45ab-4f2e-a748-0eb902e4f690",
+    "origin": "125ff2c8-56c6-4caf-8c1b-3b529508c47e",
+    "customer": {
+        "name": "John Doe",
+        "tax_id": "JBND591220KI8",
+        "tax_id_type": "rfc",
+        "external_id": "8eaab3db-7cbc-4fbd-9688-6def162af7ad",
+        "withdrawal_account": {
+            "description": "",
+            "account_number": "706180230906218359",
+            "account_format": "clabe",
+            "selected": true,
+            "validation_status": "not_validated",
+            "bank": null
+        }
+    },
+    "amount": 0.01,
+    "description": "concept",
+    "external_id": "SOME_EXTERNAL_ID",
+    "reference": "XBBEF4RGWM0KWEC4ETZEEQ8H21WTTA"
+}
