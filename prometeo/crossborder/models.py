@@ -105,6 +105,7 @@ class WithdrawalAccountDetailsResponse(BaseModel):
     id: Optional[str] = None
     account_format: Optional[AccountFormatEnum] = None
     account_number: str
+    validation_status: Optional[str] = None
     description: Optional[str] = None
     selected: Optional[bool] = None
     branch: Optional[str] = None
