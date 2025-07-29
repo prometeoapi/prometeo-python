@@ -235,7 +235,7 @@ class PayoutCustomer(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: WithdrawalAccountDetailsResponse
+    withdrawal_accounts: WithdrawalAccountDetailsResponse
 
 
 class CustomerResponse(BaseModel):
