@@ -126,7 +126,7 @@ class Customer(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: Optional[List[WithdrawalAccountDetailsResponse]] = None
+    withdrawal_accounts: Optional[List[WithdrawalAccountDetailsResponse]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
     qr_codes: Optional[List[QRCodeDetails]] = None
 
@@ -244,9 +244,9 @@ class CustomerResponse(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: Optional[List[CustomerAccountDetails]] = None
-    virtual_account: Optional[List[VirtualAccountDetails]] = None
-    qr_code: Optional[List[QRCodeDetails]] = None
+    withdrawal_accounts: Optional[List[CustomerAccountDetails]] = None
+    virtual_accounts: Optional[List[VirtualAccountDetails]] = None
+    qr_codes: Optional[List[QRCodeDetails]] = None
 
 
 class PayinTransferState(BaseModel):

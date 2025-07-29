@@ -191,7 +191,9 @@ class CrossBorderAPIClient(base_client.BaseClient):
     ) -> CustomerResponse:
         return CustomerResponse(
             **await self.call_api(
-                "POST", f"customer/{customer_id}/withdrawal_account", json=data.dict()
+                "POST",
+                f"customer/{customer_id}/withdrawal_account",
+                json=data.dict(exclude_none=True)
             )
         )
 
