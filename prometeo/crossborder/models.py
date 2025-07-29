@@ -122,6 +122,7 @@ class PayinCustomer(BaseModel):
 
 
 class Customer(BaseModel):
+    id: str
     name: str
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
