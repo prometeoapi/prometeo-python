@@ -238,7 +238,9 @@ class PayoutCustomer(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_accounts: WithdrawalAccountDetailsResponse
+    withdrawal_accounts: WithdrawalAccountDetailsResponse = Field(
+        alias="withdrawal_account"
+    )
 
 
 class CustomerResponse(BaseModel):
