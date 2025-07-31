@@ -16,10 +16,12 @@ class BaseEnum(str, Enum):
 
 class TaxIdTypeBR(BaseEnum):
     cnpj = "cnpj"
+    cpf = "cpf"
 
 
 class TaxIdTypeMX(BaseEnum):
     rfc = "rfc"
+    curp = "curp"
 
 
 class TaxIdTypePE(BaseEnum):
