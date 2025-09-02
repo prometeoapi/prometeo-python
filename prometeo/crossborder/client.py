@@ -209,7 +209,7 @@ class CrossBorderAPIClient(base_client.BaseClient):
 
     @utils.adapt_async_sync
     async def get_accounts(self) -> List[Account]:
-        data = await self.call_api("GET", "account/")
+        data = await self.call_api("GET", "account")
         return [Account(**account) for account in data]
 
     @utils.adapt_async_sync
