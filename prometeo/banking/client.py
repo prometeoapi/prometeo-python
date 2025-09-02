@@ -16,6 +16,7 @@ from .exceptions import BankingClientError
 
 
 PRODUCTION_URL = "https://banking.prometeoapi.net"
+BETA_URL = "https://banking.beta.prometeoapi.com"
 SANDBOX_URL = "https://banking.sandbox.prometeoapi.com"
 
 
@@ -357,6 +358,7 @@ class BankingAPIClient(base_client.BaseClient):
 
     ENVIRONMENTS = {
         "production": PRODUCTION_URL,
+        "beta": BETA_URL,
         "sandbox": SANDBOX_URL,
     }
 

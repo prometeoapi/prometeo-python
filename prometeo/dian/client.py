@@ -20,6 +20,7 @@ from .models import (
 )
 
 PRODUCTION_URL = "https://fiscal.prometeoapi.net"
+BETA_URL = "https://fiscal.beta.prometeoapi.com"
 SANDBOX_URL = "https://fiscal.sandbox.prometeoapi.com"
 
 
@@ -175,6 +176,7 @@ class DianAPIClient(base_client.BaseClient):
 
     ENVIRONMENTS = {
         "production": PRODUCTION_URL,
+        "beta": BETA_URL,
         "sandbox": SANDBOX_URL,
     }
 
