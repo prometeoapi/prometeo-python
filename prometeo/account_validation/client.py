@@ -15,6 +15,7 @@ import re
 
 
 PRODUCTION_URL = "https://account-validation.prometeoapi.net"
+BETA_URL = "https://account-validation.beta.prometeoapi.com"
 SANDBOX_URL = "https://account-validation.sandbox.prometeoapi.com"
 
 
@@ -25,6 +26,7 @@ class AccountValidationAPIClient(base_client.BaseClient):
 
     ENVIRONMENTS = {
         "production": PRODUCTION_URL,
+        "beta": BETA_URL,
         "sandbox": SANDBOX_URL,
     }
 

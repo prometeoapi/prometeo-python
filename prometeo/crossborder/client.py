@@ -191,7 +191,9 @@ class CrossBorderAPIClient(base_client.BaseClient):
     ) -> CustomerResponse:
         return CustomerResponse(
             **await self.call_api(
-                "POST", f"customer/{customer_id}/withdrawal_account", json=data.dict()
+                "POST",
+                f"customer/{customer_id}/withdrawal_account",
+                json=data.dict(exclude_none=True)
             )
         )
 
@@ -207,7 +209,7 @@ class CrossBorderAPIClient(base_client.BaseClient):
 
     @utils.adapt_async_sync
     async def get_accounts(self) -> List[Account]:
-        data = await self.call_api("GET", "account/")
+        data = await self.call_api("GET", "account")
         return [Account(**account) for account in data]
 
     @utils.adapt_async_sync

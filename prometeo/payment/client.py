@@ -5,6 +5,7 @@ from .models import CreatePaymentIntentResponse, PaymentIntent
 
 
 PRODUCTION_URL = "https://payment.prometeoapi.net"
+BETA_URL = "https://payment.beta.prometeoapi.com"
 
 
 class PaymentAPIClient(base_client.BaseClient):
@@ -14,6 +15,7 @@ class PaymentAPIClient(base_client.BaseClient):
 
     ENVIRONMENTS = {
         "production": PRODUCTION_URL,
+        "beta": BETA_URL,
     }
 
     def on_error(self, response, data):

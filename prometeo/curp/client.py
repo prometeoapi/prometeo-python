@@ -6,6 +6,7 @@ from .models import QueryResult, DocumentData, PersonalData
 from .exceptions import CurpError
 
 PRODUCTION_URL = "https://identity.prometeoapi.net"
+BETA_URL = "https://identity.beta.prometeoapi.com"
 SANDBOX_URL = "https://identity.sandbox.prometeoapi.com"
 
 
@@ -63,6 +64,7 @@ class CurpAPIClient(base_client.BaseClient):
 
     ENVIRONMENTS = {
         "production": PRODUCTION_URL,
+        "beta": BETA_URL,
         "sandbox": SANDBOX_URL,
     }
 

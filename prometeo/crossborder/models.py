@@ -1,5 +1,5 @@
 from typing import Union, List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from enum import Enum
 from datetime import datetime
 
@@ -16,10 +16,12 @@ class BaseEnum(str, Enum):
 
 class TaxIdTypeBR(BaseEnum):
     cnpj = "cnpj"
+    cpf = "cpf"
 
 
 class TaxIdTypeMX(BaseEnum):
     rfc = "rfc"
+    curp = "curp"
 
 
 class TaxIdTypePE(BaseEnum):
@@ -122,11 +124,12 @@ class PayinCustomer(BaseModel):
 
 
 class Customer(BaseModel):
+    id: str
     name: str
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: Optional[List[WithdrawalAccountDetailsResponse]] = None
+    withdrawal_accounts: Optional[List[WithdrawalAccountDetailsResponse]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
     qr_codes: Optional[List[QRCodeDetails]] = None
 
@@ -235,7 +238,9 @@ class PayoutCustomer(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: WithdrawalAccountDetailsResponse
+    withdrawal_accounts: WithdrawalAccountDetailsResponse = Field(
+        alias="withdrawal_account"
+    )
 
 
 class CustomerResponse(BaseModel):
@@ -244,9 +249,9 @@ class CustomerResponse(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_account: Optional[List[CustomerAccountDetails]] = None
-    virtual_account: Optional[List[VirtualAccountDetails]] = None
-    qr_code: Optional[List[QRCodeDetails]] = None
+    withdrawal_accounts: Optional[List[CustomerAccountDetails]] = None
+    virtual_accounts: Optional[List[VirtualAccountDetails]] = None
+    qr_codes: Optional[List[QRCodeDetails]] = None
 
 
 class PayinTransferState(BaseModel):
