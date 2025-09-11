@@ -1,5 +1,5 @@
 from typing import Union, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from enum import Enum
 from datetime import datetime
 
@@ -234,6 +234,8 @@ class RefundIntentInput(BaseModel):
 
 
 class PayoutCustomer(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
     name: str
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
