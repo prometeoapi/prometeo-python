@@ -70,6 +70,9 @@ class AccountFormatEnum(BaseEnum):
     iban = "iban"
     cci = "cci"
 
+class PayinTransferMethods(BaseEnum):
+    transfer = "transfer"
+    qr = "qr"
 
 class Bank(BaseModel):
     name: str
@@ -214,6 +217,7 @@ class IntentDataRequest(BaseModel):
     destination_id: str
     concept: str
     currency: str
+    payment_method: Optional[Union[str, PayinTransferMethods]]
     amount: float
     external_id: str
     customer: Union[str, CustomerInput]
