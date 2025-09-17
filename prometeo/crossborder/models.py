@@ -70,9 +70,11 @@ class AccountFormatEnum(BaseEnum):
     iban = "iban"
     cci = "cci"
 
+
 class PayinTransferMethods(BaseEnum):
     transfer = "transfer"
     qr = "qr"
+
 
 class Bank(BaseModel):
     name: str

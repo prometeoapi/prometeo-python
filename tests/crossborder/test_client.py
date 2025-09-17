@@ -21,6 +21,7 @@ class TestCrossBorderClient(BaseTestCase):
                 currency="currency",
                 amount=100,
                 customer="customer",
+                payment_method="transfer",
                 external_id="external_id",
             )
         )
@@ -39,6 +40,7 @@ class TestCrossBorderClient(BaseTestCase):
                 concept="concept",
                 currency="MXN",
                 amount=100,
+                payment_method="transfer",
                 customer=CustomerInput(
                     name="name",
                     tax_id_type="rfc",
@@ -60,6 +62,7 @@ class TestCrossBorderClient(BaseTestCase):
                     concept="concept",
                     currency="MXN",
                     amount=100,
+                    payment_method="transfer",
                     customer="a7f9501c-6979-4400-92db-809d1d317e21",
                     external_id="external_id",
                 )
