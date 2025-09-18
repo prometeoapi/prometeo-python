@@ -125,7 +125,7 @@ class PayinCustomer(BaseModel):
     tax_id: str
     external_id: str
     virtual_account: Optional[VirtualAccountDetails] = None
-    qr_code: Optional[QRCodeDetails] = None
+    qr: Optional[QRCodeDetails] = None
 
 
 class Customer(BaseModel):
@@ -136,7 +136,7 @@ class Customer(BaseModel):
     external_id: str
     withdrawal_accounts: Optional[List[WithdrawalAccountDetailsResponse]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
-    qr_codes: Optional[List[QRCodeDetails]] = None
+    qrs: Optional[List[QRCodeDetails]] = None
 
 
 class IntentData(BaseModel):
@@ -255,7 +255,7 @@ class CustomerResponse(BaseModel):
     external_id: str
     withdrawal_accounts: Optional[List[CustomerAccountDetails]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
-    qr_codes: Optional[List[QRCodeDetails]] = None
+    qrs: Optional[List[QRCodeDetails]] = None
 
 
 class PayinTransferState(BaseModel):
