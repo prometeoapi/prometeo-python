@@ -1,5 +1,5 @@
 from typing import Union, List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from enum import Enum
 from datetime import datetime
 
@@ -96,6 +96,12 @@ class QRCodeDetails(BaseModel):
     img: str
     external_link: str
     expire_date: datetime
+
+    @field_validator("expire_date", mode="before")
+    def fix_utc(cls, v):
+        if isinstance(v, str) and v.endswith(" UTC"):
+            v = v.replace(" UTC", "+00:00")
+        return v
 
 
 class AccountDetails(BaseModel):
