@@ -1,0 +1,16 @@
+{
+    "id": "abc-123",
+    "customer": {
+        "name": "Juan Pérez",
+        "tax_id_type": "ruc",
+        "tax_id": "20100000000",
+        "external_id": "ext-1",
+        "virtual_account": null,
+        "qr": {
+            "emv_code": "000201010212...",
+            "img": "base64...",
+            "external_link": "https://example.com/qr/abc-123",
+            "expire_date": "2025-09-20 04:59:59 UTC"
+        }
+    }
+}
