@@ -8,6 +8,7 @@ from prometeo.crossborder.models import (
 )
 from tests.base_test_case import BaseTestCase
 from prometeo.crossborder.exceptions import CrossBorderClientError
+from datetime import datetime, timezone
 
 
 class TestCrossBorderClient(BaseTestCase):
@@ -21,6 +22,7 @@ class TestCrossBorderClient(BaseTestCase):
                 currency="currency",
                 amount=100,
                 customer="customer",
+                payment_method="transfer",
                 external_id="external_id",
             )
         )
@@ -39,6 +41,7 @@ class TestCrossBorderClient(BaseTestCase):
                 concept="concept",
                 currency="MXN",
                 amount=100,
+                payment_method="transfer",
                 customer=CustomerInput(
                     name="name",
                     tax_id_type="rfc",
@@ -51,6 +54,31 @@ class TestCrossBorderClient(BaseTestCase):
         self.assertEqual(result.id, "80e61a67-1f0a-45b0-9cd8-4ab8e8788f5e")
 
     @respx.mock
+    async def test_create_intent_parses_expire_date_with_utc_suffix(self):
+        self.mock_post_request(
+            respx,
+            "/payin/intent",
+            fixture_name="intent_pe"
+        )
+        result = await self.client.crossborder.create_intent(
+            IntentDataRequest(
+                destination_id="dest",
+                concept="Payment",
+                currency="USD",
+                amount=100,
+                customer="customer",
+                payment_method="transfer",
+                external_id="ext",
+            )
+        )
+
+        self.assertIsNotNone(result.customer.qr)
+        self.assertEqual(
+            result.customer.qr.expire_date,
+            datetime(2025, 9, 20, 4, 59, 59, tzinfo=timezone.utc),
+        )
+
+    @respx.mock
     def test_create_intent_error(self):
         self.mock_post_request(respx, "/payin/intent", "error_intent")
         with self.assertRaises(CrossBorderClientError) as cm:
@@ -60,6 +88,7 @@ class TestCrossBorderClient(BaseTestCase):
                     concept="concept",
                     currency="MXN",
                     amount=100,
+                    payment_method="transfer",
                     customer="a7f9501c-6979-4400-92db-809d1d317e21",
                     external_id="external_id",
                 )

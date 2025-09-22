@@ -1,5 +1,5 @@
 from typing import Union, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, field_validator
 from enum import Enum
 from datetime import datetime
 
@@ -71,6 +71,11 @@ class AccountFormatEnum(BaseEnum):
     cci = "cci"
 
 
+class PayinTransferMethods(BaseEnum):
+    transfer = "transfer"
+    qr = "qr"
+
+
 class Bank(BaseModel):
     name: str
     code: str
@@ -91,6 +96,12 @@ class QRCodeDetails(BaseModel):
     img: str
     external_link: str
     expire_date: datetime
+
+    @field_validator("expire_date", mode="before")
+    def fix_utc(cls, v):
+        if isinstance(v, str) and v.endswith(" UTC"):
+            v = v.replace(" UTC", "+00:00")
+        return v
 
 
 class AccountDetails(BaseModel):
@@ -120,7 +131,7 @@ class PayinCustomer(BaseModel):
     tax_id: str
     external_id: str
     virtual_account: Optional[VirtualAccountDetails] = None
-    qr_code: Optional[QRCodeDetails] = None
+    qr: Optional[QRCodeDetails] = None
 
 
 class Customer(BaseModel):
@@ -131,7 +142,7 @@ class Customer(BaseModel):
     external_id: str
     withdrawal_accounts: Optional[List[WithdrawalAccountDetailsResponse]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
-    qr_codes: Optional[List[QRCodeDetails]] = None
+    qrs: Optional[List[QRCodeDetails]] = None
 
 
 class IntentData(BaseModel):
@@ -214,6 +225,7 @@ class IntentDataRequest(BaseModel):
     destination_id: str
     concept: str
     currency: str
+    payment_method: Optional[Union[str, PayinTransferMethods]]
     amount: float
     external_id: str
     customer: Union[str, CustomerInput]
@@ -238,9 +250,7 @@ class PayoutCustomer(BaseModel):
     tax_id_type: Union[TaxIdTypeBR, TaxIdTypeMX, TaxIdTypePE]
     tax_id: str
     external_id: str
-    withdrawal_accounts: WithdrawalAccountDetailsResponse = Field(
-        alias="withdrawal_account"
-    )
+    withdrawal_account: WithdrawalAccountDetailsResponse
 
 
 class CustomerResponse(BaseModel):
@@ -251,7 +261,7 @@ class CustomerResponse(BaseModel):
     external_id: str
     withdrawal_accounts: Optional[List[CustomerAccountDetails]] = None
     virtual_accounts: Optional[List[VirtualAccountDetails]] = None
-    qr_codes: Optional[List[QRCodeDetails]] = None
+    qrs: Optional[List[QRCodeDetails]] = None
 
 
 class PayinTransferState(BaseModel):
