@@ -66,7 +66,23 @@ class CrossBorderAPIClient(base_client.BaseClient):
         "production": PRODUCTION_URL,
         "sandbox": SANDBOX_URL,
         "beta": BETA_URL,
+        "custom": "",
     }
+
+    def __init__(
+        self,
+        api_key,
+        environment,
+        raw_responses=False,
+        proxy=None,
+        custom_enviroment=None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(api_key, environment, raw_responses, proxy, *args, **kwargs)
+
+        if environment == "custom" and custom_enviroment:
+            self.ENVIRONMENTS["custom"] = custom_enviroment
 
     def on_error(self, response, data):
         if isinstance(data, dict):
