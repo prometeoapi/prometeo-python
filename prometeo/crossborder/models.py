@@ -157,9 +157,25 @@ class IntentData(BaseModel):
     events: List[PayinTransferState]
 
 
+class FXQuoteData(BaseModel):
+    amount: int
+    pair: str
+
+
+class FXQuoteDataResponse(BaseModel):
+    id: str
+    amount: int
+    net_amount: float | int
+    target_amount: float | int
+    currency: str
+    target_currency: str
+    expires_at: str
+
+
 class IntentDataResponse(BaseModel):
     id: str
     customer: PayinCustomer
+    quote: Optional[FXQuoteDataResponse] = None
 
 
 class AccountTransaction(BaseModel):
@@ -229,6 +245,8 @@ class IntentDataRequest(BaseModel):
     amount: float
     external_id: str
     customer: Union[str, CustomerInput]
+    country: Optional[str] = None
+    quote: Optional[str] = None
 
 
 class CreatePayoutTransferRequest(BaseModel):

@@ -1,8 +1,13 @@
 from prometeo import base_client, utils
 from typing import List
 from .exceptions import (
+    CurrencyPairNotAvailableException,
     InvalidParameterError,
+    InvalidQuoteAmountException,
+    InvalidQuoteCurrencyException,
+    InvalidQuoteException,
     ParseException,
+    QuoteAlreadyUsedException,
     Unauthorized,
     PermissionException,
     NotFoundException,
@@ -28,6 +33,8 @@ from .exceptions import (
     CrossBorderClientError,
 )
 from .models import (
+    FXQuoteData,
+    FXQuoteDataResponse,
     IntentData,
     IntentDataRequest,
     IntentDataResponse,
@@ -119,6 +126,16 @@ class CrossBorderAPIClient(base_client.BaseClient):
             raise AccountDataNotMatchException(error_message)
         elif error_code == "X2015":
             raise InvalidAccountException(error_message)
+        elif error_code == "X2020":
+            raise InvalidQuoteException(error_message)
+        elif error_code == "X2021":
+            raise QuoteAlreadyUsedException(error_message)
+        elif error_code == "X2031":
+            raise InvalidQuoteAmountException(error_message)
+        elif error_code == "X2032":
+            raise InvalidQuoteCurrencyException(error_message)
+        elif error_code == "X2033":
+            raise CurrencyPairNotAvailableException(error_message)
         elif error_code:
             raise CrossBorderClientError(error_message)
 
@@ -126,6 +143,11 @@ class CrossBorderAPIClient(base_client.BaseClient):
     async def create_intent(self, data: IntentDataRequest) -> IntentDataResponse:
         response = await self.call_api("POST", "payin/intent", json=data.dict())
         return IntentDataResponse(**response)
+
+    @utils.adapt_async_sync
+    async def create_fx_quote(self, data: FXQuoteData) -> FXQuoteDataResponse:
+        response = await self.call_api("POST", "fx/exchange", json=data.dict())
+        return FXQuoteDataResponse(**response)
 
     @utils.adapt_async_sync
     async def list_intents(self) -> List[IntentData]:
@@ -193,7 +215,7 @@ class CrossBorderAPIClient(base_client.BaseClient):
             **await self.call_api(
                 "POST",
                 f"customer/{customer_id}/withdrawal_account",
-                json=data.dict(exclude_none=True)
+                json=data.dict(exclude_none=True),
             )
         )
 

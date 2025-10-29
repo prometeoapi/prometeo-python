@@ -289,3 +289,58 @@ class InvalidAccountException(CrossBorderClientError):
 
     def __str__(self):
         return f"{self.message}"
+
+
+class InvalidQuoteException(CrossBorderClientError):
+    def __init__(self, message):
+        self.code = "X2020"
+        self.type = "invalid_quote"
+        self.status = "error"
+        self.message = message
+
+    def __str__(self):
+        return f"{self.message}"
+
+
+class QuoteAlreadyUsedException(CrossBorderClientError):
+    def __init__(self, message):
+        self.code = "X2021"
+        self.type = "quote_already_used"
+        self.status = "error"
+        self.message = message
+
+    def __str__(self):
+        return f"{self.message}"
+
+
+class InvalidQuoteAmountException(CrossBorderClientError):
+    def __init__(self, message):
+        self.code = "X2031"
+        self.type = "invalid_amount"
+        self.status = "error"
+        self.message = message
+
+    def __str__(self):
+        return f"{self.message}"
+
+
+class InvalidQuoteCurrencyException(CrossBorderClientError):
+    def __init__(self, message):
+        self.code = "X2032"
+        self.type = "fx_rate_not_found"
+        self.status = "error"
+        self.message = message
+
+    def __str__(self):
+        return f"{self.message}"
+
+
+class CurrencyPairNotAvailableException(CrossBorderClientError):
+    def __init__(self, message):
+        self.code = "X2033"
+        self.type = "pricing_rule_not_found"
+        self.status = "error"
+        self.message = message
+
+    def __str__(self):
+        return f"{self.message}"
