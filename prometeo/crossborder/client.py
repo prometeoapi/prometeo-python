@@ -157,7 +157,9 @@ class CrossBorderAPIClient(base_client.BaseClient):
 
     @utils.adapt_async_sync
     async def create_intent(self, data: IntentDataRequest) -> IntentDataResponse:
-        response = await self.call_api("POST", "payin/intent", json=data.dict())
+        response = await self.call_api(
+            "POST", "payin/intent", json=data.dict(exclude_none=True)
+        )
         return IntentDataResponse(**response)
 
     @utils.adapt_async_sync
