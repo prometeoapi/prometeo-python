@@ -165,8 +165,8 @@ class FXQuoteData(BaseModel):
 class FXQuoteDataResponse(BaseModel):
     id: str
     amount: int
-    net_amount: float | int
-    target_amount: float | int
+    net_amount: Union[float, int]
+    target_amount: Union[float, int]
     currency: str
     target_currency: str
     expires_at: str
