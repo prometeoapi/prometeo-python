@@ -1,0 +1,9 @@
+{
+  "amount": 10,
+  "currency": "PEN",
+  "expires_at": "2025-10-17T03:46:45.531406Z",
+  "id": "4b4d079e-c256-4b39-9aaf-907780cf5512",
+  "net_amount": 8.9,
+  "target_amount": 17.17,
+  "target_currency": "BRL"
+}
