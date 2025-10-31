@@ -1,5 +1,5 @@
 from prometeo import base_client, utils
-from typing import List
+from typing import List, Optional
 from .exceptions import (
     CurrencyPairNotAvailableException,
     InvalidParameterError,
@@ -211,8 +211,8 @@ class CrossBorderAPIClient(base_client.BaseClient):
         return CustomerResponse(**await self.call_api("GET", f"customer/{customer_id}"))
 
     @utils.adapt_async_sync
-    async def get_customers(self) -> List[Customer]:
-        data = await self.call_api("GET", "customer")
+    async def get_customers(self, params: Optional[dict] = None) -> List[Customer]:
+        data = await self.call_api("GET", "customer", params=params)
         return [Customer(**customer) for customer in data.get("results", [])]
 
     @utils.adapt_async_sync
