@@ -1,6 +1,7 @@
 import respx
 
 from prometeo.crossborder.models import (
+    FXQuoteData,
     IntentDataRequest,
     PayoutTransferInput,
     CustomerInput,
@@ -33,7 +34,7 @@ class TestCrossBorderClient(BaseTestCase):
         self.mock_post_request(
             respx,
             "/payin/intent",
-            fixture_name="successful_intent_with_embebed_customer"
+            fixture_name="successful_intent_with_embebed_customer",
         )
         result = await self.client.crossborder.create_intent(
             IntentDataRequest(
@@ -46,7 +47,7 @@ class TestCrossBorderClient(BaseTestCase):
                     name="name",
                     tax_id_type="rfc",
                     tax_id="tax_id",
-                    external_id="external_id"
+                    external_id="external_id",
                 ),
                 external_id="external_id",
             )
@@ -55,11 +56,7 @@ class TestCrossBorderClient(BaseTestCase):
 
     @respx.mock
     async def test_create_intent_parses_expire_date_with_utc_suffix(self):
-        self.mock_post_request(
-            respx,
-            "/payin/intent",
-            fixture_name="intent_pe"
-        )
+        self.mock_post_request(respx, "/payin/intent", fixture_name="intent_pe")
         result = await self.client.crossborder.create_intent(
             IntentDataRequest(
                 destination_id="dest",
@@ -94,6 +91,51 @@ class TestCrossBorderClient(BaseTestCase):
                 )
             )
         self.assertIn("Validation error", cm.exception.message)
+
+    @respx.mock
+    async def test_create_intent_with_quote(self):
+        self.mock_post_request(respx, "/payin/intent", "successful_intent_with_quote")
+        result = await self.client.crossborder.create_intent(
+            IntentDataRequest(
+                destination_id="destination_id",
+                concept="concept",
+                currency="PEN",
+                amount=100,
+                payment_method="qr",
+                customer=CustomerInput(
+                    name="name",
+                    tax_id_type="rfc",
+                    tax_id="tax_id",
+                    external_id="external_id",
+                ),
+                external_id="external_id",
+                country="BR",
+                quote="4b4d079e-c256-4b39-9aaf-907780cf5512",
+            )
+        )
+        self.assertEqual(result.quote.id, "4b4d079e-c256-4b39-9aaf-907780cf5512")
+
+    @respx.mock
+    async def test_create_quote(self):
+        self.mock_post_request(respx, "/fx/exchange", "create_quote_success")
+        result = await self.client.crossborder.create_fx_quote(
+            FXQuoteData(amount=10, pair="PEN/BRL")
+        )
+        self.assertEqual(result.id, "4b4d079e-c256-4b39-9aaf-907780cf5512")
+
+    @respx.mock
+    async def test_create_quote_invalid_par_error(self):
+        self.mock_post_request(
+            respx, "/fx/exchange", "create_quote_invalid_currency_par_error"
+        )
+        with self.assertRaises(CrossBorderClientError) as cm:
+            await self.client.crossborder.create_fx_quote(
+                FXQuoteData(amount=10, pair="VES/RUP")
+            )
+        self.assertIn(
+            "The requested currency pair (XXXYYY) is not available",
+            cm.exception.message,
+        )
 
     @respx.mock
     def test_list_intents_success(self):

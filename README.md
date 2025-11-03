@@ -265,7 +265,7 @@ for ack in acks:
 
 We are using the ```tox``` testing library [tox](https://tox.readthedocs.io/en/latest/)
 
-To run the tests imlpemented inside the ```tests``` folder simply run the following command inside your project:
+To run the tests implemented inside the ```tests``` folder simply run the following command inside your project:
 ```tox```
 
 This will run tests for both python 2 and 3. To restrict the result to only python3 use:

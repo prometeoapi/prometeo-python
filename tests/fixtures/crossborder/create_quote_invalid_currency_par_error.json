@@ -1,0 +1,6 @@
+{
+  "code": "X2033",
+  "message": "The requested currency pair (XXXYYY) is not available",
+  "status": "error",
+  "type": "pricing_rule_not_found"
+}
