@@ -158,13 +158,13 @@ class IntentData(BaseModel):
 
 
 class FXQuoteData(BaseModel):
-    amount: int
+    amount: Union[int, float]
     pair: str
 
 
 class FXQuoteDataResponse(BaseModel):
     id: str
-    amount: int
+    amount: Union[int, float]
     net_amount: Union[float, int]
     target_amount: Union[float, int]
     currency: str
