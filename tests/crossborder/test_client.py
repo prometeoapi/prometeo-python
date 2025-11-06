@@ -359,3 +359,27 @@ class TestCrossBorderClient(BaseTestCase):
         with self.assertRaises(CrossBorderClientError) as cm:
             self.client.crossborder.get_account_transactions("account_id")
         self.assertIn("Resource not found", cm.exception.message)
+
+    @respx.mock
+    def test_get_customers_brazil_success(self):
+        self.mock_get_request(
+            respx, "/customer", fixture_name="get_customers_brazil"
+        )
+        result = self.client.crossborder.get_customers()
+        self.assertEqual(result[0].id, "7604d812-a20d-4369-8223-53909c089854")
+
+    @respx.mock
+    def test_get_customers_mexico_success(self):
+        self.mock_get_request(
+            respx, "/customer", fixture_name="get_customers_mexico"
+        )
+        result = self.client.crossborder.get_customers()
+        self.assertEqual(result[0].id, "21cc4ab1-85bc-4c20-9cd9-9dbd4d2ce534")
+
+    @respx.mock
+    def test_get_customers_peru_success(self):
+        self.mock_get_request(
+            respx, "/customer", fixture_name="get_customers_peru"
+        )
+        result = self.client.crossborder.get_customers()
+        self.assertEqual(result[0].id, "e4ef773e-cfa4-4a28-87cf-4746146944c4")

@@ -1,0 +1,66 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": "e4ef773e-cfa4-4a28-87cf-4746146944c4",
+            "name": "Jorge Perez",
+            "tax_id": "41371123",
+            "tax_id_type": "dni",
+            "external_id": "Leo-b4bb5c8f-d62c-4c77-8fe1-85538dd06c81",
+            "country": "PE",
+            "currency": "PEN",
+            "withdrawal_accounts": [
+                {
+                    "id": "b93fca25-b3e7-461a-952e-6d9e163c81d2",
+                    "description": "Default Account",
+                    "account_number": "00212311232131231287",
+                    "account_format": "cci",
+                    "timestamp": "2025-09-26T15:12:39.799334Z",
+                    "selected": true,
+                    "validation_status": "valid",
+                    "branch": null,
+                    "account_type": "CHECKING",
+                    "bank": {
+                        "code": "002",
+                        "bicfi": "BANCOPE",
+                        "name": "Banco BC",
+                        "country": "PE"
+                    }
+                }
+            ],
+            "virtual_accounts": []
+        },
+        {
+            "id": "23f4231f-4c57-43c2-ac89-f0fa467433b8",
+            "name": "Teófilo Cubillas",
+            "tax_id": "0051123431",
+            "tax_id_type": "ce",
+            "external_id": "Leo-39b616c0-9660-43e6-b5f2-d526746989db",
+            "country": "PE",
+            "currency": "PEN",
+            "user_uuid": "2783f35e-9d3c-462f-bf15-ef33902ef879",
+            "withdrawal_accounts": [
+                {
+                    "id": "0c840f29-930c-4fb2-935d-c2c998361c53",
+                    "description": null,
+                    "account_number": "00211213554485333318",
+                    "account_format": "cci",
+                    "timestamp": "2025-09-02T14:52:35.990095Z",
+                    "selected": true,
+                    "validation_status": "valid",
+                    "branch": null,
+                    "account_type": "CHECKING",
+                    "bank": {
+                        "code": "002",
+                        "bicfi": "BCPLPEPL",
+                        "name": "BCP",
+                        "country": "PE"
+                    }
+                }
+            ],
+            "virtual_accounts": []
+        }   
+    ]
+}

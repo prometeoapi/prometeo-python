@@ -1,0 +1,36 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": "7604d812-a20d-4369-8223-53909c089854",
+            "name": "Joao Moreira",
+            "tax_id": "33529219207",
+            "tax_id_type": "cpf",
+            "external_id": "23532208-4c81-4378-b530-70eba668b704",
+            "country": "BR",
+            "currency": "BRL",
+            "withdrawal_accounts": [
+                {
+                    "id": "54cf6d68-16b4-4612-902b-ba1683504ee6",
+                    "description": "Default Account",
+                    "account_number": "12312312",
+                    "account_format": "ted",
+                    "timestamp": "2025-11-05T19:24:52.137027Z",
+                    "selected": true,
+                    "validation_status": "valid",
+                    "branch": "001",
+                    "account_type": "PREPAID",
+                    "bank": {
+                        "code": "260",
+                        "bicfi": "",
+                        "name": "NU PAGAMENTOS - IP",
+                        "country": "BR"
+                    }
+                }
+            ],
+            "virtual_accounts": []
+        }
+    ]
+}
