@@ -1,0 +1,36 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": "21cc4ab1-85bc-4c20-9cd9-9dbd4d2ce534",
+            "name": "John J. Rambo",
+            "tax_id": "JRJO460706F14",
+            "tax_id_type": "rfc",
+            "external_id": "PROM002.BTA",
+            "country": "MX",
+            "currency": "MXN",
+            "withdrawal_accounts": [
+                {
+                    "id": "120f05cb-2a81-4f73-a616-69697abdc9fd",
+                    "description": null,
+                    "account_number": "012020710935137335",
+                    "account_format": "clabe",
+                    "timestamp": "2025-06-13T12:25:39.339788Z",
+                    "selected": true,
+                    "validation_status": "not_validated",
+                    "branch": null,
+                    "account_type": "CHECKING",
+                    "bank": {
+                        "code": "012",
+                        "bicfi": "BCMRMXMM",
+                        "name": "BBVA MX",
+                        "country": "MX"
+                    }
+                }
+            ],
+            "virtual_accounts": []
+        }
+    ]
+}

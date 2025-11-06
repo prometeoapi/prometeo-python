@@ -69,6 +69,8 @@ class AccountFormatEnum(BaseEnum):
     clabe = "clabe"
     iban = "iban"
     cci = "cci"
+    ted = "ted"
+    pix = "pix"
 
 
 class PayinTransferMethods(BaseEnum):
